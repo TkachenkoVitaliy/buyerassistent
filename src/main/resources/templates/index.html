@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Buyer Assistent</title>
+</head>
+<body>
+
+<form action="/uploadAccept" method="post" enctype="multipart/form-data">
+    <label>Акцепт ММК</label>
+    <input type="file" accept=".xlsx" name="mmkAccept" required>
+    <button>SEND</button>
+</form>
+
+</body>
+</html>
