@@ -31,15 +31,18 @@ public class MmkAcceptDBService {
     }
 
     private MmkAcceptRowEntity updateEntity(MmkAcceptRowEntity sourceEntity, MmkAcceptRowEntity targetEntity) {
-        targetEntity.setNomenclature(sourceEntity.getNomenclature());
-        targetEntity.setGrade(sourceEntity.getGrade());
-        targetEntity.setThickness(sourceEntity.getThickness());
-        targetEntity.setWidth(sourceEntity.getWidth());
-        targetEntity.setLength(sourceEntity.getLength());
-        targetEntity.setAlterProfile(sourceEntity.getAlterProfile());
-        targetEntity.setAccepted(sourceEntity.getAccepted());
-        targetEntity.setAcceptMonth(sourceEntity.getAcceptMonth());
-        targetEntity.setAdditionalRequirements(sourceEntity.getAdditionalRequirements());
+        final double MIN_ACCEPT_VALUE = 0.1;
+        if(sourceEntity.getAccepted() > MIN_ACCEPT_VALUE) {
+            targetEntity.setNomenclature(sourceEntity.getNomenclature());
+            targetEntity.setGrade(sourceEntity.getGrade());
+            targetEntity.setThickness(sourceEntity.getThickness());
+            targetEntity.setWidth(sourceEntity.getWidth());
+            targetEntity.setLength(sourceEntity.getLength());
+            targetEntity.setAlterProfile(sourceEntity.getAlterProfile());
+            targetEntity.setAccepted(sourceEntity.getAccepted());
+            targetEntity.setAcceptMonth(sourceEntity.getAcceptMonth());
+            targetEntity.setAdditionalRequirements(sourceEntity.getAdditionalRequirements());
+        }
 
         return targetEntity;
     }
