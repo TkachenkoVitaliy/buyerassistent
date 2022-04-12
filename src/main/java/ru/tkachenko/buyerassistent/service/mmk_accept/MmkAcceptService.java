@@ -8,7 +8,6 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.tkachenko.buyerassistent.entity.MmkAcceptRowEntity;
-import ru.tkachenko.buyerassistent.repository.MmkAcceptRepository;
 import ru.tkachenko.buyerassistent.utils.ExcelUtils;
 
 import java.io.FileInputStream;
@@ -17,7 +16,7 @@ import java.io.IOException;
 import java.nio.file.Path;
 
 @Service
-public class MmkAcceptParser {
+public class MmkAcceptService {
     private final MmkAcceptDBService mmkAcceptDBService;
     private final String SPEC_COL_NAME = "Номер заказа";
     private final String POSITION_COL_NAME = "Номер строки";
@@ -36,11 +35,11 @@ public class MmkAcceptParser {
             ACCEPTED_MONTH_COL_NAME, ADDITIONAL_REQUIREMENTS_COL_NAME};
 
     @Autowired
-    public MmkAcceptParser(MmkAcceptDBService mmkAcceptDBService) {
+    public MmkAcceptService(MmkAcceptDBService mmkAcceptDBService) {
         this.mmkAcceptDBService = mmkAcceptDBService;
     }
 
-    public void parseFile (Path filePath) {
+    public void parseFileToDatabase(Path filePath) {
         try {
             FileInputStream fileInputStream = new FileInputStream(filePath.toString());
             XSSFWorkbook workbook = new XSSFWorkbook(fileInputStream);
@@ -71,8 +70,6 @@ public class MmkAcceptParser {
     }
 
     private MmkAcceptRowEntity parseMmkAcceptEntityFromRow(int[] colIndexes, Row row) {
-        Cell cell = null;
-
         //spec (not null)
         String spec = ExcelUtils.getStringValue(colIndexes[0], row);
 
