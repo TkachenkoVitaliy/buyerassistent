@@ -21,9 +21,13 @@ public class ExcelUtils {
     }
 
     public static int[] findColIndexesByValues(String[] arrayValues, Row row) {
+
         int[] resultArray = new int[arrayValues.length];
         for (int i = 0; i < arrayValues.length; i++) {
             String value = arrayValues[i];
+            //TODO remove sout
+            System.out.println(value);
+
             resultArray[i] = findColIndexByValue(value, row);
         }
         return resultArray;
@@ -33,13 +37,20 @@ public class ExcelUtils {
         int result = -1;
         for (Row row : sheet) {
             for (Cell cell : row) {
-                if(cell.getCellType() != CellType.BLANK || cell.getCellType() != CellType._NONE) {
+                if(!cellIsNullOrBlank(cell)) {
                     result = cell.getRowIndex();
                     return result;
                 }
             }
         }
         return result;
+    }
+
+    public static boolean cellIsNullOrBlank(Cell cell) {
+        if(cell == null || cell.getCellType() == CellType.BLANK || cell.getCellType() == CellType._NONE) {
+            return true;
+        }
+        return false;
     }
 
     public static String getAnyValueAsString(Cell cell) {
@@ -51,14 +62,10 @@ public class ExcelUtils {
         }
     }
 
-    public static boolean cellIsNullOrBlank(Cell cell) {
-        if(cell == null && cell.getCellType() == CellType.BLANK && cell.getCellType() == CellType._NONE) {
-            return true;
-        }
-        return false;
-    }
-
     public static String getStringValue(int colIndex, Row row) {
+        //TODO remove sout
+        System.out.println("getStringValue cellIndex - " + colIndex);
+
         Cell cell = row.getCell(colIndex);
         return getAnyValueAsString(cell);
     }

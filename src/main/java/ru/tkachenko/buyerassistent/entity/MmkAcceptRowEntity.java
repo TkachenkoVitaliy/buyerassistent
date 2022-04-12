@@ -39,7 +39,7 @@ public class MmkAcceptRowEntity {
     @Column(name = "accepted")
     private double accepted;
 
-    @Column(name = "accepth_month")
+    @Column(name = "accept_month")
     private int acceptMonth;
 
     @Column(name = "additional_requirements")

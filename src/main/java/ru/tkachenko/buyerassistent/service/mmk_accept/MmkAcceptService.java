@@ -3,6 +3,7 @@ package ru.tkachenko.buyerassistent.service.mmk_accept;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,7 +45,18 @@ public class MmkAcceptService {
             FileInputStream fileInputStream = new FileInputStream(filePath.toString());
             XSSFWorkbook workbook = new XSSFWorkbook(fileInputStream);
             XSSFSheet sheet = workbook.getSheetAt(0);
+
+            //TODO remove all block
+            XSSFRow testedRow = sheet.getRow(0);
+            for (Cell cell : testedRow) {
+                System.out.println(cell.getCellType());
+            }
+            //TODO remove all block
+
             int headerRowIndex = ExcelUtils.findFirstNotBlankRow(sheet);
+            //TODO remove sout
+            System.out.println("headerRowIndex = " + headerRowIndex);
+
             int[] colIndexes = getEntityColumns(sheet, headerRowIndex);
 
             int firstRowIndex = headerRowIndex + 1;
@@ -71,6 +83,11 @@ public class MmkAcceptService {
 
     private MmkAcceptRowEntity parseMmkAcceptEntityFromRow(int[] colIndexes, Row row) {
         //spec (not null)
+        //TODO remove sout
+        for(int index : colIndexes) {
+            System.out.print(index + "   ");
+        }
+
         String spec = ExcelUtils.getStringValue(colIndexes[0], row);
 
         //position (not null)

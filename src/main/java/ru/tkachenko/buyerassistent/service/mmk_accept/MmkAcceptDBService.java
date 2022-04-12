@@ -18,13 +18,15 @@ public class MmkAcceptDBService {
     }
 
     public void addUniqueEntity(MmkAcceptRowEntity mmkAcceptRowEntity) {
-        MmkAcceptRowEntity entityFromDB = mmkAcceptRepository.findFirstBySpecAndPosition(mmkAcceptRowEntity.getSpec(),
-                mmkAcceptRowEntity.getPosition());
-        if(entityFromDB == null) {
-            mmkAcceptRepository.save(mmkAcceptRowEntity);
-        } else {
-            MmkAcceptRowEntity updatedEntity = updateEntity(mmkAcceptRowEntity, entityFromDB);
-            mmkAcceptRepository.save(updatedEntity);
+        if(mmkAcceptRowEntity.getSpec() != null && mmkAcceptRowEntity.getPosition() != 0) {
+            MmkAcceptRowEntity entityFromDB = mmkAcceptRepository.findFirstBySpecAndPosition(mmkAcceptRowEntity.getSpec(),
+                    mmkAcceptRowEntity.getPosition());
+            if(entityFromDB == null) {
+                mmkAcceptRepository.save(mmkAcceptRowEntity);
+            } else {
+                MmkAcceptRowEntity updatedEntity = updateEntity(mmkAcceptRowEntity, entityFromDB);
+                mmkAcceptRepository.save(updatedEntity);
+            }
         }
     }
 
