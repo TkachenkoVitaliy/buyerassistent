@@ -45,20 +45,8 @@ public class MmkAcceptService {
             FileInputStream fileInputStream = new FileInputStream(filePath.toString());
             XSSFWorkbook workbook = new XSSFWorkbook(fileInputStream);
             XSSFSheet sheet = workbook.getSheetAt(0);
-
-            //TODO remove all block
-            XSSFRow testedRow = sheet.getRow(0);
-            for (Cell cell : testedRow) {
-                System.out.println(cell.getCellType());
-            }
-            //TODO remove all block
-
             int headerRowIndex = ExcelUtils.findFirstNotBlankRow(sheet);
-            //TODO remove sout
-            System.out.println("headerRowIndex = " + headerRowIndex);
-
             int[] colIndexes = getEntityColumns(sheet, headerRowIndex);
-
             int firstRowIndex = headerRowIndex + 1;
             int lastRowIndex = sheet.getLastRowNum();
 
@@ -82,42 +70,16 @@ public class MmkAcceptService {
     }
 
     private MmkAcceptRowEntity parseMmkAcceptEntityFromRow(int[] colIndexes, Row row) {
-        //spec (not null)
-        //TODO remove sout
-        for(int index : colIndexes) {
-            System.out.print(index + "   ");
-        }
-
         String spec = ExcelUtils.getStringValue(colIndexes[0], row);
-
-        //position (not null)
         int position = ExcelUtils.getIntValue(colIndexes[1], row);
-
-        //nomenclature
         String nomenclature = ExcelUtils.getStringValue(colIndexes[2], row);
-
-        //grade
         String grade = ExcelUtils.getStringValue(colIndexes[3], row);
-
-        //thickness
         double thickness = ExcelUtils.getDoubleValue(colIndexes[4], row);
-
-        //width
         double width = ExcelUtils.getDoubleValue(colIndexes[5], row);
-
-        //length
         double length = ExcelUtils.getDoubleValue(colIndexes[6], row);
-
-        //alterProfile
         String alterProfile = ExcelUtils.getStringValue(colIndexes[7], row);
-
-        //accepted
         double accepted = ExcelUtils.getDoubleValue(colIndexes[8], row);
-
-        //acceptMonth
         int acceptMonth = ExcelUtils.getIntValue(colIndexes[9], row);
-
-        //additionalRequirements
         String additionalRequirements = ExcelUtils.getStringValue(colIndexes[10], row);
 
         return new MmkAcceptRowEntity(spec, position, nomenclature, grade, thickness,

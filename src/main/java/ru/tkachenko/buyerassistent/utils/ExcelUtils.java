@@ -25,9 +25,6 @@ public class ExcelUtils {
         int[] resultArray = new int[arrayValues.length];
         for (int i = 0; i < arrayValues.length; i++) {
             String value = arrayValues[i];
-            //TODO remove sout
-            System.out.println(value);
-
             resultArray[i] = findColIndexByValue(value, row);
         }
         return resultArray;
@@ -63,9 +60,6 @@ public class ExcelUtils {
     }
 
     public static String getStringValue(int colIndex, Row row) {
-        //TODO remove sout
-        System.out.println("getStringValue cellIndex - " + colIndex);
-
         Cell cell = row.getCell(colIndex);
         return getAnyValueAsString(cell);
     }
