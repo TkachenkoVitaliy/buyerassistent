@@ -1,11 +1,10 @@
 package ru.tkachenko.buyerassistent.utils;
 
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.CellType;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.*;
 
 public class ExcelUtils {
+
+    private final static DataFormatter dataFormatter = new DataFormatter();
 
     public static int findColIndexByValue (String value, Row row) {
         int result = -1;
@@ -41,5 +40,30 @@ public class ExcelUtils {
             }
         }
         return result;
+    }
+
+    public static String getAnyValueAsString(Cell cell) {
+        if(cell.getCellType() == CellType.STRING) {
+            return cell.getStringCellValue();
+        } else {
+            String stringValue = dataFormatter.formatCellValue(cell);
+            return stringValue;
+        }
+    }
+
+    public static String getCellValue(Cell cell) {
+        return cell.getStringCellValue();
+    }
+
+    //TODO do some overloading methods for get cellValue
+//    public static int getCellValue(Cell cell) {
+//        return (int) cell.getNumericCellValue();
+//    }
+
+    public static boolean cellIsNullOrBlank(Cell cell) {
+        if(cell == null && cell.getCellType() == CellType.BLANK && cell.getCellType() == CellType._NONE) {
+            return true;
+        }
+        return false;
     }
 }

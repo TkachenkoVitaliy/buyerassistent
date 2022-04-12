@@ -1,11 +1,14 @@
 package ru.tkachenko.buyerassistent.service.mmk_accept;
 
+import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import ru.tkachenko.buyerassistent.entity.MmkAcceptRowEntity;
+import ru.tkachenko.buyerassistent.repository.MmkAcceptRepository;
 import ru.tkachenko.buyerassistent.utils.ExcelUtils;
 
 import java.io.FileInputStream;
@@ -15,6 +18,7 @@ import java.nio.file.Path;
 
 @Service
 public class MmkAcceptParser {
+    private final MmkAcceptDBService mmkAcceptDBService;
     private final String SPEC_COL_NAME = "Номер заказа";
     private final String POSITION_COL_NAME = "Номер строки";
     private final String NOMENCLATURE_COL_NAME = "Наименование позиции";
@@ -31,6 +35,11 @@ public class MmkAcceptParser {
             THICKNESS_COL_NAME, WIDTH_COL_NAME, LENGTH_COL_NAME, ALTER_PROFILE_COL_NAME, ACCEPTED_COL_NAME,
             ACCEPTED_MONTH_COL_NAME, ADDITIONAL_REQUIREMENTS_COL_NAME};
 
+    @Autowired
+    public MmkAcceptParser(MmkAcceptDBService mmkAcceptDBService) {
+        this.mmkAcceptDBService = mmkAcceptDBService;
+    }
+
     public void parseFile (Path filePath) {
         try {
             FileInputStream fileInputStream = new FileInputStream(filePath.toString());
@@ -44,7 +53,8 @@ public class MmkAcceptParser {
 
             for (int i = firstRowIndex; i <= lastRowIndex; i++) {
                 Row currentRow = sheet.getRow(i);
-                parseMmkAcceptEntityFromRow(colIndexes, currentRow);
+                MmkAcceptRowEntity entity = parseMmkAcceptEntityFromRow(colIndexes, currentRow);
+                mmkAcceptDBService.addUniqueEntity(entity);
             }
         } catch (FileNotFoundException e) {
             e.printStackTrace();
@@ -60,7 +70,68 @@ public class MmkAcceptParser {
         return colIndexes;
     }
 
-    private void parseMmkAcceptEntityFromRow(int[] colIndexes, Row row) {
+    private MmkAcceptRowEntity parseMmkAcceptEntityFromRow(int[] colIndexes, Row row) {
+        Cell cell = null;
 
+        //spec
+        cell = row.getCell(colIndexes[0]);
+        if(ExcelUtils.cellIsNullOrBlank(cell)) {
+            return null;
+        }
+        String spec = ExcelUtils.getAnyValueAsString(cell);
+
+        //position
+        cell = row.getCell(colIndexes[1]);
+        if(ExcelUtils.cellIsNullOrBlank(cell)) {
+            return null;
+        }
+        int position = (int) cell.getNumericCellValue();
+        //TODO ExcelUtils methods
+
+
+        /*
+        public int getPosition() {
+            return position;
+        }
+
+        public String getNomenclature() {
+            return nomenclature;
+        }
+
+        public String getGrade() {
+            return grade;
+        }
+
+        public double getThickness() {
+            return thickness;
+        }
+
+        public double getWidth() {
+            return width;
+        }
+
+        public double getLength() {
+            return length;
+        }
+
+        public String getAlterProfile() {
+            return alterProfile;
+        }
+
+        public double getAccepted() {
+            return accepted;
+        }
+
+        public int getAcceptMonth() {
+            return acceptMonth;
+        }
+
+        public String getAdditionalRequirements() {
+            return additionalRequirements;
+        }
+        */
+
+        //TODO return MmkAcceptRowEntity
+        return null;
     }
 }
