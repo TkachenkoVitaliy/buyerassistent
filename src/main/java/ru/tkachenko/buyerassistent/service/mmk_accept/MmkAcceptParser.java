@@ -73,65 +73,40 @@ public class MmkAcceptParser {
     private MmkAcceptRowEntity parseMmkAcceptEntityFromRow(int[] colIndexes, Row row) {
         Cell cell = null;
 
-        //spec
-        cell = row.getCell(colIndexes[0]);
-        if(ExcelUtils.cellIsNullOrBlank(cell)) {
-            return null;
-        }
-        String spec = ExcelUtils.getAnyValueAsString(cell);
+        //spec (not null)
+        String spec = ExcelUtils.getStringValue(colIndexes[0], row);
 
-        //position
-        cell = row.getCell(colIndexes[1]);
-        if(ExcelUtils.cellIsNullOrBlank(cell)) {
-            return null;
-        }
-        int position = (int) cell.getNumericCellValue();
-        //TODO ExcelUtils methods
+        //position (not null)
+        int position = ExcelUtils.getIntValue(colIndexes[1], row);
 
+        //nomenclature
+        String nomenclature = ExcelUtils.getStringValue(colIndexes[2], row);
 
-        /*
-        public int getPosition() {
-            return position;
-        }
+        //grade
+        String grade = ExcelUtils.getStringValue(colIndexes[3], row);
 
-        public String getNomenclature() {
-            return nomenclature;
-        }
+        //thickness
+        double thickness = ExcelUtils.getDoubleValue(colIndexes[4], row);
 
-        public String getGrade() {
-            return grade;
-        }
+        //width
+        double width = ExcelUtils.getDoubleValue(colIndexes[5], row);
 
-        public double getThickness() {
-            return thickness;
-        }
+        //length
+        double length = ExcelUtils.getDoubleValue(colIndexes[6], row);
 
-        public double getWidth() {
-            return width;
-        }
+        //alterProfile
+        String alterProfile = ExcelUtils.getStringValue(colIndexes[7], row);
 
-        public double getLength() {
-            return length;
-        }
+        //accepted
+        double accepted = ExcelUtils.getDoubleValue(colIndexes[8], row);
 
-        public String getAlterProfile() {
-            return alterProfile;
-        }
+        //acceptMonth
+        int acceptMonth = ExcelUtils.getIntValue(colIndexes[9], row);
 
-        public double getAccepted() {
-            return accepted;
-        }
+        //additionalRequirements
+        String additionalRequirements = ExcelUtils.getStringValue(colIndexes[10], row);
 
-        public int getAcceptMonth() {
-            return acceptMonth;
-        }
-
-        public String getAdditionalRequirements() {
-            return additionalRequirements;
-        }
-        */
-
-        //TODO return MmkAcceptRowEntity
-        return null;
+        return new MmkAcceptRowEntity(spec, position, nomenclature, grade, thickness,
+                width, length, alterProfile, accepted, acceptMonth, additionalRequirements);
     }
 }

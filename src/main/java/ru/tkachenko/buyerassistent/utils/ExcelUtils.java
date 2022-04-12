@@ -51,19 +51,25 @@ public class ExcelUtils {
         }
     }
 
-    public static String getCellValue(Cell cell) {
-        return cell.getStringCellValue();
-    }
-
-    //TODO do some overloading methods for get cellValue
-//    public static int getCellValue(Cell cell) {
-//        return (int) cell.getNumericCellValue();
-//    }
-
     public static boolean cellIsNullOrBlank(Cell cell) {
         if(cell == null && cell.getCellType() == CellType.BLANK && cell.getCellType() == CellType._NONE) {
             return true;
         }
         return false;
+    }
+
+    public static String getStringValue(int colIndex, Row row) {
+        Cell cell = row.getCell(colIndex);
+        return getAnyValueAsString(cell);
+    }
+
+    public static double getDoubleValue(int colIndex, Row row) {
+        Cell cell = row.getCell(colIndex);
+        return cell.getNumericCellValue();
+    }
+
+    public static int getIntValue(int colIndex, Row row) {
+        Cell cell = row.getCell(colIndex);
+        return (int) cell.getNumericCellValue();
     }
 }
