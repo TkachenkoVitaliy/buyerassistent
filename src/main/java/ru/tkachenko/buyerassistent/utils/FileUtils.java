@@ -9,8 +9,7 @@ public class FileUtils {
         final String CORRECT_EXTENSION = ".xlsx";
 
         String fileName = multipartFile.getOriginalFilename();
-        String fileExtension = fileName.substring(fileName.lastIndexOf("."));
-        if (fileExtension.equals(CORRECT_EXTENSION)) {
+        if (fileName.endsWith(CORRECT_EXTENSION)) {
             return true;
         } else {
             throw new IllegalFileExtensionException("Wrong Extension! File - " + multipartFile.getOriginalFilename());

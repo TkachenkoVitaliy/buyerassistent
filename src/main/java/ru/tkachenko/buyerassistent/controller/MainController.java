@@ -40,4 +40,12 @@ public class MainController {
         }
     }
 
+    @PostMapping("/uploadMultipleFiles")
+    public String uploadMultipleFiles(@RequestParam("otherFactories") MultipartFile otherFactories,
+                                      @RequestParam("oracleMmk") MultipartFile oracleMmk,
+                                      @RequestParam("dependenciesMmk") MultipartFile dependenciesMmk) {
+
+        return "Files Uploaded";
+    }
+
 }
