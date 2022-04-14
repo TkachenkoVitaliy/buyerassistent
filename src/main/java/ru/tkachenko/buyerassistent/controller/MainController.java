@@ -44,7 +44,13 @@ public class MainController {
     public String uploadMultipleFiles(@RequestParam("otherFactories") MultipartFile otherFactories,
                                       @RequestParam("oracleMmk") MultipartFile oracleMmk,
                                       @RequestParam("dependenciesMmk") MultipartFile dependenciesMmk) {
-        fileStorageService.storeFiles(otherFactories, oracleMmk,dependenciesMmk);
+        try {
+            fileStorageService.storeFiles(otherFactories, oracleMmk,dependenciesMmk);
+        } catch (IllegalFileExtensionException e) {
+            e.printStackTrace();
+            return "Wrong Extension!" + "\n" + otherFactories.getOriginalFilename()
+                    + "\n" + oracleMmk.getOriginalFilename() + "\n" + dependenciesMmk.getOriginalFilename();
+        }
         return "Files Uploaded";
     }
 

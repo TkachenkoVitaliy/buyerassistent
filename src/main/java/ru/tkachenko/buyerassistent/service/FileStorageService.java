@@ -13,7 +13,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
-import java.util.GregorianCalendar;
 import java.util.List;
 
 @Service
@@ -43,13 +42,38 @@ public class FileStorageService {
         return mmkAcceptDestinationPath;
     }
 
-    public List<Path> storeFiles(MultipartFile otherFactories, MultipartFile oracleMmk, MultipartFile dependenciesMmk) {
+    public List<Path> storeFiles(MultipartFile otherFactories, MultipartFile oracleMmk, MultipartFile dependenciesMmk)
+    throws IllegalFileExtensionException {
+        String otherFactoriesFileName = "otherFactories.xlsx";
+        String oracleMmkFileName = "oracleMMK.xlsx";
+        String dependenciesMmkFileName = "dependenciesMMK.xlsx";
         CurrentDate currentDate = new CurrentDate();
         String year = currentDate.getYear();
         String month = currentDate.getMonth();
         String day = currentDate.getDay();
         String time = currentDate.getTime();
-        System.out.println(year + " " + month + " " + day + " " + time);
+        Path DESTINATION_DIRECTORY = FILE_STORAGE_LOCATION.resolve(year).resolve(month).resolve(day).resolve(time);
+
+        try {
+            FileUtils.validateFileExtension(otherFactories);
+            FileUtils.validateFileExtension(oracleMmk);
+            FileUtils.validateFileExtension(dependenciesMmk);
+
+            Files.createDirectories(DESTINATION_DIRECTORY);
+
+            Path otherFactoriesPath = DESTINATION_DIRECTORY.resolve(otherFactoriesFileName);
+            Files.copy(otherFactories.getInputStream(), otherFactoriesPath, StandardCopyOption.REPLACE_EXISTING);
+
+            Path oracleMmkPath = DESTINATION_DIRECTORY.resolve(oracleMmkFileName);
+            Files.copy(oracleMmk.getInputStream(), oracleMmkPath, StandardCopyOption.REPLACE_EXISTING);
+
+            Path dependenciesMmkPath = DESTINATION_DIRECTORY.resolve(dependenciesMmkFileName);
+            Files.copy(dependenciesMmk.getInputStream(), dependenciesMmkPath, StandardCopyOption.REPLACE_EXISTING);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+
         //TODO return List<Path>
         return null;
     }
