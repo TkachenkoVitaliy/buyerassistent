@@ -23,7 +23,7 @@ public class FileStorageService {
         this.FILE_STORAGE_LOCATION = Paths.get(fileStorageProperties.getUploadDir()).toAbsolutePath().normalize();
     }
 
-    public Path storeFiles(MultipartFile mmkAccept) throws IllegalFileExtensionException{
+    public Path storeFile(MultipartFile mmkAccept) throws IllegalFileExtensionException{
         final String MMK_ACCEPT_STORAGE_FILENAME = "mmkAccept.xlsx";
         final Path TEMP_DIRECTORY = FILE_STORAGE_LOCATION.resolve("temp");
         Path mmkAcceptDestinationPath = TEMP_DIRECTORY.resolve(MMK_ACCEPT_STORAGE_FILENAME);

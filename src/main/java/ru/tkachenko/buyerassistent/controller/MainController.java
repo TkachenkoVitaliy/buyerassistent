@@ -25,7 +25,7 @@ public class MainController {
         //added sout new Date() for check function time
         try{
             System.out.println(new Date());
-            Path mmkAcceptPath = fileStorageService.storeFiles(mmkAccept);
+            Path mmkAcceptPath = fileStorageService.storeFile(mmkAccept);
             mmkAcceptService.parseFileToDatabase(mmkAcceptPath);
             return "Accept Uploaded";
         } catch (IllegalFileExtensionException e) {

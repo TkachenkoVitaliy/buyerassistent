@@ -1,9 +1,7 @@
 package ru.tkachenko.buyerassistent.service.mmk_accept;
 
-import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,14 +39,14 @@ public class MmkAcceptService {
     }
 
     public void parseFileToDatabase(Path filePath) {
-        try {
-            FileInputStream fileInputStream = new FileInputStream(filePath.toString());
-            XSSFWorkbook workbook = new XSSFWorkbook(fileInputStream);
+
+        try (FileInputStream fileInputStream = new FileInputStream(filePath.toString());
+             XSSFWorkbook workbook = new XSSFWorkbook(fileInputStream)) {
             XSSFSheet sheet = workbook.getSheetAt(0);
             int headerRowIndex = ExcelUtils.findFirstNotBlankRow(sheet);
-            int[] colIndexes = getEntityColumns(sheet, headerRowIndex);
             int firstRowIndex = headerRowIndex + 1;
             int lastRowIndex = sheet.getLastRowNum();
+            int[] colIndexes = getEntityColumns(sheet, headerRowIndex);
 
             for (int i = firstRowIndex; i <= lastRowIndex; i++) {
                 Row currentRow = sheet.getRow(i);
@@ -60,7 +58,6 @@ public class MmkAcceptService {
         } catch (IOException ioException) {
             ioException.printStackTrace();
         }
-
     }
 
     private int[] getEntityColumns(Sheet sheet, int headerRowIndex) {
