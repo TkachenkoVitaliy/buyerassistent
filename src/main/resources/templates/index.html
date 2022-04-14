@@ -12,5 +12,20 @@
     <button>SEND</button>
 </form>
 
+<hr>
+
+<form action="/uploadMultipleFiles" method="post" enctype="multipart/form-data">
+    <label>Прочие заводы</label>
+    <input type="file" accept=".xlsx" name="otherFactories" required>
+    <br>
+    <label>Оракл ММК</label>
+    <input type="file" accept=".xlsx" name="oracleMmk" required>
+    <br>
+    <label>Зависимости ММК</label>
+    <input type="file" accept=".xlsx" name="dependenciesMmk" required>
+    <br>
+    <button>SEND</button>
+</form>
+
 </body>
 </html>
