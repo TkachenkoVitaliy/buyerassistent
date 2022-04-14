@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import ru.tkachenko.buyerassistent.exceptions.IllegalFileExtensionException;
 import ru.tkachenko.buyerassistent.property.FileStorageProperties;
+import ru.tkachenko.buyerassistent.utils.CurrentDate;
 import ru.tkachenko.buyerassistent.utils.FileUtils;
 
 import java.io.IOException;
@@ -12,6 +13,8 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.util.GregorianCalendar;
+import java.util.List;
 
 @Service
 public class FileStorageService {
@@ -38,5 +41,16 @@ public class FileStorageService {
 
         //TODO нужно что-то придумать с этим возвращаемым значением (мб бросить ошибку)
         return mmkAcceptDestinationPath;
+    }
+
+    public List<Path> storeFiles(MultipartFile otherFactories, MultipartFile oracleMmk, MultipartFile dependenciesMmk) {
+        CurrentDate currentDate = new CurrentDate();
+        String year = currentDate.getYear();
+        String month = currentDate.getMonth();
+        String day = currentDate.getDay();
+        String time = currentDate.getTime();
+        System.out.println(year + " " + month + " " + day + " " + time);
+        //TODO return List<Path>
+        return null;
     }
 }

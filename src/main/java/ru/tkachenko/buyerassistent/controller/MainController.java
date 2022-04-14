@@ -44,7 +44,7 @@ public class MainController {
     public String uploadMultipleFiles(@RequestParam("otherFactories") MultipartFile otherFactories,
                                       @RequestParam("oracleMmk") MultipartFile oracleMmk,
                                       @RequestParam("dependenciesMmk") MultipartFile dependenciesMmk) {
-
+        fileStorageService.storeFiles(otherFactories, oracleMmk,dependenciesMmk);
         return "Files Uploaded";
     }
 
