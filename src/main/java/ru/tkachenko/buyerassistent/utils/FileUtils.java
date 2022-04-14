@@ -1,11 +1,11 @@
 package ru.tkachenko.buyerassistent.utils;
 
 import org.springframework.web.multipart.MultipartFile;
-import ru.tkachenko.buyerassistent.exceptions.WrongExtensionException;
+import ru.tkachenko.buyerassistent.exceptions.IllegalFileExtensionException;
 
 public class FileUtils {
 
-    public static boolean validateFileExtension (MultipartFile multipartFile) throws WrongExtensionException {
+    public static boolean validateFileExtension (MultipartFile multipartFile) throws IllegalFileExtensionException {
         final String CORRECT_EXTENSION = ".xlsx";
 
         String fileName = multipartFile.getOriginalFilename();
@@ -13,7 +13,7 @@ public class FileUtils {
         if(fileExtension.equals(CORRECT_EXTENSION)) {
             return true;
         } else {
-            throw new WrongExtensionException("Wrong Extension! File - " + multipartFile.getOriginalFilename());
+            throw new IllegalFileExtensionException("Wrong Extension! File - " + multipartFile.getOriginalFilename());
         }
     }
 

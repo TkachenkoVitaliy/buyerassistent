@@ -3,6 +3,7 @@ package ru.tkachenko.buyerassistent.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import ru.tkachenko.buyerassistent.exceptions.IllegalFileExtensionException;
 import ru.tkachenko.buyerassistent.property.FileStorageProperties;
 import ru.tkachenko.buyerassistent.utils.FileUtils;
 
@@ -22,13 +23,13 @@ public class FileStorageService {
         this.FILE_STORAGE_LOCATION = Paths.get(fileStorageProperties.getUploadDir()).toAbsolutePath().normalize();
     }
 
-    public Path storeFiles(MultipartFile mmkAccept) {
+    public Path storeFiles(MultipartFile mmkAccept) throws IllegalFileExtensionException{
         final String MMK_ACCEPT_STORAGE_FILENAME = "mmkAccept.xlsx";
         final Path TEMP_DIRECTORY = FILE_STORAGE_LOCATION.resolve("temp");
         Path mmkAcceptDestinationPath = TEMP_DIRECTORY.resolve(MMK_ACCEPT_STORAGE_FILENAME);
 
-        FileUtils.validateFileExtension(mmkAccept); //if extension is wrong throws WrongExtensionException and end this method
         try {
+            FileUtils.validateFileExtension(mmkAccept); //if extension is wrong throws WrongExtensionException and end this method
             Files.createDirectories(TEMP_DIRECTORY);
             Files.copy(mmkAccept.getInputStream(), mmkAcceptDestinationPath, StandardCopyOption.REPLACE_EXISTING);
         } catch (IOException e) {
