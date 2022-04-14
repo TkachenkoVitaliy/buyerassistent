@@ -15,15 +15,19 @@ import java.util.Date;
 @RestController
 public class MainController {
 
+    private final FileStorageService fileStorageService;
+    private final MmkAcceptService mmkAcceptService;
+
     @Autowired
-    FileStorageService fileStorageService;
-    @Autowired
-    MmkAcceptService mmkAcceptService;
+    public MainController(FileStorageService fileStorageService, MmkAcceptService mmkAcceptService) {
+        this.fileStorageService = fileStorageService;
+        this.mmkAcceptService = mmkAcceptService;
+    }
 
     @PostMapping("/uploadAccept")
     public String uploadAccept(@RequestParam("mmkAccept") MultipartFile mmkAccept) {
         //added sout new Date() for check function time
-        try{
+        try {
             System.out.println(new Date());
             Path mmkAcceptPath = fileStorageService.storeFile(mmkAccept);
             mmkAcceptService.parseFileToDatabase(mmkAcceptPath);
@@ -31,8 +35,7 @@ public class MainController {
         } catch (IllegalFileExtensionException e) {
             e.printStackTrace();
             return "Wrong Extension! File - " + mmkAccept.getOriginalFilename();
-        }
-        finally {
+        } finally {
             System.out.println(new Date());
         }
     }

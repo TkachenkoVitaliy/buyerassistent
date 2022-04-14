@@ -6,9 +6,9 @@ public class ExcelUtils {
 
     private final static DataFormatter dataFormatter = new DataFormatter();
 
-    public static int findColIndexByValue (String value, Row row) {
+    public static int findColIndexByValue(String value, Row row) {
         int result = -1;
-        for (Cell cell: row) {
+        for (Cell cell : row) {
             if (cell.getCellType() == CellType.STRING) {
                 if (value.equals(cell.getStringCellValue())) {
                     result = cell.getColumnIndex();
@@ -30,11 +30,11 @@ public class ExcelUtils {
         return resultArray;
     }
 
-    public static int findFirstNotBlankRow (Sheet sheet) {
+    public static int findFirstNotBlankRow(Sheet sheet) {
         int result = -1;
         for (Row row : sheet) {
             for (Cell cell : row) {
-                if(!cellIsNullOrBlank(cell)) {
+                if (!cellIsNullOrBlank(cell)) {
                     result = cell.getRowIndex();
                     return result;
                 }
@@ -44,14 +44,14 @@ public class ExcelUtils {
     }
 
     public static boolean cellIsNullOrBlank(Cell cell) {
-        if(cell == null || cell.getCellType() == CellType.BLANK || cell.getCellType() == CellType._NONE) {
+        if (cell == null || cell.getCellType() == CellType.BLANK || cell.getCellType() == CellType._NONE) {
             return true;
         }
         return false;
     }
 
     public static String getAnyValueAsString(Cell cell) {
-        if(cell.getCellType() == CellType.STRING) {
+        if (cell.getCellType() == CellType.STRING) {
             return cell.getStringCellValue();
         } else {
             String stringValue = dataFormatter.formatCellValue(cell);

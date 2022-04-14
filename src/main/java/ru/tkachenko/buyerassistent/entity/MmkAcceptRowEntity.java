@@ -45,9 +45,7 @@ public class MmkAcceptRowEntity {
     @Column(name = "additional_requirements")
     private String additionalRequirements;
 
-    public MmkAcceptRowEntity(String spec, int position, String nomenclature, String grade, double thickness,
-                              double width, double length, String alterProfile, double accepted, int acceptMonth,
-                              String additionalRequirements) {
+    public MmkAcceptRowEntity(String spec, int position, String nomenclature, String grade, double thickness, double width, double length, String alterProfile, double accepted, int acceptMonth, String additionalRequirements) {
         this.spec = spec;
         this.position = position;
         this.nomenclature = nomenclature;
