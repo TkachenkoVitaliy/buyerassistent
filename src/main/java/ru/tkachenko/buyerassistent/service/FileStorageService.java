@@ -13,6 +13,8 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -25,25 +27,24 @@ public class FileStorageService {
         this.FILE_STORAGE_LOCATION = Paths.get(fileStorageProperties.getUploadDir()).toAbsolutePath().normalize();
     }
 
-    public Path storeFile(MultipartFile mmkAccept) throws IllegalFileExtensionException{
+    public Path storeFile(MultipartFile mmkAccept) throws IllegalFileExtensionException {
         final String MMK_ACCEPT_STORAGE_FILENAME = "mmkAccept.xlsx";
         final Path TEMP_DIRECTORY = FILE_STORAGE_LOCATION.resolve("temp");
         Path mmkAcceptDestinationPath = TEMP_DIRECTORY.resolve(MMK_ACCEPT_STORAGE_FILENAME);
 
         try {
-            FileUtils.validateFileExtension(mmkAccept); //if extension is wrong throws WrongExtensionException and end this method
+            FileUtils.validateFileExtension(mmkAccept);
             Files.createDirectories(TEMP_DIRECTORY);
             Files.copy(mmkAccept.getInputStream(), mmkAcceptDestinationPath, StandardCopyOption.REPLACE_EXISTING);
         } catch (IOException e) {
             e.printStackTrace();
         }
 
-        //TODO нужно что-то придумать с этим возвращаемым значением (мб бросить ошибку)
         return mmkAcceptDestinationPath;
     }
 
     public List<Path> storeFiles(MultipartFile otherFactories, MultipartFile oracleMmk, MultipartFile dependenciesMmk)
-    throws IllegalFileExtensionException {
+            throws IllegalFileExtensionException {
         String otherFactoriesFileName = "otherFactories.xlsx";
         String oracleMmkFileName = "oracleMMK.xlsx";
         String dependenciesMmkFileName = "dependenciesMMK.xlsx";
@@ -53,6 +54,7 @@ public class FileStorageService {
         String day = currentDate.getDay();
         String time = currentDate.getTime();
         Path DESTINATION_DIRECTORY = FILE_STORAGE_LOCATION.resolve(year).resolve(month).resolve(day).resolve(time);
+        List<Path> savedFilesPaths = new ArrayList<>();
 
         try {
             FileUtils.validateFileExtension(otherFactories);
@@ -69,12 +71,12 @@ public class FileStorageService {
 
             Path dependenciesMmkPath = DESTINATION_DIRECTORY.resolve(dependenciesMmkFileName);
             Files.copy(dependenciesMmk.getInputStream(), dependenciesMmkPath, StandardCopyOption.REPLACE_EXISTING);
+
+            Collections.addAll(savedFilesPaths, otherFactoriesPath, oracleMmkPath, dependenciesMmkPath);
         } catch (IOException e) {
             e.printStackTrace();
         }
 
-
-        //TODO return List<Path>
-        return null;
+        return savedFilesPaths;
     }
 }

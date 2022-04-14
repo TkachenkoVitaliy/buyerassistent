@@ -11,6 +11,7 @@ import ru.tkachenko.buyerassistent.service.mmk_accept.MmkAcceptService;
 
 import java.nio.file.Path;
 import java.util.Date;
+import java.util.List;
 
 @RestController
 public class MainController {
@@ -28,15 +29,12 @@ public class MainController {
     public String uploadAccept(@RequestParam("mmkAccept") MultipartFile mmkAccept) {
         //added sout new Date() for check function time
         try {
-            System.out.println(new Date());
             Path mmkAcceptPath = fileStorageService.storeFile(mmkAccept);
             mmkAcceptService.parseFileToDatabase(mmkAcceptPath);
             return "Accept Uploaded";
         } catch (IllegalFileExtensionException e) {
             e.printStackTrace();
-            return "Wrong Extension! File - " + mmkAccept.getOriginalFilename();
-        } finally {
-            System.out.println(new Date());
+            return e.getMessage();
         }
     }
 
@@ -45,11 +43,10 @@ public class MainController {
                                       @RequestParam("oracleMmk") MultipartFile oracleMmk,
                                       @RequestParam("dependenciesMmk") MultipartFile dependenciesMmk) {
         try {
-            fileStorageService.storeFiles(otherFactories, oracleMmk,dependenciesMmk);
+            List<Path> savedFilesPaths = fileStorageService.storeFiles(otherFactories, oracleMmk,dependenciesMmk);
         } catch (IllegalFileExtensionException e) {
             e.printStackTrace();
-            return "Wrong Extension!" + "\n" + otherFactories.getOriginalFilename()
-                    + "\n" + oracleMmk.getOriginalFilename() + "\n" + dependenciesMmk.getOriginalFilename();
+            return e.getMessage();
         }
         return "Files Uploaded";
     }
