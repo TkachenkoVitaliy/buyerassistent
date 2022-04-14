@@ -1,8 +1,9 @@
-CREATE TABLE IF NOT EXISTS files_table
+CREATE TABLE IF NOT EXISTS saved_files_table
 (
     id    BIGINT PRIMARY KEY ,
-    original_file_name  VARCHAR(255) NOT NULL ,
+    file_path VARCHAR (255) NOT NULL ,
     storage_file_name  VARCHAR(150) NOT NULL ,
+    saved_timestamp TIMESTAMP(0) NOT NULL ,
     year  VARCHAR(4) NOT NULL ,
     month  VARCHAR(2) NOT NULL ,
     day  VARCHAR(2) NOT NULL ,
