@@ -9,6 +9,7 @@ import ru.tkachenko.buyerassistent.exceptions.IllegalFileExtensionException;
 import ru.tkachenko.buyerassistent.service.FileStorageService;
 import ru.tkachenko.buyerassistent.service.mmk_accept.MmkAcceptService;
 import ru.tkachenko.buyerassistent.service.summary.SummaryService;
+import ru.tkachenko.buyerassistent.utils.TimerUtil;
 
 import java.nio.file.Path;
 import java.util.Date;
@@ -31,7 +32,7 @@ public class MainController {
 
     @PostMapping("/uploadAccept")
     public String uploadAccept(@RequestParam("mmkAccept") MultipartFile mmkAccept) {
-        //added sout new Date() for check function time
+        TimerUtil timerUtil = new TimerUtil();
         try {
             Path mmkAcceptPath = fileStorageService.storeFile(mmkAccept);
             mmkAcceptService.parseFileToDatabase(mmkAcceptPath);
@@ -39,6 +40,8 @@ public class MainController {
         } catch (IllegalFileExtensionException e) {
             e.printStackTrace();
             return e.getMessage();
+        } finally {
+            timerUtil.consoleLogTime("uploadAccept");
         }
     }
 
@@ -46,14 +49,18 @@ public class MainController {
     public String uploadMultipleFiles(@RequestParam("otherFactories") MultipartFile otherFactories,
                                       @RequestParam("oracleMmk") MultipartFile oracleMmk,
                                       @RequestParam("dependenciesMmk") MultipartFile dependenciesMmk) {
+        TimerUtil timerUtil = new TimerUtil();
         try {
             List<Path> savedFilesPaths = fileStorageService.storeFiles(otherFactories, oracleMmk,dependenciesMmk);
             summaryService.parseFilesToSummary(savedFilesPaths);
+            return "Files Uploaded";
         } catch (IllegalFileExtensionException e) {
             e.printStackTrace();
             return e.getMessage();
+        } finally {
+            timerUtil.consoleLogTime("uploadMultipleFiles");
         }
-        return "Files Uploaded";
+
     }
 
 }

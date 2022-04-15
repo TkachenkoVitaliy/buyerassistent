@@ -73,4 +73,25 @@ public class ExcelUtils {
         Cell cell = row.getCell(colIndex);
         return (int) cell.getNumericCellValue();
     }
+
+    public static java.sql.Date getDateValue(int colIndex, Row row) {
+        Cell cell = row.getCell(colIndex);
+        java.sql.Date sqlDate = null;
+        if(cell != null && cell.getCellType()!= CellType.BLANK) {
+            if(cell.getCellType() == CellType.STRING) {
+                String dateString = cell.getStringCellValue();
+                sqlDate = java.sql.Date.valueOf(dateString);
+            } else {
+                java.util.Date javaDate = cell.getDateCellValue();
+                sqlDate = new java.sql.Date(javaDate.getTime());
+            }
+        }
+        return sqlDate;
+    }
+
+    public static int[] getEntityColumns (Sheet sheet, int headerRowIndex, String[] entityColumnNames) {
+        Row header = sheet.getRow(headerRowIndex);
+        int[] colIndexes = ExcelUtils.findColIndexesByValues(entityColumnNames, header);
+        return colIndexes;
+    }
 }

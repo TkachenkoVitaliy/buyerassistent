@@ -17,6 +17,7 @@ import java.nio.file.Path;
 @Service
 public class MmkAcceptService {
     private final MmkAcceptDBService mmkAcceptDBService;
+
     private final String SPEC_COL_NAME = "Номер заказа";
     private final String POSITION_COL_NAME = "Номер строки";
     private final String NOMENCLATURE_COL_NAME = "Наименование позиции";
@@ -28,7 +29,6 @@ public class MmkAcceptService {
     private final String ACCEPTED_COL_NAME = "Заказанное количество";
     private final String ACCEPTED_MONTH_COL_NAME = "Отгрузить до (Месяц)";
     private final String ADDITIONAL_REQUIREMENTS_COL_NAME = "Доп.тех.требования";
-
     private final String[] columnsNames = {SPEC_COL_NAME, POSITION_COL_NAME, NOMENCLATURE_COL_NAME, GRADE_COL_NAME, THICKNESS_COL_NAME, WIDTH_COL_NAME, LENGTH_COL_NAME, ALTER_PROFILE_COL_NAME, ACCEPTED_COL_NAME, ACCEPTED_MONTH_COL_NAME, ADDITIONAL_REQUIREMENTS_COL_NAME};
 
     @Autowired
@@ -44,7 +44,7 @@ public class MmkAcceptService {
             int headerRowIndex = ExcelUtils.findFirstNotBlankRow(sheet);
             int firstRowIndex = headerRowIndex + 1;
             int lastRowIndex = sheet.getLastRowNum();
-            int[] colIndexes = getEntityColumns(sheet, headerRowIndex);
+            int[] colIndexes = ExcelUtils.getEntityColumns(sheet, headerRowIndex, columnsNames);
 
             for (int i = firstRowIndex; i <= lastRowIndex; i++) {
                 Row currentRow = sheet.getRow(i);
@@ -56,12 +56,6 @@ public class MmkAcceptService {
         } catch (IOException ioException) {
             ioException.printStackTrace();
         }
-    }
-
-    private int[] getEntityColumns(Sheet sheet, int headerRowIndex) {
-        Row header = sheet.getRow(headerRowIndex);
-        int[] colIndexes = ExcelUtils.findColIndexesByValues(columnsNames, header);
-        return colIndexes;
     }
 
     private MmkAcceptRowEntity parseMmkAcceptEntityFromRow(int[] colIndexes, Row row) {
