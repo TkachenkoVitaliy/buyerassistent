@@ -5,6 +5,8 @@ import org.springframework.stereotype.Service;
 import ru.tkachenko.buyerassistent.entity.SummaryRowEntity;
 import ru.tkachenko.buyerassistent.repository.SummaryRowRepository;
 
+import javax.transaction.Transactional;
+
 @Service
 public class SummaryDBService {
 
@@ -17,5 +19,10 @@ public class SummaryDBService {
 
     public void save(SummaryRowEntity summaryRowEntity) {
         summaryRowRepository.save(summaryRowEntity);
+    }
+
+    @Transactional
+    public void truncateTable() {
+        summaryRowRepository.truncateTable();
     }
 }

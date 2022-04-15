@@ -27,9 +27,8 @@ public class OtherFactoriesParser {
     }
 
     public void parse(Path filePath) {
-        try {
-            FileInputStream fis = new FileInputStream(filePath.toString());
-            XSSFWorkbook wb = new XSSFWorkbook(fis);
+        try(FileInputStream fis = new FileInputStream(filePath.toString());
+            XSSFWorkbook wb = new XSSFWorkbook(fis);) {
             for(String monthSheetName : monthSheetNames) {
                 XSSFSheet sheet = wb.getSheet(monthSheetName);
                 if(sheet != null) parseSheet(sheet);
