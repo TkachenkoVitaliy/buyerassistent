@@ -62,3 +62,17 @@ CREATE TABLE IF NOT EXISTS accept_table
     additional_requirements VARCHAR
 );
 CREATE SEQUENCE IF NOT EXISTS hibernate_sequence START WITH 1 INCREMENT BY 1;
+
+CREATE TABLE IF NOT EXISTS dependency_table
+(
+    id    BIGINT PRIMARY KEY ,
+    consignee VARCHAR,
+    station VARCHAR(50),
+    spec VARCHAR(50),
+    position INTEGER,
+    branch VARCHAR(50) NOT NULL,
+    sell_type VARCHAR(10) NOT NULL,
+    client VARCHAR(100),
+    priority INTEGER
+);
+CREATE SEQUENCE IF NOT EXISTS hibernate_sequence START WITH 1 INCREMENT BY 1;
