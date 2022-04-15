@@ -10,6 +10,6 @@ import ru.tkachenko.buyerassistent.entity.DependencyEntity;
 public interface DependencyRepository extends JpaRepository<DependencyEntity, Long> {
 
     @Modifying
-    @Query(value = "truncate table summary_table", nativeQuery = true)
+    @Query(value = "truncate table dependency_table", nativeQuery = true)
     void truncateTable();
 }

@@ -11,7 +11,7 @@ public class DependencyEntity {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @Column(name = "cosignee")
+    @Column(name = "consignee")
     private String consignee;
 
     @Column(name = "station")

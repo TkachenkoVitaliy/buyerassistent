@@ -9,15 +9,17 @@ import java.util.List;
 @Service
 public class SummaryService {
 
-    private final OtherFactoriesParser otherFactoriesParser;
     private final SummaryDBService summaryDBService;
+    private final DependencyParser dependencyParser;
+    private final OtherFactoriesParser otherFactoriesParser;
     private final OracleParser oracleParser;
 
     @Autowired
-    public SummaryService(OtherFactoriesParser otherFactoriesParser, SummaryDBService summaryDBService,
-                          OracleParser oracleParser) {
-        this.otherFactoriesParser = otherFactoriesParser;
+    public SummaryService(SummaryDBService summaryDBService, DependencyParser dependencyParser,
+                          OtherFactoriesParser otherFactoriesParser, OracleParser oracleParser) {
         this.summaryDBService = summaryDBService;
+        this.dependencyParser = dependencyParser;
+        this.otherFactoriesParser = otherFactoriesParser;
         this.oracleParser = oracleParser;
     }
 
@@ -27,9 +29,11 @@ public class SummaryService {
         Path dependenciesMmkPath = filesPaths.get(2);
 
         //TODO предварительно нужно очищать summary_table
+
         summaryDBService.truncateTable();
+        dependencyParser.parse(dependenciesMmkPath);
         otherFactoriesParser.parse(otherFactoriesPath);
-        oracleParser.parse(oracleMmkPath, dependenciesMmkPath);
+        oracleParser.parse(oracleMmkPath);
         //write oracleMmk to SummaryDB
     }
 }

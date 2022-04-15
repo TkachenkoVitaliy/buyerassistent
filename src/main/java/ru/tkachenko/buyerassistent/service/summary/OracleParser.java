@@ -14,7 +14,7 @@ import java.nio.file.Path;
 @Service
 public class OracleParser {
 
-    public void parse(Path oracleMmkPath, Path dependenciesMmkPath) {
+    public void parse(Path oracleMmkPath) {
         try(FileInputStream fis = new FileInputStream(oracleMmkPath.toString());
             XSSFWorkbook wb = new XSSFWorkbook(fis)) {
             XSSFSheet sheet = wb.getSheetAt(0);
@@ -35,7 +35,7 @@ public class OracleParser {
         }
     }
 
-    public OracleDTO parseToOracleDTO(int[] colIndexes, Row row) {
+    private OracleDTO parseToOracleDTO(int[] colIndexes, Row row) {
         OracleDTO oracleDTO = new OracleDTO();
         oracleDTO.setMill(ExcelUtils.getStringValue(colIndexes[0], row));
         oracleDTO.setConsignee(ExcelUtils.getStringValue(colIndexes[1], row));

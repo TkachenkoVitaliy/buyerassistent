@@ -52,7 +52,7 @@ public class OtherFactoriesParser {
         }
     }
 
-    public SummaryRowEntity parseSummaryEntityFromRow(int[] colIndexes, Row row) {
+    private SummaryRowEntity parseSummaryEntityFromRow(int[] colIndexes, Row row) {
         String supplier = ExcelUtils.getStringValue(colIndexes[0],row);
         int mill = ExcelUtils.getIntValue(colIndexes[1], row);
         String branch = ExcelUtils.getStringValue(colIndexes[2], row);
