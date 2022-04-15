@@ -49,6 +49,9 @@ public class SavedFileEntity {
         this.isActual = isActual;
     }
 
+    public SavedFileEntity() {
+    }
+
     public Long getId() {
         return id;
     }
