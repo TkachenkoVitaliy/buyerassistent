@@ -4,27 +4,29 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-import ru.tkachenko.buyerassistent.entity.MmkAcceptRowEntity;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import ru.tkachenko.buyerassistent.entity.SummaryRowEntity;
 import ru.tkachenko.buyerassistent.utils.ExcelUtils;
 
-import javax.persistence.Column;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.sql.Date;
 
+@Service
 public class OtherFactoriesParser {
-    private final Path filePath;
+
     private final String[] monthSheetNames = {"Январь_2022", "Февраль_2022", "Март_2022", "Апрель_2022", "Май_2022",
             "Июнь_2022", "Июль_2022", "Август_2022", "Сентябрь_2022", "Октябрь_2022", "Ноябрь_2022", "Декабрь_2022"};
+    private final SummaryDBService summaryDBService;
 
-
-    public OtherFactoriesParser(Path filePath) {
-        this.filePath = filePath;
+    @Autowired
+    public OtherFactoriesParser(SummaryDBService summaryDBService) {
+        this.summaryDBService = summaryDBService;
     }
 
-    public void parse() {
+    public void parse(Path filePath) {
         try {
             FileInputStream fis = new FileInputStream(filePath.toString());
             XSSFWorkbook wb = new XSSFWorkbook(fis);
@@ -47,7 +49,7 @@ public class OtherFactoriesParser {
         for (int i = firstRowIndex; i <= lastRowIndex; i++) {
             Row currentRow = sheet.getRow(i);
             SummaryRowEntity entity = parseSummaryEntityFromRow(colIndexes, currentRow);
-            //mmkAcceptDBService.addUniqueEntity(entity);
+            summaryDBService.save(entity);
         }
     }
 
