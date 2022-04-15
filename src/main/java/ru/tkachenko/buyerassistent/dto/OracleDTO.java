@@ -12,13 +12,13 @@ public class OracleDTO {
     private String contract;
     private String spec;
     private int position;
-    private int accept_month;
+    private int acceptMonth;
     private double accepted;
     private double shipped;
-    private Date shipped_date;
-    private String vehicle_number;
-    private int invoice_number;
-    private Date invoice_date;
+    private Date shippedDate;
+    private String vehicleNumber;
+    private int invoiceNumber;
+    private Date invoiceDate;
 
     private double priceWithoutNDS;
     private String prt;
@@ -42,13 +42,13 @@ public class OracleDTO {
         this.contract = contract;
         this.spec = spec;
         this.position = position;
-        this.accept_month = accept_month;
+        this.acceptMonth = accept_month;
         this.accepted = accepted;
         this.shipped = shipped;
-        this.shipped_date = shipped_date;
-        this.vehicle_number = vehicle_number;
-        this.invoice_number = invoice_number;
-        this.invoice_date = invoice_date;
+        this.shippedDate = shipped_date;
+        this.vehicleNumber = vehicle_number;
+        this.invoiceNumber = invoice_number;
+        this.invoiceDate = invoice_date;
         this.priceWithoutNDS = priceWithoutNDS;
         this.prt = prt;
         this.station = station;
@@ -133,12 +133,12 @@ public class OracleDTO {
         this.position = position;
     }
 
-    public int getAccept_month() {
-        return accept_month;
+    public int getAcceptMonth() {
+        return acceptMonth;
     }
 
-    public void setAccept_month(int accept_month) {
-        this.accept_month = accept_month;
+    public void setAcceptMonth(int acceptMonth) {
+        this.acceptMonth = acceptMonth;
     }
 
     public double getAccepted() {
@@ -157,36 +157,36 @@ public class OracleDTO {
         this.shipped = shipped;
     }
 
-    public Date getShipped_date() {
-        return shipped_date;
+    public Date getShippedDate() {
+        return shippedDate;
     }
 
-    public void setShipped_date(Date shipped_date) {
-        this.shipped_date = shipped_date;
+    public void setShippedDate(Date shippedDate) {
+        this.shippedDate = shippedDate;
     }
 
-    public String getVehicle_number() {
-        return vehicle_number;
+    public String getVehicleNumber() {
+        return vehicleNumber;
     }
 
-    public void setVehicle_number(String vehicle_number) {
-        this.vehicle_number = vehicle_number;
+    public void setVehicleNumber(String vehicleNumber) {
+        this.vehicleNumber = vehicleNumber;
     }
 
-    public int getInvoice_number() {
-        return invoice_number;
+    public int getInvoiceNumber() {
+        return invoiceNumber;
     }
 
-    public void setInvoice_number(int invoice_number) {
-        this.invoice_number = invoice_number;
+    public void setInvoiceNumber(int invoiceNumber) {
+        this.invoiceNumber = invoiceNumber;
     }
 
-    public Date getInvoice_date() {
-        return invoice_date;
+    public Date getInvoiceDate() {
+        return invoiceDate;
     }
 
-    public void setInvoice_date(Date invoice_date) {
-        this.invoice_date = invoice_date;
+    public void setInvoiceDate(Date invoiceDate) {
+        this.invoiceDate = invoiceDate;
     }
 
     public double getPriceWithoutNDS() {
@@ -243,5 +243,34 @@ public class OracleDTO {
 
     public void setAdditionalRequirements(String additionalRequirements) {
         this.additionalRequirements = additionalRequirements;
+    }
+
+    @Override
+    public String toString() {
+        return "OracleDTO{" +
+                "mill='" + mill + '\'' +
+                ", consignee='" + consignee + '\'' +
+                ", productType='" + productType + '\'' +
+                ", profile='" + profile + '\'' +
+                ", grade='" + grade + '\'' +
+                ", ral='" + ral + '\'' +
+                ", contract='" + contract + '\'' +
+                ", spec='" + spec + '\'' +
+                ", position=" + position +
+                ", acceptMonth=" + acceptMonth +
+                ", accepted=" + accepted +
+                ", shipped=" + shipped +
+                ", shippedDate=" + shippedDate +
+                ", vehicleNumber='" + vehicleNumber + '\'' +
+                ", invoiceNumber=" + invoiceNumber +
+                ", invoiceDate=" + invoiceDate +
+                ", priceWithoutNDS=" + priceWithoutNDS +
+                ", prt='" + prt + '\'' +
+                ", station='" + station + '\'' +
+                ", thickness=" + thickness +
+                ", width=" + width +
+                ", length=" + length +
+                ", additionalRequirements='" + additionalRequirements + '\'' +
+                '}';
     }
 }

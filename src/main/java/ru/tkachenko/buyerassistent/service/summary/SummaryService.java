@@ -2,7 +2,6 @@ package ru.tkachenko.buyerassistent.service.summary;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import ru.tkachenko.buyerassistent.repository.SummaryRowRepository;
 
 import java.nio.file.Path;
 import java.util.List;
@@ -12,11 +11,14 @@ public class SummaryService {
 
     private final OtherFactoriesParser otherFactoriesParser;
     private final SummaryDBService summaryDBService;
+    private final OracleParser oracleParser;
 
     @Autowired
-    public SummaryService(OtherFactoriesParser otherFactoriesParser, SummaryDBService summaryDBService) {
+    public SummaryService(OtherFactoriesParser otherFactoriesParser, SummaryDBService summaryDBService,
+                          OracleParser oracleParser) {
         this.otherFactoriesParser = otherFactoriesParser;
         this.summaryDBService = summaryDBService;
+        this.oracleParser = oracleParser;
     }
 
     public void parseFilesToSummary(List<Path> filesPaths) {
@@ -27,6 +29,7 @@ public class SummaryService {
         //TODO предварительно нужно очищать summary_table
         summaryDBService.truncateTable();
         otherFactoriesParser.parse(otherFactoriesPath);
+        oracleParser.parse(oracleMmkPath, dependenciesMmkPath);
         //write oracleMmk to SummaryDB
     }
 }

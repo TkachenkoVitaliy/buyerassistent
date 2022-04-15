@@ -51,6 +51,7 @@ public class ExcelUtils {
     }
 
     public static String getAnyValueAsString(Cell cell) {
+        if (cell == null) return null;
         if (cell.getCellType() == CellType.STRING) {
             return cell.getStringCellValue();
         } else {
@@ -66,11 +67,17 @@ public class ExcelUtils {
 
     public static double getDoubleValue(int colIndex, Row row) {
         Cell cell = row.getCell(colIndex);
+        if(cell == null || cell.getCellType() == CellType.BLANK) {
+            return 0.0;
+        }
         return cell.getNumericCellValue();
     }
 
     public static int getIntValue(int colIndex, Row row) {
         Cell cell = row.getCell(colIndex);
+        if(cell == null || cell.getCellType() == CellType.BLANK) {
+            return 0;
+        }
         return (int) cell.getNumericCellValue();
     }
 
