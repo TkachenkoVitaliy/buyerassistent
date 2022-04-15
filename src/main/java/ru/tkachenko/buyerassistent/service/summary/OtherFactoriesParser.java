@@ -56,10 +56,10 @@ public class OtherFactoriesParser {
         String supplier = ExcelUtils.getStringValue(colIndexes[0],row);
         int mill = ExcelUtils.getIntValue(colIndexes[1], row);
         String branch = ExcelUtils.getStringValue(colIndexes[2], row);
-        String sell_type = ExcelUtils.getStringValue(colIndexes[3], row);
+        String sellType = ExcelUtils.getStringValue(colIndexes[3], row);
         String client = ExcelUtils.getStringValue(colIndexes[4], row);
         String consignee = ExcelUtils.getStringValue(colIndexes[5], row);
-        String product_type = ExcelUtils.getStringValue(colIndexes[6], row);
+        String productType = ExcelUtils.getStringValue(colIndexes[6], row);
         String profile = ExcelUtils.getStringValue(colIndexes[7], row);
         String grade = ExcelUtils.getStringValue(colIndexes[8], row);
         String ral = ExcelUtils.getStringValue(colIndexes[9], row);
@@ -67,23 +67,23 @@ public class OtherFactoriesParser {
         String contract = ExcelUtils.getStringValue(colIndexes[11], row);
         String spec = ExcelUtils.getStringValue(colIndexes[12], row);
         int position = ExcelUtils.getIntValue(colIndexes[13], row);
-        int accept_month = ExcelUtils.getIntValue(colIndexes[14], row);
+        int acceptMonth = ExcelUtils.getIntValue(colIndexes[14], row);
         int year = ExcelUtils.getIntValue(colIndexes[15], row);
         double accepted = ExcelUtils.getDoubleValue(colIndexes[16], row);
         double price = ExcelUtils.getDoubleValue(colIndexes[17], row);
-        double accepted_cost = ExcelUtils.getDoubleValue(colIndexes[18], row);
+        double acceptedCost = ExcelUtils.getDoubleValue(colIndexes[18], row);
         double shipped = ExcelUtils.getDoubleValue(colIndexes[19], row);
-        double shipped_cost = ExcelUtils.getDoubleValue(colIndexes[20], row);
-        Date shipped_date = ExcelUtils.getDateValue(colIndexes[21], row);
-        String vehicle_number = ExcelUtils.getStringValue(colIndexes[22], row);
-        int invoice_number = ExcelUtils.getIntValue(colIndexes[23], row);
-        Date invoice_date = ExcelUtils.getDateValue(colIndexes[24], row);
-        double final_price = ExcelUtils.getDoubleValue(colIndexes[25], row);
-        double final_cost = ExcelUtils.getDoubleValue(colIndexes[26], row);
+        double shippedCost = ExcelUtils.getDoubleValue(colIndexes[20], row);
+        Date shippedDate = ExcelUtils.getDateValue(colIndexes[21], row);
+        String vehicleNumber = ExcelUtils.getStringValue(colIndexes[22], row);
+        int invoiceNumber = ExcelUtils.getIntValue(colIndexes[23], row);
+        Date invoiceDate = ExcelUtils.getDateValue(colIndexes[24], row);
+        double finalPrice = ExcelUtils.getDoubleValue(colIndexes[25], row);
+        double finalCost = ExcelUtils.getDoubleValue(colIndexes[26], row);
 
-        return new SummaryRowEntity(supplier, mill, branch, sell_type, client, consignee, product_type, profile, grade,
-                ral, issued, contract, spec, position, accept_month, year, accepted, price, accepted_cost, shipped,
-                shipped_cost, shipped_date, vehicle_number, invoice_number, invoice_date, final_price, final_cost);
+        return new SummaryRowEntity(supplier, mill, branch, sellType, client, consignee, productType, profile, grade,
+                ral, issued, contract, spec, position, acceptMonth, year, accepted, price, acceptedCost, shipped,
+                shippedCost, shippedDate, vehicleNumber, invoiceNumber, invoiceDate, finalPrice, finalCost);
     }
 
 }

@@ -22,7 +22,7 @@ public class SummaryRowEntity {
     private String branch;
 
     @Column(name = "sell_type")//4
-    private String sell_type;
+    private String sellType;
 
     @Column(name = "client")//5
     private String client;
@@ -31,7 +31,7 @@ public class SummaryRowEntity {
     private String consignee;
 
     @Column(name = "product_type")//7
-    private String product_type;
+    private String productType;
 
     @Column(name = "profile")//8
     private String profile;
@@ -55,7 +55,7 @@ public class SummaryRowEntity {
     private int position;
 
     @Column(name = "accept_month")//15
-    private int accept_month;
+    private int acceptMonth;
 
     @Column(name = "year")//16
     private int year;
@@ -67,45 +67,45 @@ public class SummaryRowEntity {
     private double price;
 
     @Column(name = "accepted_cost")//19
-    private double accepted_cost;
+    private double acceptedCost;
 
     @Column(name = "shipped")//20
     private double shipped;
 
     @Column(name = "shipped_cost")//21
-    private double shipped_cost;
+    private double shippedCost;
 
     @Column(name = "shipped_date")//22
-    private Date shipped_date;
+    private Date shippedDate;
 
     @Column(name = "vehicle_number")//23
-    private String vehicle_number;
+    private String vehicleNumber;
 
     @Column(name = "invoice_number")//24
-    private int invoice_number;
+    private int invoiceNumber;
 
     @Column(name = "invoice_date")//25
-    private Date invoice_date;
+    private Date invoiceDate;
 
     @Column(name = "final_price")//26
-    private double final_price;
+    private double finalPrice;
 
     @Column(name = "final_cost")//27
-    private double final_cost;
+    private double finalCost;
 
-    public SummaryRowEntity(String supplier, int mill, String branch, String sell_type, String client, String consignee,
-                            String product_type, String profile, String grade, String ral, double issued,
-                            String contract, String spec, int position, int accept_month, int year, double accepted,
-                            double price, double accepted_cost, double shipped, double shipped_cost, Date shipped_date,
-                            String vehicle_number, int invoice_number, Date invoice_date, double final_price,
-                            double final_cost) {
+    public SummaryRowEntity(String supplier, int mill, String branch, String sellType, String client, String consignee,
+                            String productType, String profile, String grade, String ral, double issued,
+                            String contract, String spec, int position, int acceptMonth, int year, double accepted,
+                            double price, double acceptedCost, double shipped, double shippedCost, Date shippedDate,
+                            String vehicleNumber, int invoiceNumber, Date invoiceDate, double finalPrice,
+                            double finalCost) {
         this.supplier = supplier;
         this.mill = mill;
         this.branch = branch;
-        this.sell_type = sell_type;
+        this.sellType = sellType;
         this.client = client;
         this.consignee = consignee;
-        this.product_type = product_type;
+        this.productType = productType;
         this.profile = profile;
         this.grade = grade;
         this.ral = ral;
@@ -113,19 +113,19 @@ public class SummaryRowEntity {
         this.contract = contract;
         this.spec = spec;
         this.position = position;
-        this.accept_month = accept_month;
+        this.acceptMonth = acceptMonth;
         this.year = year;
         this.accepted = accepted;
         this.price = price;
-        this.accepted_cost = accepted_cost;
+        this.acceptedCost = acceptedCost;
         this.shipped = shipped;
-        this.shipped_cost = shipped_cost;
-        this.shipped_date = shipped_date;
-        this.vehicle_number = vehicle_number;
-        this.invoice_number = invoice_number;
-        this.invoice_date = invoice_date;
-        this.final_price = final_price;
-        this.final_cost = final_cost;
+        this.shippedCost = shippedCost;
+        this.shippedDate = shippedDate;
+        this.vehicleNumber = vehicleNumber;
+        this.invoiceNumber = invoiceNumber;
+        this.invoiceDate = invoiceDate;
+        this.finalPrice = finalPrice;
+        this.finalCost = finalCost;
     }
 
     public SummaryRowEntity() {
@@ -147,8 +147,8 @@ public class SummaryRowEntity {
         return branch;
     }
 
-    public String getSell_type() {
-        return sell_type;
+    public String getSellType() {
+        return sellType;
     }
 
     public String getClient() {
@@ -159,8 +159,8 @@ public class SummaryRowEntity {
         return consignee;
     }
 
-    public String getProduct_type() {
-        return product_type;
+    public String getProductType() {
+        return productType;
     }
 
     public String getProfile() {
@@ -191,8 +191,8 @@ public class SummaryRowEntity {
         return position;
     }
 
-    public int getAccept_month() {
-        return accept_month;
+    public int getAcceptMonth() {
+        return acceptMonth;
     }
 
     public int getYear() {
@@ -207,40 +207,40 @@ public class SummaryRowEntity {
         return price;
     }
 
-    public double getAccepted_cost() {
-        return accepted_cost;
+    public double getAcceptedCost() {
+        return acceptedCost;
     }
 
     public double getShipped() {
         return shipped;
     }
 
-    public double getShipped_cost() {
-        return shipped_cost;
+    public double getShippedCost() {
+        return shippedCost;
     }
 
-    public Date getShipped_date() {
-        return shipped_date;
+    public Date getShippedDate() {
+        return shippedDate;
     }
 
-    public String getVehicle_number() {
-        return vehicle_number;
+    public String getVehicleNumber() {
+        return vehicleNumber;
     }
 
-    public int getInvoice_number() {
-        return invoice_number;
+    public int getInvoiceNumber() {
+        return invoiceNumber;
     }
 
-    public Date getInvoice_date() {
-        return invoice_date;
+    public Date getInvoiceDate() {
+        return invoiceDate;
     }
 
-    public double getFinal_price() {
-        return final_price;
+    public double getFinalPrice() {
+        return finalPrice;
     }
 
-    public double getFinal_cost() {
-        return final_cost;
+    public double getFinalCost() {
+        return finalCost;
     }
 
     public void setSupplier(String supplier) {
@@ -255,8 +255,8 @@ public class SummaryRowEntity {
         this.branch = branch;
     }
 
-    public void setSell_type(String sell_type) {
-        this.sell_type = sell_type;
+    public void setSellType(String sell_type) {
+        this.sellType = sell_type;
     }
 
     public void setClient(String client) {
@@ -267,8 +267,8 @@ public class SummaryRowEntity {
         this.consignee = consignee;
     }
 
-    public void setProduct_type(String product_type) {
-        this.product_type = product_type;
+    public void setProductType(String product_type) {
+        this.productType = product_type;
     }
 
     public void setProfile(String profile) {
@@ -299,8 +299,8 @@ public class SummaryRowEntity {
         this.position = position;
     }
 
-    public void setAccept_month(int accept_month) {
-        this.accept_month = accept_month;
+    public void setAcceptMonth(int accept_month) {
+        this.acceptMonth = accept_month;
     }
 
     public void setYear(int year) {
@@ -315,39 +315,39 @@ public class SummaryRowEntity {
         this.price = price;
     }
 
-    public void setAccepted_cost(double accepted_cost) {
-        this.accepted_cost = accepted_cost;
+    public void setAcceptedCost(double accepted_cost) {
+        this.acceptedCost = accepted_cost;
     }
 
     public void setShipped(double shipped) {
         this.shipped = shipped;
     }
 
-    public void setShipped_cost(double shipped_cost) {
-        this.shipped_cost = shipped_cost;
+    public void setShippedCost(double shipped_cost) {
+        this.shippedCost = shipped_cost;
     }
 
-    public void setShipped_date(Date shipped_date) {
-        this.shipped_date = shipped_date;
+    public void setShippedDate(Date shipped_date) {
+        this.shippedDate = shipped_date;
     }
 
-    public void setVehicle_number(String vehicle_number) {
-        this.vehicle_number = vehicle_number;
+    public void setVehicleNumber(String vehicle_number) {
+        this.vehicleNumber = vehicle_number;
     }
 
-    public void setInvoice_number(int invoice_number) {
-        this.invoice_number = invoice_number;
+    public void setInvoiceNumber(int invoice_number) {
+        this.invoiceNumber = invoice_number;
     }
 
-    public void setInvoice_date(Date invoice_date) {
-        this.invoice_date = invoice_date;
+    public void setInvoiceDate(Date invoice_date) {
+        this.invoiceDate = invoice_date;
     }
 
-    public void setFinal_price(double final_price) {
-        this.final_price = final_price;
+    public void setFinalPrice(double final_price) {
+        this.finalPrice = final_price;
     }
 
-    public void setFinal_cost(double final_cost) {
-        this.final_cost = final_cost;
+    public void setFinalCost(double final_cost) {
+        this.finalCost = final_cost;
     }
 }

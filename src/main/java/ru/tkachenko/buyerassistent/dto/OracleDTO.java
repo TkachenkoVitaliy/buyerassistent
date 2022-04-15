@@ -3,7 +3,7 @@ package ru.tkachenko.buyerassistent.dto;
 import java.sql.Date;
 
 public class OracleDTO {
-    private String mill;
+    private int mill;
     private String consignee;
     private String productType;
     private String profile;
@@ -28,7 +28,7 @@ public class OracleDTO {
     private double length;
     private String additionalRequirements;
 
-    public OracleDTO(String mill, String consignee, String productType, String profile, String grade, String ral,
+    public OracleDTO(int mill, String consignee, String productType, String profile, String grade, String ral,
                      String contract, String spec, int position, int accept_month, double accepted, double shipped,
                      Date shipped_date, String vehicle_number, int invoice_number, Date invoice_date,
                      double priceWithoutNDS, String prt, String station, double thickness, double width, double length,
@@ -61,11 +61,11 @@ public class OracleDTO {
     public OracleDTO() {
     }
 
-    public String getMill() {
+    public int getMill() {
         return mill;
     }
 
-    public void setMill(String mill) {
+    public void setMill(int mill) {
         this.mill = mill;
     }
 
