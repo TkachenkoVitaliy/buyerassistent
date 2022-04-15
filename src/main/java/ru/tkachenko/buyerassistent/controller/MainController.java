@@ -8,6 +8,7 @@ import org.springframework.web.multipart.MultipartFile;
 import ru.tkachenko.buyerassistent.exceptions.IllegalFileExtensionException;
 import ru.tkachenko.buyerassistent.service.FileStorageService;
 import ru.tkachenko.buyerassistent.service.mmk_accept.MmkAcceptService;
+import ru.tkachenko.buyerassistent.service.summary.SummaryService;
 
 import java.nio.file.Path;
 import java.util.Date;
@@ -18,11 +19,14 @@ public class MainController {
 
     private final FileStorageService fileStorageService;
     private final MmkAcceptService mmkAcceptService;
+    private final SummaryService summaryService;
 
     @Autowired
-    public MainController(FileStorageService fileStorageService, MmkAcceptService mmkAcceptService) {
+    public MainController(FileStorageService fileStorageService, MmkAcceptService mmkAcceptService,
+                          SummaryService summaryService) {
         this.fileStorageService = fileStorageService;
         this.mmkAcceptService = mmkAcceptService;
+        this.summaryService = summaryService;
     }
 
     @PostMapping("/uploadAccept")
@@ -44,6 +48,7 @@ public class MainController {
                                       @RequestParam("dependenciesMmk") MultipartFile dependenciesMmk) {
         try {
             List<Path> savedFilesPaths = fileStorageService.storeFiles(otherFactories, oracleMmk,dependenciesMmk);
+            summaryService.parseFilesToSummary(savedFilesPaths);
         } catch (IllegalFileExtensionException e) {
             e.printStackTrace();
             return e.getMessage();

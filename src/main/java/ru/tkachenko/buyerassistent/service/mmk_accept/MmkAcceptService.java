@@ -38,7 +38,8 @@ public class MmkAcceptService {
 
     public void parseFileToDatabase(Path filePath) {
 
-        try (FileInputStream fileInputStream = new FileInputStream(filePath.toString()); XSSFWorkbook workbook = new XSSFWorkbook(fileInputStream)) {
+        try (FileInputStream fileInputStream = new FileInputStream(filePath.toString());
+             XSSFWorkbook workbook = new XSSFWorkbook(fileInputStream)) {
             XSSFSheet sheet = workbook.getSheetAt(0);
             int headerRowIndex = ExcelUtils.findFirstNotBlankRow(sheet);
             int firstRowIndex = headerRowIndex + 1;
