@@ -57,7 +57,6 @@ public class DependencyParser {
     private DependencyEntity parseRowToEntity(int[] colIndexes, Row row, int priority) {
         String consignee = null;
         if(colIndexes[0] != -1) consignee = ExcelUtils.getStringValue(colIndexes[0], row);
-        System.out.println(consignee);
 
         String station = null;
         if(colIndexes[1] != -1) station = ExcelUtils.getStringValue(colIndexes[1], row);

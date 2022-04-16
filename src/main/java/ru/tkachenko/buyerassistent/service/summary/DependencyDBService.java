@@ -6,6 +6,7 @@ import ru.tkachenko.buyerassistent.entity.DependencyEntity;
 import ru.tkachenko.buyerassistent.repository.DependencyRepository;
 
 import javax.transaction.Transactional;
+import java.util.List;
 
 @Service
 public class DependencyDBService {
@@ -25,5 +26,21 @@ public class DependencyDBService {
     public void truncateTable() {
 
         dependencyRepository.truncateTable();
+    }
+
+    public List<DependencyEntity> findFromExceptional(String spec) {
+        return dependencyRepository.findBySpecAndPriority(spec, 4);
+    }
+
+    public List<DependencyEntity> findFromContainers(String consignee, String station) {
+        return dependencyRepository.findByConsigneeAndStationAndPriority(consignee, station, 3);
+    }
+
+    public List<DependencyEntity> findFromTransits(String consignee) {
+        return dependencyRepository.findByConsigneeAndPriority(consignee, 2);
+    }
+
+    public List<DependencyEntity> findFromDefault(String consignee) {
+        return dependencyRepository.findByConsigneeAndPriority(consignee, 1);
     }
 }

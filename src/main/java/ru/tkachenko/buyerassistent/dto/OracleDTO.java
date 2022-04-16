@@ -74,7 +74,8 @@ public class OracleDTO {
     }
 
     public void setConsignee(String consignee) {
-        this.consignee = consignee;
+        //TODO need create better method for delete all <">
+        this.consignee = consignee.replaceAll("\"", "");
     }
 
     public String getProductType() {
