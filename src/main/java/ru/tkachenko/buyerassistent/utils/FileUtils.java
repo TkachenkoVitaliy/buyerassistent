@@ -1,7 +1,7 @@
 package ru.tkachenko.buyerassistent.utils;
 
 import org.springframework.web.multipart.MultipartFile;
-import ru.tkachenko.buyerassistent.exceptions.IllegalFileExtensionException;
+import ru.tkachenko.buyerassistent.file_storage.exceptions.IllegalFileExtensionException;
 
 public class FileUtils {
 
