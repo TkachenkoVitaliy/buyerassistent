@@ -31,8 +31,6 @@ public class SummaryService {
         Path oracleMmkPath = filesPaths.get(1);
         Path dependenciesMmkPath = filesPaths.get(2);
 
-        //TODO предварительно нужно очищать summary_table
-
         summaryDBService.truncateTable();
         dependencyParser.parse(dependenciesMmkPath);
         otherFactoriesParser.parse(otherFactoriesPath);
