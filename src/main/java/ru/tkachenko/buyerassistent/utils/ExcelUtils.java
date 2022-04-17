@@ -20,7 +20,7 @@ public class ExcelUtils {
         return result;
     }
 
-    public static int[] findColIndexesByValues(String[] arrayValues, Row row) {
+    public static int[] getEntityColumnsIndexes(String[] arrayValues, Row row) {
 
         int[] resultArray = new int[arrayValues.length];
         for (int i = 0; i < arrayValues.length; i++) {
@@ -28,6 +28,12 @@ public class ExcelUtils {
             resultArray[i] = findColIndexByValue(value, row);
         }
         return resultArray;
+    }
+
+    public static int[] getEntityColumnsIndexes(Sheet sheet, int headerRowIndex, String[] entityColumnNames) {
+        Row header = sheet.getRow(headerRowIndex);
+        int[] colIndexes = ExcelUtils.getEntityColumnsIndexes(entityColumnNames, header);
+        return colIndexes;
     }
 
     public static int findFirstNotBlankRow(Sheet sheet) {
@@ -96,9 +102,4 @@ public class ExcelUtils {
         return sqlDate;
     }
 
-    public static int[] getEntityColumns (Sheet sheet, int headerRowIndex, String[] entityColumnNames) {
-        Row header = sheet.getRow(headerRowIndex);
-        int[] colIndexes = ExcelUtils.findColIndexesByValues(entityColumnNames, header);
-        return colIndexes;
-    }
 }

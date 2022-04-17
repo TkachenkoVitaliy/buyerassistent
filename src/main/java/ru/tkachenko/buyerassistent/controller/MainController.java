@@ -31,7 +31,9 @@ public class MainController {
 
     @PostMapping("/uploadAccept")
     public String uploadAccept(@RequestParam("mmkAccept") MultipartFile mmkAccept) {
+        //TODO remove timer
         TimerUtil timerUtil = new TimerUtil();
+        //TODO remove timer
         try {
             Path mmkAcceptPath = fileStorageService.storeFile(mmkAccept);
             mmkAcceptService.parseFileToDatabase(mmkAcceptPath);
@@ -39,16 +41,18 @@ public class MainController {
         } catch (IllegalFileExtensionException e) {
             e.printStackTrace();
             return e.getMessage();
-        } finally {
+        } finally { //TODO remove timer
             timerUtil.consoleLogTime("uploadAccept");
-        }
+        } //TODO remove timer
     }
 
     @PostMapping("/uploadMultipleFiles")
     public String uploadMultipleFiles(@RequestParam("otherFactories") MultipartFile otherFactories,
                                       @RequestParam("oracleMmk") MultipartFile oracleMmk,
                                       @RequestParam("dependenciesMmk") MultipartFile dependenciesMmk) {
+        //TODO remove timer
         TimerUtil timerUtil = new TimerUtil();
+        //TODO remove timer
         try {
             List<Path> savedFilesPaths = fileStorageService.storeFiles(otherFactories, oracleMmk,dependenciesMmk);
             summaryService.parseFilesToSummary(savedFilesPaths);
@@ -56,10 +60,8 @@ public class MainController {
         } catch (IllegalFileExtensionException e) {
             e.printStackTrace();
             return e.getMessage();
-        } finally {
+        } finally { //TODO remove timer
             timerUtil.consoleLogTime("uploadMultipleFiles");
-        }
-
+        } //TODO remove timer
     }
-
 }

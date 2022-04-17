@@ -15,6 +15,8 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.sql.Date;
+import java.util.Arrays;
+import java.util.Objects;
 
 @Service
 public class OtherFactoriesParser {
@@ -31,11 +33,15 @@ public class OtherFactoriesParser {
     public void parse(Path filePath) {
         try(FileInputStream fis = new FileInputStream(filePath.toString());
             XSSFWorkbook wb = new XSSFWorkbook(fis);) {
-            for(String monthSheetName : monthSheetNames) {
-                XSSFSheet sheet = wb.getSheet(monthSheetName);
-                if(sheet != null) parseSheet(sheet);
-            }
-
+//            for(String monthSheetName : monthSheetNames) {
+//                XSSFSheet sheet = wb.getSheet(monthSheetName);
+//                if(sheet != null) parseSheet(sheet);
+//            }
+            //TODO learn and test about parallelStreams (old realization upper in commentaries)
+            Arrays.stream(monthSheetNames).parallel()
+                    .map(wb::getSheet)
+                    .filter(Objects::nonNull)
+                    .forEach(this::parseSheet);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -46,7 +52,7 @@ public class OtherFactoriesParser {
         int headerRowIndex = ExcelUtils.findFirstNotBlankRow(sheet);
         int firstRowIndex = headerRowIndex + 1;
         int lastRowIndex = sheet.getLastRowNum();
-        int[] colIndexes = ExcelUtils.getEntityColumns(sheet, headerRowIndex, columnsNames);
+        int[] colIndexes = ExcelUtils.getEntityColumnsIndexes(sheet, headerRowIndex, columnsNames);
         for (int i = firstRowIndex; i <= lastRowIndex; i++) {
             Row currentRow = sheet.getRow(i);
             SummaryRowEntity entity = parseSummaryEntityFromRow(colIndexes, currentRow);

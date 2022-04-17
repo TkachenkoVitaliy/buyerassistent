@@ -18,7 +18,8 @@ public class MmkAcceptDBService {
 
     public void addUniqueEntity(MmkAcceptRowEntity entityFromFile) {
         if (entityFromFile.getSpec() != null && entityFromFile.getPosition() != 0) {
-            MmkAcceptRowEntity entityFromDB = mmkAcceptRepository.findFirstBySpecAndPosition(entityFromFile.getSpec(), entityFromFile.getPosition());
+            MmkAcceptRowEntity entityFromDB = mmkAcceptRepository.findFirstBySpecAndPosition(entityFromFile.getSpec(),
+                    entityFromFile.getPosition());
             if (entityFromDB == null) {
                 mmkAcceptRepository.save(entityFromFile);
             } else {
@@ -26,6 +27,7 @@ public class MmkAcceptDBService {
                 mmkAcceptRepository.save(entityFromDB);
             }
         }
+        //TODO add Exception for situation when we get entity with spec = null or position = 0
     }
 
     private MmkAcceptRowEntity updateEntity(MmkAcceptRowEntity targetEntity, MmkAcceptRowEntity sourceEntity) {

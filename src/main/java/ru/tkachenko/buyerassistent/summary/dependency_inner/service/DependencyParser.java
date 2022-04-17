@@ -45,7 +45,7 @@ public class DependencyParser {
         int headerRowIndex = ExcelUtils.findFirstNotBlankRow(sheet);
         int firstRowIndex = headerRowIndex + 1;
         int lastRowIndex = sheet.getLastRowNum();
-        int[] colIndexes = ExcelUtils.findColIndexesByValues(columnNames, sheet.getRow(headerRowIndex));
+        int[] colIndexes = ExcelUtils.getEntityColumnsIndexes(sheet, headerRowIndex, columnNames);
         for (int i = firstRowIndex; i <= lastRowIndex; i++) {
             Row currentRow = sheet.getRow(i);
             DependencyEntity dependencyEntity = parseRowToEntity(colIndexes, currentRow, priority);

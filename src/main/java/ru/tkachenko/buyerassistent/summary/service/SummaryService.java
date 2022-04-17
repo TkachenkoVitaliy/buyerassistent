@@ -26,6 +26,7 @@ public class SummaryService {
         this.oracleParser = oracleParser;
     }
 
+    //TODO parseFilesToSummary need to return Path summaryFile and after need save this fileEntity in DB
     public void parseFilesToSummary(List<Path> filesPaths) {
         Path otherFactoriesPath = filesPaths.get(0);
         Path oracleMmkPath = filesPaths.get(1);

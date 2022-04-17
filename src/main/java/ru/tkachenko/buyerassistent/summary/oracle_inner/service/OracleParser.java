@@ -33,15 +33,15 @@ public class OracleParser {
         try(FileInputStream fis = new FileInputStream(oracleMmkPath.toString());
             XSSFWorkbook wb = new XSSFWorkbook(fis)) {
             XSSFSheet sheet = wb.getSheetAt(0);
-            String[] oracleColumnsNames = OracleInfoUtil.getOracleColumnsNamesForDTO();
+            String[] oracleDTOColumnsNames = OracleInfoUtil.getOracleColumnsNamesForDTO();
             int headerRowIndex = ExcelUtils.findFirstNotBlankRow(sheet);
             int firstRowIndex = headerRowIndex + 1;
             int lastRowIndex = sheet.getLastRowNum();
-            int[] oracleColIndexes = ExcelUtils.getEntityColumns(sheet, headerRowIndex, oracleColumnsNames);
+            int[] oracleDTOColIndexes = ExcelUtils.getEntityColumnsIndexes(sheet, headerRowIndex, oracleDTOColumnsNames);
 
             for (int i = firstRowIndex; i <= lastRowIndex; i++) {
                 Row currentRow = sheet.getRow(i);
-                OracleDTO oracleDTO = parseToOracleDTO(oracleColIndexes, currentRow);
+                OracleDTO oracleDTO = parseToOracleDTO(oracleDTOColIndexes, currentRow);
                 SummaryRowEntity summaryRowEntity = parseSummaryEntityFromOracleDTOAndDependencies(oracleDTO);
                 summaryDBService.save(summaryRowEntity);
             }

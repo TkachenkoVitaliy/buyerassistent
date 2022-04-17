@@ -48,6 +48,8 @@ public class FileStorageService {
         String otherFactoriesFileName = "otherFactories.xlsx";
         String oracleMmkFileName = "oracleMMK.xlsx";
         String dependenciesMmkFileName = "dependenciesMMK.xlsx";
+
+        //TODO rewrite this part, maybe save this files in temporary directory and remove after using and save only summary file
         CurrentDate currentDate = new CurrentDate();
         String year = currentDate.getYear();
         String month = currentDate.getMonth();
@@ -65,14 +67,15 @@ public class FileStorageService {
 
             Path otherFactoriesPath = DESTINATION_DIRECTORY.resolve(otherFactoriesFileName);
             Files.copy(otherFactories.getInputStream(), otherFactoriesPath, StandardCopyOption.REPLACE_EXISTING);
+            savedFilesPaths.add(otherFactoriesPath);
 
             Path oracleMmkPath = DESTINATION_DIRECTORY.resolve(oracleMmkFileName);
             Files.copy(oracleMmk.getInputStream(), oracleMmkPath, StandardCopyOption.REPLACE_EXISTING);
+            savedFilesPaths.add(oracleMmkPath);
 
             Path dependenciesMmkPath = DESTINATION_DIRECTORY.resolve(dependenciesMmkFileName);
             Files.copy(dependenciesMmk.getInputStream(), dependenciesMmkPath, StandardCopyOption.REPLACE_EXISTING);
-
-            Collections.addAll(savedFilesPaths, otherFactoriesPath, oracleMmkPath, dependenciesMmkPath);
+            savedFilesPaths.add(dependenciesMmkPath);
         } catch (IOException e) {
             e.printStackTrace();
         }

@@ -6,7 +6,6 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.tkachenko.buyerassistent.mmk_accept.entity.MmkAcceptRowEntity;
-import ru.tkachenko.buyerassistent.mmk_accept.service.MmkAcceptDBService;
 import ru.tkachenko.buyerassistent.utils.ExcelUtils;
 
 import java.io.FileInputStream;
@@ -29,7 +28,9 @@ public class MmkAcceptService {
     private final String ACCEPTED_COL_NAME = "Заказанное количество";
     private final String ACCEPTED_MONTH_COL_NAME = "Отгрузить до (Месяц)";
     private final String ADDITIONAL_REQUIREMENTS_COL_NAME = "Доп.тех.требования";
-    private final String[] columnsNames = {SPEC_COL_NAME, POSITION_COL_NAME, NOMENCLATURE_COL_NAME, GRADE_COL_NAME, THICKNESS_COL_NAME, WIDTH_COL_NAME, LENGTH_COL_NAME, ALTER_PROFILE_COL_NAME, ACCEPTED_COL_NAME, ACCEPTED_MONTH_COL_NAME, ADDITIONAL_REQUIREMENTS_COL_NAME};
+    private final String[] columnsNames = {SPEC_COL_NAME, POSITION_COL_NAME, NOMENCLATURE_COL_NAME, GRADE_COL_NAME,
+            THICKNESS_COL_NAME, WIDTH_COL_NAME, LENGTH_COL_NAME, ALTER_PROFILE_COL_NAME, ACCEPTED_COL_NAME,
+            ACCEPTED_MONTH_COL_NAME, ADDITIONAL_REQUIREMENTS_COL_NAME};
 
     @Autowired
     public MmkAcceptService(MmkAcceptDBService mmkAcceptDBService) {
@@ -44,7 +45,7 @@ public class MmkAcceptService {
             int headerRowIndex = ExcelUtils.findFirstNotBlankRow(sheet);
             int firstRowIndex = headerRowIndex + 1;
             int lastRowIndex = sheet.getLastRowNum();
-            int[] colIndexes = ExcelUtils.getEntityColumns(sheet, headerRowIndex, columnsNames);
+            int[] colIndexes = ExcelUtils.getEntityColumnsIndexes(sheet, headerRowIndex, columnsNames);
 
             for (int i = firstRowIndex; i <= lastRowIndex; i++) {
                 Row currentRow = sheet.getRow(i);
@@ -71,6 +72,7 @@ public class MmkAcceptService {
         int acceptMonth = ExcelUtils.getIntValue(colIndexes[9], row);
         String additionalRequirements = ExcelUtils.getStringValue(colIndexes[10], row);
 
-        return new MmkAcceptRowEntity(spec, position, nomenclature, grade, thickness, width, length, alterProfile, accepted, acceptMonth, additionalRequirements);
+        return new MmkAcceptRowEntity(spec, position, nomenclature, grade, thickness, width, length, alterProfile,
+                accepted, acceptMonth, additionalRequirements);
     }
 }
