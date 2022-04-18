@@ -15,9 +15,9 @@ public class ProfileParser {
     private final String STRIP = "Лента";
     private final String ANGLE = "Уголок";
     private final String U_CHANNEL = "Швеллер";
-    private final String ROUND_BAR = "Круг";
-    private final String REBAR = "Профиль арматурный";
     private final String REBAR_COILS = "Профиль арматурный_моток";
+    private final String REBAR = "Профиль арматурный";
+    private final String ROUND_BAR = "Круг";
     private final String SPECIAL_SECTIONS = "Спецпрофиль";
 
 
@@ -45,6 +45,10 @@ public class ProfileParser {
 
         if (productType.contains(REBAR_COILS)) {
             return parseRebarCoils(spec, position);
+        }
+
+        if (productType.equals(REBAR)) {
+            return parseRebars(spec, position);
         }
 
         //TODO realize default method for non-standart productType
@@ -119,11 +123,42 @@ public class ProfileParser {
     }
 
     private String parseRebarCoils(String spec, int position) {
+        final String profileDiameterRegex = "(Номер профиля горячекатаного проката=[0-9]{1,2})";
+        final String stringForRemove = "Номер профиля горячекатаного проката=";
 
         String result = null;
+        MmkAcceptRowEntity acceptEntity = mmkAcceptDBService.findEntityBySpecAndPosition(spec, position);
+        if(acceptEntity != null) {
+            result = acceptEntity.getAlterProfile();
+            if(result != null) return result;
 
+            String additionalRequirements = acceptEntity.getAdditionalRequirements();
+            if (additionalRequirements != null) {
+                result = RegexUtil.findRegexInTextAndRemoveUnnecessary(additionalRequirements,
+                        profileDiameterRegex,stringForRemove);
+            }
+        }
+        return result;
+    }
 
+    private String parseRebars(String spec, int position) {
+        final String profileDiameterRegex = "(Номер профиля горячекатаного проката=[0-9]{1,2})";
+        final String stringForRemove = "Номер профиля горячекатаного проката=";
 
+        String result = null;
+        MmkAcceptRowEntity acceptEntity = mmkAcceptDBService.findEntityBySpecAndPosition(spec, position);
+        if (acceptEntity != null) {
+            result = acceptEntity.getAlterProfile();
+            if (result != null) return RegexUtil.replaceDelimiter(result);
+
+            String additionalRequirements = acceptEntity.getAdditionalRequirements();
+            if (additionalRequirements != null) {
+                String profileDiameter = RegexUtil.findRegexInTextAndRemoveUnnecessary(additionalRequirements,
+                        profileDiameterRegex, stringForRemove);
+                String length = String.valueOf(acceptEntity.getLength());
+                result = profileDiameter + DELIMITER + length;
+            }
+        }
         return result;
     }
 }

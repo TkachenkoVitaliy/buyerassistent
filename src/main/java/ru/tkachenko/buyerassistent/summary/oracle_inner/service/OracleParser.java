@@ -103,7 +103,7 @@ public class OracleParser {
 
         String profile = null;
         if(oracleDTO.getProfile() != null) {
-            profile = RegexUtil.replaceDelimiter(oracleDTO.getProfile());//WRITE replace 'x' to '*'
+            profile = RegexUtil.replaceDelimiter(oracleDTO.getProfile());
         } else {
             profile = profileParser.parse(oracleDTO.getProductType(), oracleDTO.getSpec(), oracleDTO.getPosition());
             //TODO method for parse profile
