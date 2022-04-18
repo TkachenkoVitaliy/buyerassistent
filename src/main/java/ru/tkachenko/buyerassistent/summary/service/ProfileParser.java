@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.tkachenko.buyerassistent.mmk_accept.entity.MmkAcceptRowEntity;
 import ru.tkachenko.buyerassistent.mmk_accept.service.MmkAcceptDBService;
+import ru.tkachenko.buyerassistent.utils.RegexUtil;
 
 @Service
 public class ProfileParser {
@@ -26,16 +27,16 @@ public class ProfileParser {
     }
 
     public String parse(String productType, String spec, int position) {
-        if(productType.contains(PLATE)) {
+        if (productType.contains(PLATE)) {
             return parsePlates(spec, position);
         }
 
-        if(productType.contains(COIL) || productType.contains(STRIP)) {
+        if (productType.contains(COIL) || productType.contains(STRIP)) {
             return parseCoilsAndStrips(spec, position);
         }
 
-        if(productType.contains(ANGLE)) {
-
+        if (productType.contains(ANGLE)) {
+            return parseAngles(spec, position);
         }
 
         //TODO realize default method for non-standart productType
@@ -47,7 +48,7 @@ public class ProfileParser {
     private String parsePlates(String spec, int position) {
         String result = null;
         MmkAcceptRowEntity acceptEntity = mmkAcceptDBService.findEntityBySpecAndPosition(spec, position);
-        if(acceptEntity != null) {
+        if (acceptEntity != null) {
             result = "" + acceptEntity.getThickness() + DELIMITER + acceptEntity.getWidth() + DELIMITER
                     + acceptEntity.getLength();
         }
@@ -57,15 +58,36 @@ public class ProfileParser {
     private String parseCoilsAndStrips(String spec, int position) {
         String result = null;
         MmkAcceptRowEntity acceptEntity = mmkAcceptDBService.findEntityBySpecAndPosition(spec, position);
-        if(acceptEntity != null) {
+        if (acceptEntity != null) {
             result = "" + acceptEntity.getThickness() + DELIMITER + acceptEntity.getWidth();
         }
         return result;
     }
 
-    private String parseAngles (String spec, int position) {
+    private String parseAngles(String spec, int position) {
+        final String firstMeasureRegex = "(Ширина полки=[0-9]{1,3})";
+        final String firstMeasureRemovedString = "Ширина полки=";
+        final String thirdMeasureRegex = "(Толщина полки профиля=[0-9]{1,2})";
+        final String thirdMeasureRemovedString = "Толщина полки профиля=";
+
         String result = null;
         MmkAcceptRowEntity acceptEntity = mmkAcceptDBService.findEntityBySpecAndPosition(spec, position);
+        if (acceptEntity != null) {
+            if (acceptEntity.getAlterProfile() != null) {
+                result = acceptEntity.getAlterProfile();
+                return RegexUtil.replaceDelimiter(result);
+            }
+            String additionalRequirements = acceptEntity.getAdditionalRequirements();
+            if (additionalRequirements != null) {
+                String firstTwoMeasure = RegexUtil.findRegexInTextAndRemoveUnnecessary(additionalRequirements,
+                        firstMeasureRegex, firstMeasureRemovedString);
+                String thirdMeasure = RegexUtil.findRegexInTextAndRemoveUnnecessary(additionalRequirements,
+                        thirdMeasureRegex, thirdMeasureRemovedString);
+                String length = String.valueOf(acceptEntity.getLength());
+                result = firstTwoMeasure + DELIMITER + firstTwoMeasure + DELIMITER + thirdMeasure + DELIMITER + length;
+            }
+        }
+        return result;
     }
 
 }

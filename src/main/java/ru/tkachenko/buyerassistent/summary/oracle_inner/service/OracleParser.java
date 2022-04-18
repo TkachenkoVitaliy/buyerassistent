@@ -12,6 +12,7 @@ import ru.tkachenko.buyerassistent.summary.dependency_inner.service.DependencyWo
 import ru.tkachenko.buyerassistent.summary.service.ProfileParser;
 import ru.tkachenko.buyerassistent.summary.service.SummaryDBService;
 import ru.tkachenko.buyerassistent.utils.ExcelUtils;
+import ru.tkachenko.buyerassistent.utils.RegexUtil;
 
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -102,7 +103,7 @@ public class OracleParser {
 
         String profile = null;
         if(oracleDTO.getProfile() != null) {
-            profile = oracleDTO.getProfile();//WRITE replace 'x' to '*'
+            profile = RegexUtil.replaceDelimiter(oracleDTO.getProfile());//WRITE replace 'x' to '*'
         } else {
             profile = profileParser.parse(oracleDTO.getProductType(), oracleDTO.getSpec(), oracleDTO.getPosition());
             //TODO method for parse profile
