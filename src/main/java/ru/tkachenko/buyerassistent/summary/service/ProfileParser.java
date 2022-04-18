@@ -39,6 +39,14 @@ public class ProfileParser {
             return parseAngles(spec, position);
         }
 
+        if (productType.contains(U_CHANNEL)) {
+            return parseUChannels(spec, position);
+        }
+
+        if (productType.contains(REBAR_COILS)) {
+            return parseRebarCoils(spec, position);
+        }
+
         //TODO realize default method for non-standart productType
 
         //TODO return String
@@ -73,10 +81,9 @@ public class ProfileParser {
         String result = null;
         MmkAcceptRowEntity acceptEntity = mmkAcceptDBService.findEntityBySpecAndPosition(spec, position);
         if (acceptEntity != null) {
-            if (acceptEntity.getAlterProfile() != null) {
-                result = acceptEntity.getAlterProfile();
-                return RegexUtil.replaceDelimiter(result);
-            }
+            result = acceptEntity.getAlterProfile();
+            if (result != null) return RegexUtil.replaceDelimiter(result);
+
             String additionalRequirements = acceptEntity.getAdditionalRequirements();
             if (additionalRequirements != null) {
                 String firstTwoMeasure = RegexUtil.findRegexInTextAndRemoveUnnecessary(additionalRequirements,
@@ -90,4 +97,33 @@ public class ProfileParser {
         return result;
     }
 
+    private String parseUChannels(String spec, int position) {
+        final String profileNumberRegex = "(Номер профиля горячекатаного проката=)([0-9.УВП]{1,5})";
+        final String stringForRemove = "Номер профиля горячекатаного проката=";
+
+        String result = null;
+        MmkAcceptRowEntity acceptEntity = mmkAcceptDBService.findEntityBySpecAndPosition(spec, position);
+        if (acceptEntity != null) {
+            result = acceptEntity.getAlterProfile();
+            if (result != null) return RegexUtil.replaceDelimiter(result);
+
+            String additionalRequirements = acceptEntity.getAdditionalRequirements();
+            if (additionalRequirements != null) {
+                String profileNumber = RegexUtil.findRegexInTextAndRemoveUnnecessary(additionalRequirements,
+                        profileNumberRegex, stringForRemove);
+                String length = String.valueOf(acceptEntity.getLength());
+                result = profileNumber + DELIMITER + length;
+            }
+        }
+        return result;
+    }
+
+    private String parseRebarCoils(String spec, int position) {
+
+        String result = null;
+
+
+
+        return result;
+    }
 }
