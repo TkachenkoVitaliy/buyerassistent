@@ -54,7 +54,7 @@ public class OracleParser {
     private OracleDTO parseToOracleDTO(int[] colIndexes, Row row) {
         OracleDTO oracleDTO = new OracleDTO();
         oracleDTO.setMill(ExcelUtils.getIntValue(colIndexes[0], row));
-        oracleDTO.setConsignee(ExcelUtils.getStringValue(colIndexes[1], row));
+        oracleDTO.setConsignee(ExcelUtils.getStringValueWithoutQuote(colIndexes[1], row));
         oracleDTO.setProductType(ExcelUtils.getStringValue(colIndexes[2], row));
         oracleDTO.setProfile(ExcelUtils.getStringValue(colIndexes[3], row));
         oracleDTO.setGrade(ExcelUtils.getStringValue(colIndexes[4], row));

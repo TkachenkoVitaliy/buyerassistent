@@ -71,6 +71,11 @@ public class ExcelUtils {
         return getAnyValueAsString(cell);
     }
 
+    public static String getStringValueWithoutQuote(int colIndex, Row row) {
+        Cell cell = row.getCell(colIndex);
+        return getAnyValueAsString(cell).replace("\"", "");
+    }
+
     public static double getDoubleValue(int colIndex, Row row) {
         Cell cell = row.getCell(colIndex);
         if(cell == null || cell.getCellType() == CellType.BLANK) {
