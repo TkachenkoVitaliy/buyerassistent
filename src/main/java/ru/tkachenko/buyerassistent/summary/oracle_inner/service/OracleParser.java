@@ -9,6 +9,7 @@ import ru.tkachenko.buyerassistent.summary.oracle_inner.dto.OracleDTO;
 import ru.tkachenko.buyerassistent.summary.dependency_inner.entity.DependencyEntity;
 import ru.tkachenko.buyerassistent.summary.entity.SummaryRowEntity;
 import ru.tkachenko.buyerassistent.summary.dependency_inner.service.DependencyWorker;
+import ru.tkachenko.buyerassistent.summary.service.ProfileParser;
 import ru.tkachenko.buyerassistent.summary.service.SummaryDBService;
 import ru.tkachenko.buyerassistent.utils.ExcelUtils;
 
@@ -22,11 +23,13 @@ public class OracleParser {
 
     private final DependencyWorker dependencyWorker;
     private final SummaryDBService summaryDBService;
+    private final ProfileParser profileParser;
 
     @Autowired
-    public OracleParser(DependencyWorker dependencyWorker, SummaryDBService summaryDBService) {
+    public OracleParser(DependencyWorker dependencyWorker, SummaryDBService summaryDBService, ProfileParser profileParser) {
         this.dependencyWorker = dependencyWorker;
         this.summaryDBService = summaryDBService;
+        this.profileParser = profileParser;
     }
 
     public void parse(Path oracleMmkPath) {
@@ -99,8 +102,9 @@ public class OracleParser {
 
         String profile = null;
         if(oracleDTO.getProfile() != null) {
-            profile = oracleDTO.getProfile();
+            profile = oracleDTO.getProfile();//WRITE replace 'x' to '*'
         } else {
+            profile = profileParser.parse(oracleDTO.getProductType(), oracleDTO.getSpec(), oracleDTO.getPosition());
             //TODO method for parse profile
         }
 

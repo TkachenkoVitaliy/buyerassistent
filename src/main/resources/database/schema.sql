@@ -45,7 +45,7 @@ CREATE TABLE IF NOT EXISTS summary_table
 );
 CREATE SEQUENCE IF NOT EXISTS hibernate_sequence START WITH 1 INCREMENT BY 1;
 
-DROP TABLE IF EXISTS accept_table;
+-- DROP TABLE IF EXISTS accept_table;
 CREATE TABLE IF NOT EXISTS accept_table
 (
     id    BIGINT PRIMARY KEY,

@@ -45,4 +45,8 @@ public class MmkAcceptDBService {
         }
         return targetEntity;
     }
+
+    public MmkAcceptRowEntity findEntityBySpecAndPosition(String spec, int position) {
+        return mmkAcceptRepository.findFirstBySpecAndPosition(spec, position);
+    }
 }
