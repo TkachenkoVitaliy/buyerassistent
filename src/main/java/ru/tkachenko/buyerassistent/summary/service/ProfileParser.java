@@ -51,9 +51,14 @@ public class ProfileParser {
             return parseRebars(spec, position);
         }
 
-        //TODO realize default method for non-standart productType
+        if (productType.contains(ROUND_BAR)) {
+            return parseRoundBars(spec, position);
+        }
 
-        //TODO return String
+        if (productType.contains(SPECIAL_SECTIONS)) {
+            return parseSpecialSections(spec, position);
+        }
+
         return null;
     }
 
@@ -61,19 +66,25 @@ public class ProfileParser {
         String result = null;
         MmkAcceptRowEntity acceptEntity = mmkAcceptDBService.findEntityBySpecAndPosition(spec, position);
         if (acceptEntity != null) {
-            result = "" + acceptEntity.getThickness() + DELIMITER + acceptEntity.getWidth() + DELIMITER
-                    + acceptEntity.getLength();
+            String thickness = RegexUtil.doubleToString(acceptEntity.getThickness());
+            String width = RegexUtil.doubleToString(acceptEntity.getWidth());
+            String length = RegexUtil.doubleToString(acceptEntity.getLength());
+
+            result = "" + thickness + DELIMITER + width + DELIMITER
+                    + length;
         }
-        return result;
+        return RegexUtil.replaceDotToComma(result);
     }
 
     private String parseCoilsAndStrips(String spec, int position) {
         String result = null;
         MmkAcceptRowEntity acceptEntity = mmkAcceptDBService.findEntityBySpecAndPosition(spec, position);
         if (acceptEntity != null) {
-            result = "" + acceptEntity.getThickness() + DELIMITER + acceptEntity.getWidth();
+            String thickness = RegexUtil.doubleToString(acceptEntity.getThickness());
+            String width = RegexUtil.doubleToString(acceptEntity.getWidth());
+            result = "" + thickness + DELIMITER + width;
         }
-        return result;
+        return RegexUtil.replaceDotToComma(result);
     }
 
     private String parseAngles(String spec, int position) {
@@ -86,40 +97,40 @@ public class ProfileParser {
         MmkAcceptRowEntity acceptEntity = mmkAcceptDBService.findEntityBySpecAndPosition(spec, position);
         if (acceptEntity != null) {
             result = acceptEntity.getAlterProfile();
-            if (result != null) return RegexUtil.replaceDelimiter(result);
+            if (result != null && !result.equals("") && !result.equals(" ")) return RegexUtil.replaceDelimiter(result);
 
             String additionalRequirements = acceptEntity.getAdditionalRequirements();
-            if (additionalRequirements != null) {
+            if (additionalRequirements != null && !additionalRequirements.equals("") && !additionalRequirements.equals(" ")) {
                 String firstTwoMeasure = RegexUtil.findRegexInTextAndRemoveUnnecessary(additionalRequirements,
                         firstMeasureRegex, firstMeasureRemovedString);
                 String thirdMeasure = RegexUtil.findRegexInTextAndRemoveUnnecessary(additionalRequirements,
                         thirdMeasureRegex, thirdMeasureRemovedString);
-                String length = String.valueOf(acceptEntity.getLength());
+                String length = RegexUtil.doubleToString(acceptEntity.getLength());
                 result = firstTwoMeasure + DELIMITER + firstTwoMeasure + DELIMITER + thirdMeasure + DELIMITER + length;
             }
         }
-        return result;
+        return RegexUtil.replaceDotToComma(result);
     }
 
     private String parseUChannels(String spec, int position) {
-        final String profileNumberRegex = "(Номер профиля горячекатаного проката=)([0-9.УВП]{1,5})";
+        final String profileNumberRegex = "(Номер профиля горячекатаного проката=[0-9.УВП]{1,5})";
         final String stringForRemove = "Номер профиля горячекатаного проката=";
 
         String result = null;
         MmkAcceptRowEntity acceptEntity = mmkAcceptDBService.findEntityBySpecAndPosition(spec, position);
         if (acceptEntity != null) {
             result = acceptEntity.getAlterProfile();
-            if (result != null) return RegexUtil.replaceDelimiter(result);
+            if (result != null && !result.equals("") && !result.equals(" ")) return RegexUtil.replaceDelimiter(result);
 
             String additionalRequirements = acceptEntity.getAdditionalRequirements();
             if (additionalRequirements != null) {
                 String profileNumber = RegexUtil.findRegexInTextAndRemoveUnnecessary(additionalRequirements,
                         profileNumberRegex, stringForRemove);
-                String length = String.valueOf(acceptEntity.getLength());
+                String length = RegexUtil.doubleToString( acceptEntity.getLength());
                 result = profileNumber + DELIMITER + length;
             }
         }
-        return result;
+        return RegexUtil.replaceDotToComma(result);
     }
 
     private String parseRebarCoils(String spec, int position) {
@@ -130,7 +141,7 @@ public class ProfileParser {
         MmkAcceptRowEntity acceptEntity = mmkAcceptDBService.findEntityBySpecAndPosition(spec, position);
         if(acceptEntity != null) {
             result = acceptEntity.getAlterProfile();
-            if(result != null) return result;
+            if(result != null && !result.equals("") && !result.equals(" ")) return result;
 
             String additionalRequirements = acceptEntity.getAdditionalRequirements();
             if (additionalRequirements != null) {
@@ -138,7 +149,7 @@ public class ProfileParser {
                         profileDiameterRegex,stringForRemove);
             }
         }
-        return result;
+        return RegexUtil.replaceDotToComma(result);
     }
 
     private String parseRebars(String spec, int position) {
@@ -149,16 +160,63 @@ public class ProfileParser {
         MmkAcceptRowEntity acceptEntity = mmkAcceptDBService.findEntityBySpecAndPosition(spec, position);
         if (acceptEntity != null) {
             result = acceptEntity.getAlterProfile();
-            if (result != null) return RegexUtil.replaceDelimiter(result);
+            if (result != null && !result.equals("") && !result.equals(" ")) return RegexUtil.replaceDelimiter(result);
 
             String additionalRequirements = acceptEntity.getAdditionalRequirements();
             if (additionalRequirements != null) {
                 String profileDiameter = RegexUtil.findRegexInTextAndRemoveUnnecessary(additionalRequirements,
                         profileDiameterRegex, stringForRemove);
-                String length = String.valueOf(acceptEntity.getLength());
+                String length = RegexUtil.doubleToString(acceptEntity.getLength());
                 result = profileDiameter + DELIMITER + length;
             }
         }
-        return result;
+        return RegexUtil.replaceDotToComma(result);
+    }
+
+    private String parseRoundBars(String spec, int position) {
+
+        final String diameterRegex = "(Диаметр=[0-9.,]{1,4})";
+        final String stringForRemove = "Диаметр=";
+
+        String result = null;
+        MmkAcceptRowEntity acceptEntity = mmkAcceptDBService.findEntityBySpecAndPosition(spec, position);
+        if(acceptEntity != null) {
+            result = acceptEntity.getAlterProfile();
+            if (result != null && !result.equals("") && !result.equals(" ")) return RegexUtil.replaceDelimiter(result);
+
+            String additionalRequirements = acceptEntity.getAdditionalRequirements();
+            if (additionalRequirements != null) {
+                String diameter = RegexUtil.findRegexInTextAndRemoveUnnecessary(additionalRequirements, diameterRegex,
+                        stringForRemove);
+                if(acceptEntity.getLength() == 0) {
+                    result = diameter;
+                } else {
+                    String length = RegexUtil.doubleToString(acceptEntity.getLength());
+                    result = diameter + DELIMITER + length;
+                }
+            }
+        }
+        return RegexUtil.replaceDotToComma(result);
+    }
+
+    private String parseSpecialSections(String spec, int position) {
+        final String profileNumberRegex = "(Номер профиля горячекатаного проката=)([0-9.xх]{1,35})";
+        final String stringForRemove = "Номер профиля горячекатаного проката=";
+
+        String result = null;
+        MmkAcceptRowEntity acceptEntity = mmkAcceptDBService.findEntityBySpecAndPosition(spec, position);
+        if (acceptEntity != null) {
+            result = acceptEntity.getAlterProfile();
+            if (result != null && !result.equals("") && !result.equals(" ")) return RegexUtil.replaceDelimiter(result);
+
+            String additionalRequirements = acceptEntity.getAdditionalRequirements();
+            if (additionalRequirements != null) {
+                String profileNumber = RegexUtil.findRegexInTextAndRemoveUnnecessary(additionalRequirements,
+                        profileNumberRegex, stringForRemove);
+                String length = RegexUtil.doubleToString(acceptEntity.getLength());
+                result = profileNumber + DELIMITER + length;
+            }
+        }
+        return RegexUtil.replaceDotToComma(result);
     }
 }
