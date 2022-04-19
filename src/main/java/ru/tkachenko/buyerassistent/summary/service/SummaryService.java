@@ -1,11 +1,10 @@
 package ru.tkachenko.buyerassistent.summary.service;
 
-import org.apache.poi.xssf.usermodel.XSSFCell;
-import org.apache.poi.xssf.usermodel.XSSFRow;
-import org.apache.poi.xssf.usermodel.XSSFSheet;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.apache.poi.hssf.usermodel.HSSFCellStyle;
+import org.apache.poi.xssf.usermodel.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.servlet.tags.EditorAwareTag;
 import ru.tkachenko.buyerassistent.property.FileStorageProperties;
 import ru.tkachenko.buyerassistent.summary.entity.SummaryRowEntity;
 import ru.tkachenko.buyerassistent.summary.oracle_inner.service.OracleParser;
@@ -83,6 +82,9 @@ public class SummaryService {
         try(FileOutputStream fos = new FileOutputStream(targetFilePath.toString());
             XSSFWorkbook wb = new XSSFWorkbook();) {
             XSSFSheet sheet = wb.createSheet();
+            XSSFCreationHelper creationHelper = wb.getCreationHelper();
+            XSSFCellStyle dateStyle = wb.createCellStyle();
+            dateStyle.setDataFormat(creationHelper.createDataFormat().getFormat("dd.MM.yyyy"));
 
             XSSFRow headerRow = sheet.createRow(0);
             for(int i = 0; i < headerColumnsNames.length; i++) {
@@ -93,7 +95,7 @@ public class SummaryService {
             for (int rowNum = 1; rowNum <= entities.size(); rowNum++) {
                 XSSFRow row = sheet.createRow(rowNum);
                 SummaryRowEntity rowEntity = entities.get(rowNum-1);
-                SummaryEntityWriter.writeToRow(rowEntity, row, true);
+                SummaryEntityWriter.writeToRow(dateStyle, rowEntity, row, true);
             }
 
             wb.write(fos);

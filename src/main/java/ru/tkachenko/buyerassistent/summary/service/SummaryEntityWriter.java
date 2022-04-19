@@ -1,18 +1,21 @@
 package ru.tkachenko.buyerassistent.summary.service;
 
+import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.xssf.usermodel.XSSFCellStyle;
 import ru.tkachenko.buyerassistent.summary.entity.SummaryRowEntity;
 
 public class SummaryEntityWriter {
-    public static void writeToRow(SummaryRowEntity summaryRowEntity, Row row, boolean isFullCopy) {
+
+    public static void writeToRow(XSSFCellStyle dateStyle, SummaryRowEntity summaryRowEntity, Row row, boolean isFullCopy) {
         if (isFullCopy) {
-            writeFullEntityToRow(summaryRowEntity, row);
+            writeFullEntityToRow(dateStyle, summaryRowEntity, row);
         } else {
-            writeClippedEntityToRow(summaryRowEntity, row);
+            writeClippedEntityToRow(dateStyle, summaryRowEntity, row);
         }
     }
 
-    private static void writeFullEntityToRow(SummaryRowEntity summaryRowEntity, Row row) {
+    private static void writeFullEntityToRow(XSSFCellStyle dateStyle, SummaryRowEntity summaryRowEntity, Row row) {
         row.createCell(0).setCellValue(summaryRowEntity.getSupplier());
         row.createCell(1).setCellValue(summaryRowEntity.getMill());
         row.createCell(2).setCellValue(summaryRowEntity.getBranch());
@@ -34,15 +37,19 @@ public class SummaryEntityWriter {
         row.createCell(18).setCellValue(summaryRowEntity.getAcceptedCost());
         row.createCell(19).setCellValue(summaryRowEntity.getShipped());
         row.createCell(20).setCellValue(summaryRowEntity.getShippedCost());
-        row.createCell(21).setCellValue(summaryRowEntity.getShippedDate());
+        Cell shippedDateCell = row.createCell(21);
+        shippedDateCell.setCellValue(summaryRowEntity.getShippedDate());
+        shippedDateCell.setCellStyle(dateStyle);
         row.createCell(22).setCellValue(summaryRowEntity.getVehicleNumber());
         row.createCell(23).setCellValue(summaryRowEntity.getInvoiceNumber());
-        row.createCell(24).setCellValue(summaryRowEntity.getInvoiceDate());
+        Cell invoiceDateCell = row.createCell(24);
+        invoiceDateCell.setCellValue(summaryRowEntity.getInvoiceDate());
+        invoiceDateCell.setCellStyle(dateStyle);
         row.createCell(25).setCellValue(summaryRowEntity.getFinalPrice());
         row.createCell(26).setCellValue(summaryRowEntity.getFinalCost());
     }
 
-    private static void writeClippedEntityToRow(SummaryRowEntity summaryRowEntity, Row row) {
+    private static void writeClippedEntityToRow(XSSFCellStyle dateStyle, SummaryRowEntity summaryRowEntity, Row row) {
         summaryRowEntity.getSupplier();
     }
 }
