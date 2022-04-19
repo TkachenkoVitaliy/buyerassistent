@@ -6,12 +6,12 @@ import ru.tkachenko.buyerassistent.file_storage.entity.SavedFileEntity;
 import ru.tkachenko.buyerassistent.file_storage.repository.SavedFileRepository;
 
 @Service
-public class FileStorageDBService {
+public class FileDBService {
 
     SavedFileRepository savedFileRepository;
 
     @Autowired
-    public FileStorageDBService(SavedFileRepository savedFileRepository) {
+    public FileDBService(SavedFileRepository savedFileRepository) {
         this.savedFileRepository = savedFileRepository;
     }
 

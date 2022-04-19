@@ -4,16 +4,42 @@ import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.xssf.usermodel.XSSFCellStyle;
 import ru.tkachenko.buyerassistent.summary.entity.SummaryRowEntity;
+import ru.tkachenko.buyerassistent.utils.ExcelUtils;
 
-public class SummaryEntityWriter {
+public class SummaryWriter {
 
-    public static void writeToRow(XSSFCellStyle dateStyle, SummaryRowEntity summaryRowEntity, Row row, boolean isFullCopy) {
+    public static void writeHeader(Row headerRow, boolean isFullCopy) {
+        if (isFullCopy) {
+            writeFullHeader(headerRow);
+        } else {
+            writeClippedHeader(headerRow);
+        }
+    }
+
+    private static void writeFullHeader(Row headerRow) {
+        String[] headerColumnNames = SummaryInfoUtil.getFileColumnsNamesForEntity();
+        for(int i = 0; i < headerColumnNames.length; i++) {
+            Cell cell = headerRow.createCell(i);
+            cell.setCellValue(headerColumnNames[i]);
+        }
+    }
+
+    private static void writeClippedHeader(Row headerRow) {
+        String[] headerColumnNames = SummaryInfoUtil.getClippedFileColumnsNames();
+        for (int i = 0; i < headerColumnNames.length; i++) {
+            Cell cell = headerRow.createCell(i);
+            cell.setCellValue(headerColumnNames[i]);
+        }
+    }
+
+    public static void writeEntityToRow(XSSFCellStyle dateStyle, SummaryRowEntity summaryRowEntity, Row row, boolean isFullCopy) {
         if (isFullCopy) {
             writeFullEntityToRow(dateStyle, summaryRowEntity, row);
         } else {
             writeClippedEntityToRow(dateStyle, summaryRowEntity, row);
         }
     }
+
 
     private static void writeFullEntityToRow(XSSFCellStyle dateStyle, SummaryRowEntity summaryRowEntity, Row row) {
         row.createCell(0).setCellValue(summaryRowEntity.getSupplier());
@@ -50,6 +76,22 @@ public class SummaryEntityWriter {
     }
 
     private static void writeClippedEntityToRow(XSSFCellStyle dateStyle, SummaryRowEntity summaryRowEntity, Row row) {
-        summaryRowEntity.getSupplier();
+        ExcelUtils.writeCellNotBlankValue(row, 0, summaryRowEntity.getSupplier());
+        ExcelUtils.writeCellNotBlankValue(row, 1, summaryRowEntity.getMill());
+        ExcelUtils.writeCellNotBlankValue(row, 2,summaryRowEntity.getSellType());
+        ExcelUtils.writeCellNotBlankValue(row, 3,summaryRowEntity.getClient());
+        ExcelUtils.writeCellNotBlankValue(row, 4,summaryRowEntity.getConsignee());
+        ExcelUtils.writeCellNotBlankValue(row, 5,summaryRowEntity.getProductType());
+        ExcelUtils.writeCellNotBlankValue(row, 6,summaryRowEntity.getProfile());
+        ExcelUtils.writeCellNotBlankValue(row, 7,summaryRowEntity.getGrade());
+        ExcelUtils.writeCellNotBlankValue(row, 8,summaryRowEntity.getRal());
+        ExcelUtils.writeCellNotBlankValue(row, 9,summaryRowEntity.getSpec());
+        ExcelUtils.writeCellNotBlankValue(row, 10,summaryRowEntity.getPosition());
+        ExcelUtils.writeCellNotBlankValue(row, 11,summaryRowEntity.getAcceptMonth());
+        ExcelUtils.writeCellNotBlankValue(row, 12,summaryRowEntity.getYear());
+        ExcelUtils.writeCellNotBlankValue(row, 13,summaryRowEntity.getAccepted());
+        ExcelUtils.writeCellNotBlankValue(row, 14,summaryRowEntity.getShipped());
+        ExcelUtils.writeCellNotBlankDateValue(row, 15,summaryRowEntity.getShippedDate(), dateStyle);
+        ExcelUtils.writeCellNotBlankValue(row, 16,summaryRowEntity.getVehicleNumber());
     }
 }

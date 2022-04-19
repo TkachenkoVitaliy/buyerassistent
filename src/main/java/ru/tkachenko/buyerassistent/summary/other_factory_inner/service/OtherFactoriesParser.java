@@ -2,7 +2,6 @@ package ru.tkachenko.buyerassistent.summary.other_factory_inner.service;
 
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,8 +20,7 @@ import java.util.Objects;
 @Service
 public class OtherFactoriesParser {
 
-    private final String[] monthSheetNames = {"Январь_2022", "Февраль_2022", "Март_2022", "Апрель_2022", "Май_2022",
-            "Июнь_2022", "Июль_2022", "Август_2022", "Сентябрь_2022", "Октябрь_2022", "Ноябрь_2022", "Декабрь_2022"};
+    private final String[] monthSheetNames = SummaryInfoUtil.getMonthSheetNames();
     private final SummaryDBService summaryDBService;
 
     @Autowired

@@ -2,6 +2,8 @@ package ru.tkachenko.buyerassistent.utils;
 
 import org.apache.poi.ss.usermodel.*;
 
+import java.sql.Date;
+
 public class ExcelUtils {
 
     private final static DataFormatter dataFormatter = new DataFormatter();
@@ -107,4 +109,32 @@ public class ExcelUtils {
         return sqlDate;
     }
 
+    public static void writeCellNotBlankValue(Row row, int columnIndex, String stringValue) {
+        if(stringValue != null) {
+            Cell cell = row.createCell(columnIndex);
+            cell.setCellValue(stringValue);
+        }
+    }
+
+    public static void writeCellNotBlankValue(Row row, int columnIndex, int intValue) {
+        if(intValue != 0) {
+            Cell cell = row.createCell(columnIndex);
+            cell.setCellValue(intValue);
+        }
+    }
+
+    public static void writeCellNotBlankValue(Row row, int columnIndex, double doubleValue) {
+        if(doubleValue != 0.0) {
+            Cell cell = row.createCell(columnIndex);
+            cell.setCellValue(doubleValue);
+        }
+    }
+
+    public static void writeCellNotBlankDateValue(Row row, int columnIndex, Date dateValue, CellStyle dateCellStyle) {
+        if(dateValue != null) {
+            Cell cell = row.createCell(columnIndex);
+            cell.setCellValue(dateValue);
+            cell.setCellStyle(dateCellStyle);
+        }
+    }
 }

@@ -16,4 +16,6 @@ public interface SummaryRowRepository extends JpaRepository<SummaryRowEntity, Lo
     void truncateTable();
 
     List<SummaryRowEntity> findAll();
+
+    List<SummaryRowEntity> findByBranchAndAcceptMonth(String branch, int acceptMonth);
 }

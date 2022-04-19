@@ -1,6 +1,9 @@
 package ru.tkachenko.buyerassistent.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.Resource;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -11,6 +14,7 @@ import ru.tkachenko.buyerassistent.mmk_accept.service.MmkAcceptService;
 import ru.tkachenko.buyerassistent.summary.service.SummaryService;
 import ru.tkachenko.buyerassistent.utils.TimerUtil;
 
+import javax.servlet.http.HttpServletRequest;
 import java.nio.file.Path;
 import java.util.List;
 
@@ -63,5 +67,18 @@ public class MainController {
         } finally { //TODO remove timer
             timerUtil.consoleLogTime("uploadMultipleFiles");
         } //TODO remove timer
+    }
+
+    @GetMapping("/downloadAllFiles")
+    public ResponseEntity<Resource> downloadAllFiles(HttpServletRequest request) {
+        //TODO remove timer
+        TimerUtil timerUtilDownloadAllFiles = new TimerUtil();
+        //TODO remove timer
+        try {
+            summaryService.createAllBranchesFiles();
+            return null;
+        } finally {
+            timerUtilDownloadAllFiles.consoleLogTime("createAllFiles");
+        }
     }
 }
