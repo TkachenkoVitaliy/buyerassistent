@@ -6,6 +6,7 @@ import ru.tkachenko.buyerassistent.summary.entity.SummaryRowEntity;
 import ru.tkachenko.buyerassistent.summary.repository.SummaryRowRepository;
 
 import javax.transaction.Transactional;
+import java.util.List;
 
 @Service
 public class SummaryDBService {
@@ -24,5 +25,9 @@ public class SummaryDBService {
     @Transactional
     public void truncateTable() {
         summaryRowRepository.truncateTable();
+    }
+
+    List<SummaryRowEntity> findAll() {
+        return summaryRowRepository.findAll();
     }
 }

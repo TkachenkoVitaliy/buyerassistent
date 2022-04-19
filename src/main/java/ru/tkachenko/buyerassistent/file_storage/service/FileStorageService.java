@@ -21,15 +21,16 @@ import java.util.List;
 public class FileStorageService {
 
     private final Path FILE_STORAGE_LOCATION;
+    private final Path TEMP_DIRECTORY;
 
     @Autowired
     public FileStorageService(FileStorageProperties fileStorageProperties) {
         this.FILE_STORAGE_LOCATION = Paths.get(fileStorageProperties.getUploadDir()).toAbsolutePath().normalize();
+        this.TEMP_DIRECTORY = FILE_STORAGE_LOCATION.resolve("temp");
     }
 
     public Path storeFile(MultipartFile mmkAccept) throws IllegalFileExtensionException {
         final String MMK_ACCEPT_STORAGE_FILENAME = "mmkAccept.xlsx";
-        final Path TEMP_DIRECTORY = FILE_STORAGE_LOCATION.resolve("temp");
         Path mmkAcceptDestinationPath = TEMP_DIRECTORY.resolve(MMK_ACCEPT_STORAGE_FILENAME);
 
         try {
@@ -49,13 +50,6 @@ public class FileStorageService {
         String oracleMmkFileName = "oracleMMK.xlsx";
         String dependenciesMmkFileName = "dependenciesMMK.xlsx";
 
-        //TODO rewrite this part, maybe save this files in temporary directory and remove after using and save only summary file
-        CurrentDate currentDate = new CurrentDate();
-        String year = currentDate.getYear();
-        String month = currentDate.getMonth();
-        String day = currentDate.getDay();
-        String time = currentDate.getTime();
-        Path DESTINATION_DIRECTORY = FILE_STORAGE_LOCATION.resolve(year).resolve(month).resolve(day).resolve(time);
         List<Path> savedFilesPaths = new ArrayList<>();
 
         try {
@@ -63,17 +57,17 @@ public class FileStorageService {
             FileUtils.validateFileExtension(oracleMmk);
             FileUtils.validateFileExtension(dependenciesMmk);
 
-            Files.createDirectories(DESTINATION_DIRECTORY);
+            Files.createDirectories(TEMP_DIRECTORY);
 
-            Path otherFactoriesPath = DESTINATION_DIRECTORY.resolve(otherFactoriesFileName);
+            Path otherFactoriesPath = TEMP_DIRECTORY.resolve(otherFactoriesFileName);
             Files.copy(otherFactories.getInputStream(), otherFactoriesPath, StandardCopyOption.REPLACE_EXISTING);
             savedFilesPaths.add(otherFactoriesPath);
 
-            Path oracleMmkPath = DESTINATION_DIRECTORY.resolve(oracleMmkFileName);
+            Path oracleMmkPath = TEMP_DIRECTORY.resolve(oracleMmkFileName);
             Files.copy(oracleMmk.getInputStream(), oracleMmkPath, StandardCopyOption.REPLACE_EXISTING);
             savedFilesPaths.add(oracleMmkPath);
 
-            Path dependenciesMmkPath = DESTINATION_DIRECTORY.resolve(dependenciesMmkFileName);
+            Path dependenciesMmkPath = TEMP_DIRECTORY.resolve(dependenciesMmkFileName);
             Files.copy(dependenciesMmk.getInputStream(), dependenciesMmkPath, StandardCopyOption.REPLACE_EXISTING);
             savedFilesPaths.add(dependenciesMmkPath);
         } catch (IOException e) {
