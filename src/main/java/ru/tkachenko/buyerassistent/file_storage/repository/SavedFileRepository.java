@@ -6,4 +6,5 @@ import ru.tkachenko.buyerassistent.file_storage.entity.SavedFileEntity;
 
 @Repository
 public interface SavedFileRepository extends JpaRepository<SavedFileEntity, Long> {
+    public SavedFileEntity findFirstByIsActual(boolean isTrue);
 }

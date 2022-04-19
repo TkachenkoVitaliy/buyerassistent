@@ -16,6 +16,14 @@ public class FileStorageDBService {
     }
 
     public void save(SavedFileEntity fileEntity) {
+        SavedFileEntity previousActualEntity = findActual();
+        previousActualEntity.setActual(false);
+        savedFileRepository.save(previousActualEntity);
         savedFileRepository.save(fileEntity);
     }
+
+    public SavedFileEntity findActual() {
+        return savedFileRepository.findFirstByIsActual(true);
+    }
+
 }
