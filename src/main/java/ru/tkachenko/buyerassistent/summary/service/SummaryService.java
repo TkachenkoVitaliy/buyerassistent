@@ -1,10 +1,10 @@
 package ru.tkachenko.buyerassistent.summary.service;
 
-import org.apache.poi.hssf.usermodel.HSSFCellStyle;
 import org.apache.poi.xssf.usermodel.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.servlet.tags.EditorAwareTag;
+import ru.tkachenko.buyerassistent.file_storage.entity.SavedFileEntity;
+import ru.tkachenko.buyerassistent.file_storage.service.FileStorageDBService;
 import ru.tkachenko.buyerassistent.property.FileStorageProperties;
 import ru.tkachenko.buyerassistent.summary.entity.SummaryRowEntity;
 import ru.tkachenko.buyerassistent.summary.oracle_inner.service.OracleParser;
@@ -17,7 +17,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Arrays;
+import java.sql.Timestamp;
 import java.util.List;
 
 @Service
@@ -28,16 +28,18 @@ public class SummaryService {
     private final OtherFactoriesParser otherFactoriesParser;
     private final OracleParser oracleParser;
     private final Path FILE_STORAGE_LOCATION;
+    private final FileStorageDBService fileStorageDBService;
 
     @Autowired
     public SummaryService(SummaryDBService summaryDBService, DependencyParser dependencyParser,
                           OtherFactoriesParser otherFactoriesParser, OracleParser oracleParser,
-                          FileStorageProperties fileStorageProperties) {
+                          FileStorageProperties fileStorageProperties, FileStorageDBService fileStorageDBService) {
         this.summaryDBService = summaryDBService;
         this.dependencyParser = dependencyParser;
         this.otherFactoriesParser = otherFactoriesParser;
         this.oracleParser = oracleParser;
         this.FILE_STORAGE_LOCATION = Paths.get(fileStorageProperties.getUploadDir()).toAbsolutePath().normalize();
+        this.fileStorageDBService = fileStorageDBService;
     }
 
     //TODO parseFilesToSummary need to return Path summaryFile and after need save this fileEntity in DB
@@ -57,23 +59,29 @@ public class SummaryService {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        copySummaryTableToFile();
+        SavedFileEntity savedFileEntity = copySummaryTableToFile();
+        fileStorageDBService.save(savedFileEntity);
         //copy summary_table to Excel file without styles and write this file to save_files_table
 
     }
 
-    private void copySummaryTableToFile() {
+    private SavedFileEntity copySummaryTableToFile() {
         CurrentDate currentDate = new CurrentDate();
-        Path destination_directory = FILE_STORAGE_LOCATION.resolve(currentDate.getYear())
-                .resolve(currentDate.getMonth())
-                .resolve(currentDate.getDay());
+        Timestamp savedTimestamp = currentDate.getTimestamp();
+        String year = currentDate.getYear();
+        String month = currentDate.getMonth();
+        String day = currentDate.getDay();
+        String time = currentDate.getTime();
+        Path destination_directory = FILE_STORAGE_LOCATION.resolve(year)
+                .resolve(month)
+                .resolve(day);
         try {
             Files.createDirectories(destination_directory);
         } catch (IOException e) {
             e.printStackTrace();
         }
 
-        String storageFileName = currentDate.getTime() + ".xlsx";
+        String storageFileName = time + ".xlsx";
         Path targetFilePath = destination_directory.resolve(storageFileName);
 
         String[] headerColumnsNames = SummaryInfoUtil.getFileColumnsNamesForEntity();
@@ -102,5 +110,7 @@ public class SummaryService {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        return new SavedFileEntity(targetFilePath.toString(), storageFileName,
+                savedTimestamp, year, month, day, time, true);
     }
 }
