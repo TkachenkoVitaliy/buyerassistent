@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import ru.tkachenko.buyerassistent.file_storage.exceptions.IllegalFileExtensionException;
+import ru.tkachenko.buyerassistent.file_storage.service.FileDownloadService;
 import ru.tkachenko.buyerassistent.file_storage.service.FileStorageService;
 import ru.tkachenko.buyerassistent.mmk_accept.service.MmkAcceptService;
 import ru.tkachenko.buyerassistent.summary.service.SummaryService;
@@ -22,13 +23,15 @@ import java.util.List;
 public class MainController {
 
     private final FileStorageService fileStorageService;
+    private final FileDownloadService fileDownloadService;
     private final MmkAcceptService mmkAcceptService;
     private final SummaryService summaryService;
 
     @Autowired
-    public MainController(FileStorageService fileStorageService, MmkAcceptService mmkAcceptService,
+    public MainController(FileStorageService fileStorageService, FileDownloadService fileDownloadService, MmkAcceptService mmkAcceptService,
                           SummaryService summaryService) {
         this.fileStorageService = fileStorageService;
+        this.fileDownloadService = fileDownloadService;
         this.mmkAcceptService = mmkAcceptService;
         this.summaryService = summaryService;
     }
@@ -65,7 +68,7 @@ public class MainController {
             e.printStackTrace();
             return e.getMessage();
         } finally { //TODO remove timer
-            timerUtil.consoleLogTime("uploadMultipleFiles");
+            timerUtil.consoleLogTime("upload and write to DB MultipleFiles");
         } //TODO remove timer
     }
 
@@ -75,8 +78,8 @@ public class MainController {
         TimerUtil timerUtilDownloadAllFiles = new TimerUtil();
         //TODO remove timer
         try {
-            summaryService.createAllBranchesFiles();
-            return null;
+            List<Path> createdBranchesFiles = summaryService.createAllBranchesFiles();
+            return fileDownloadService.getZipFileAsResources(createdBranchesFiles, request);
         } finally {
             timerUtilDownloadAllFiles.consoleLogTime("createAllFiles");
         }

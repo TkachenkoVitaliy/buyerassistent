@@ -11,7 +11,9 @@ import ru.tkachenko.buyerassistent.summary.oracle_inner.service.OracleParser;
 import ru.tkachenko.buyerassistent.summary.other_factory_inner.service.OtherFactoriesParser;
 import ru.tkachenko.buyerassistent.summary.dependency_inner.service.DependencyParser;
 import ru.tkachenko.buyerassistent.utils.CurrentDate;
+import ru.tkachenko.buyerassistent.utils.FileUtils;
 
+import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -115,18 +117,22 @@ public class SummaryService {
     }
 
     public List<Path> createAllBranchesFiles() {
+        FileUtils.cleanDirectory(ZIP_DIRECTORY);
+
         String[] allBranchesNames = SummaryInfoUtil.getAllBranchesNames();
+        List<Path> branchFilesPaths = null;
         try {
             Files.createDirectories(ZIP_DIRECTORY);
-            List<Path> branchFilesPaths = Arrays.stream(allBranchesNames).parallel()
+            branchFilesPaths = Arrays.stream(allBranchesNames).parallel()
                     .map(this::createBranchFile)
                     .collect(Collectors.toList());
         } catch (IOException e) {
             e.printStackTrace();
         }
 
-        return null;
+        return branchFilesPaths;
     }
+
 
     private Path createBranchFile(String branchName) {
         String[] monthSheetsNames = SummaryInfoUtil.getMonthSheetNames();
