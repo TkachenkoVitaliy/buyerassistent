@@ -18,4 +18,10 @@ public interface SummaryRowRepository extends JpaRepository<SummaryRowEntity, Lo
     List<SummaryRowEntity> findAll();
 
     List<SummaryRowEntity> findByBranchAndAcceptMonth(String branch, int acceptMonth);
+
+    List<SummaryRowEntity> findByAcceptMonth(int acceptMonth);
+
+    List<SummaryRowEntity> findBySpec(String spec);
+
+    SummaryRowEntity findFirstBySpecAndAcceptMonthGreaterThan(String spec, int acceptMonth);
 }

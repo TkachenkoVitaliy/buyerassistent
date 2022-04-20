@@ -59,6 +59,7 @@ public class SummaryService {
         dependencyParser.parse(dependenciesMmkPath);
         otherFactoriesParser.parse(otherFactoriesPath);
         oracleParser.parse(oracleMmkPath);
+        fixZeroInAcceptMonth();
         try {
             Files.delete(otherFactoriesPath);
             Files.delete(oracleMmkPath);
@@ -68,6 +69,17 @@ public class SummaryService {
         }
         SavedFileEntity savedFileEntity = copySummaryTableToFile();
         fileDBService.save(savedFileEntity);
+    }
+
+    private void fixZeroInAcceptMonth() {
+        List<SummaryRowEntity> entitiesWithZeroAcceptMonth = summaryDBService.findZeroAcceptMonth();
+        for (SummaryRowEntity entity : entitiesWithZeroAcceptMonth) {
+            SummaryRowEntity entityWithAcceptMonth = summaryDBService.findSameSpecWithNotZeroAcceptMonth(entity);
+            if (entityWithAcceptMonth != null) {
+                entity.setAcceptMonth(entityWithAcceptMonth.getAcceptMonth());
+                summaryDBService.save(entity);
+            }
+        }
     }
 
     private SavedFileEntity copySummaryTableToFile() {
