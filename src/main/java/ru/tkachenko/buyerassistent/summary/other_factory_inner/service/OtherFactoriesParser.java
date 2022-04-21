@@ -14,6 +14,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.sql.Date;
+import java.sql.SQLOutput;
 import java.util.Arrays;
 import java.util.Objects;
 
@@ -31,11 +32,6 @@ public class OtherFactoriesParser {
     public void parse(Path filePath) {
         try(FileInputStream fis = new FileInputStream(filePath.toString());
             XSSFWorkbook wb = new XSSFWorkbook(fis);) {
-//            for(String monthSheetName : monthSheetNames) {
-//                XSSFSheet sheet = wb.getSheet(monthSheetName);
-//                if(sheet != null) parseSheet(sheet);
-//            }
-            //TODO learn and test about parallelStreams (old realization upper in commentaries)
             Arrays.stream(monthSheetNames).parallel()
                     .map(wb::getSheet)
                     .filter(Objects::nonNull)
