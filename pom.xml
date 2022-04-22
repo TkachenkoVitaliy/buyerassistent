@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>ru.tkachenko</groupId>
-    <artifactId>BuyerAssistent</artifactId>
+    <artifactId>BuyerAssistant</artifactId>
     <version>1.0.0</version>
 
     <parent>
@@ -102,7 +102,7 @@
                         <manifest>
                             <addClasspath>true</addClasspath>
                             <classpathPrefix>lib/</classpathPrefix>
-                            <mainClass>ru.tkachenko.buyerassistent.Application</mainClass>
+                            <mainClass>ru.tkachenko.buyerassistant.Application</mainClass>
                         </manifest>
                     </archive>
                 </configuration>
