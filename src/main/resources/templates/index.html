@@ -1,37 +1,69 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
+
 <head>
     <meta charset="UTF-8">
-    <title>Buyer Assistent</title>
+    <meta content="https://github.com/fluidicon.png" itemprop="image">
+    <title>BuyerAssistant</title>
+    <link rel="shortcut icon" href="/img/steeleks_logo.png" type="image/x-icon">
+    <link rel="icon" href="/img/steeleks_logo.png" type="image/x-icon">
+    <link rel="stylesheet" href="/styles/indexpage.css">
 </head>
+
 <body>
 
-<form action="/uploadAccept" method="post" enctype="multipart/form-data">
-    <label>Акцепт ММК</label>
-    <input type="file" accept=".xlsx" name="mmkAccept" required>
-    <button>SEND</button>
-</form>
+    <div class="main_container">
 
-<hr>
+        <form action="/uploadAccept" method="post" enctype="multipart/form-data" class="form">
 
-<form action="/uploadMultipleFiles" method="post" enctype="multipart/form-data">
-    <label>Прочие заводы</label>
-    <input type="file" accept=".xlsx" name="otherFactories" required>
-    <br>
-    <label>Оракл ММК</label>
-    <input type="file" accept=".xlsx" name="oracleMmk" required>
-    <br>
-    <label>Зависимости ММК</label>
-    <input type="file" accept=".xlsx" name="dependenciesMmk" required>
-    <br>
-    <button>SEND</button>
-</form>
+            <div class="label_input_container">
+                <label class="label">Акцепт ММК</label>
+                <input type="file" accept=".xlsx" name="mmkAccept" required class="input">
+            </div>
 
-<hr>
+            <hr>
+                
+            <button class="btn">SEND</button>
 
-<form action = "/downloadAllFiles" method="get">
-    <button>***DOWNLOAD ALL FILES***</button>
-</form>
+        </form>
+
+    
+        <form action="/uploadMultipleFiles" method="post" enctype="multipart/form-data" class="form">
+
+            <div class="label_input_container">
+                <label class="label">Прочие заводы</label>
+                <input type="file" accept=".xlsx" name="otherFactories" required class="input">
+            </div>
+
+            <hr>
+                
+            <div class="label_input_container">
+                <label class="label">Оракл ММК</label>
+                <input type="file" accept=".xlsx" name="oracleMmk" required class="input">
+            </div>
+
+            <hr>
+
+            <div class="label_input_container">
+                <label class="label">Зависимости ММК</label>
+                <input type="file" accept=".xlsx" name="dependenciesMmk" required class="input">
+            </div>
+
+            <hr>
+            
+            <button class="btn">SEND</button>
+
+        </form>
+    
+    
+        <form action = "/downloadAllFiles" method="get" class="form">
+
+            <button class="btn">***DOWNLOAD ALL FILES***</button>
+
+        </form>
+
+    </div>
 
 </body>
+
 </html>
