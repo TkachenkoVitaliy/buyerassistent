@@ -121,7 +121,8 @@ public class OracleParser {
 
         String profile = null;
         if(oracleDTO.getProfile() != null) {
-            profile = RegexUtil.replaceDelimiterAndDot(oracleDTO.getProfile());
+            String withoutFractional = RegexUtil.removeFractionalPartWithZero(oracleDTO.getProfile());
+            profile = RegexUtil.replaceDelimiterAndDot(withoutFractional);
         } else {
             profile = profileParser.parse(oracleDTO.getProductType(), oracleDTO.getSpec(), oracleDTO.getPosition());
             //TODO method for parse profile

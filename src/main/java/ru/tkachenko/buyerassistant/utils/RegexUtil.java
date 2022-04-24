@@ -22,25 +22,24 @@ public class RegexUtil {
 
     public static String removeFractionalPartWithZero(String text) {
         if (text == null) return null;
-        if (!text.contains(".")) return text;
+        if (!text.contains(".") && !text.contains(",")) return text;
         final String DELIMITER = "x";
 
         String[] measures = text.split("x");
         for (int i = 0; i < measures.length; i++) {
-            if(measures[i].contains(".")) {
+            if(measures[i].contains(".") || measures[i].contains(",")) {
                 char[] charArray = measures[i].toCharArray();
                 int endIndex = charArray.length - 1;
                 while(charArray[endIndex] == '0') {
                     endIndex--;
                 }
                 measures[i] = measures[i].substring(0, endIndex+1);
-                if(measures[i].endsWith(".")) {
+                if(measures[i].endsWith(".") || measures[i].endsWith(",")) {
                     measures[i] = measures[i].substring(0, measures[i].length()-1);
                 }
             }
         }
-        String result = convertStringArrayToString(measures, DELIMITER);
-        return result;
+        return convertStringArrayToString(measures, DELIMITER);
     }
 
     private static String convertStringArrayToString(String[] strArr, String delimiter) {

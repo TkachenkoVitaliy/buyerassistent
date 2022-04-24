@@ -105,16 +105,22 @@ class RegexUtilTest {
         String testCase2 = "1.050x1250.000x2500.000";
         String testCase3 = "1.000x1250.000x2500.000";
         String testCase4 = "10x1500x6000";
+        String testCase5 = "1,050x1250,000x2500,000";
+        String testCase6 = "1.050x1250,000x2500";
 
         String expectedCase1 = "1.05x1250x2500";
         String expectedCase2 = "1.05x1250x2500";
         String expectedCase3 = "1x1250x2500";
         String expectedCase4 = "10x1500x6000";
+        String expectedCase5 = "1,05x1250x2500";
+        String expectedCase6 = "1.05x1250x2500";
 
         Assertions.assertEquals(expectedCase1, RegexUtil.removeFractionalPartWithZero(testCase1));
         Assertions.assertEquals(expectedCase2, RegexUtil.removeFractionalPartWithZero(testCase2));
         Assertions.assertEquals(expectedCase3, RegexUtil.removeFractionalPartWithZero(testCase3));
         Assertions.assertEquals(expectedCase4, RegexUtil.removeFractionalPartWithZero(testCase4));
+        Assertions.assertEquals(expectedCase5, RegexUtil.removeFractionalPartWithZero(testCase5));
+        Assertions.assertEquals(expectedCase6, RegexUtil.removeFractionalPartWithZero(testCase6));
         Assertions.assertNull(RegexUtil.removeFractionalPartWithZero(nullCase));
     }
 
