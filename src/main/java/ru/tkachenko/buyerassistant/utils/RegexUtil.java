@@ -20,9 +20,16 @@ public class RegexUtil {
         return text.replace('x','*').replace('.', ',');
     }
 
+    //TODO rewrite for n.000 or n.00 or 1.500 etc...
     public static String removeFractionalPartWithZero(String text) {
         if (text == null) return null;
-        return text.replace(".0", "");
+        Pattern pattern = Pattern.compile("[.][1-9]{0,2}0{1,10}");
+        Matcher matcher = pattern.matcher(text);
+        //TODO возможно проще разбивать по разделителю и собирать сроку заного из массива строк
+//        ([.]{1}0{1,4})|(0{1,3})
+//        [.].{0,2}[0]{1,10}
+//        ([.]{1}[0]{1,10})
+//        return text.replace(".0", "");
     }
 
     public static String doubleToString(double value) {
