@@ -101,26 +101,51 @@ class RegexUtilTest {
 
     @Test
     void removeFractionalPartWithZero() {
-        String expectedCase1 = "1,5x1250x2500";
-        String expectedCase2 = "1,5*1250*2500";
-        String expectedCase3 = "1.5x1250x2500";
-        String expectedCase4 = "1.5*1250*2500";
-        String expectedCase5 = "4*1500*6000";
-        String expectedCase6 = "4*1500*6000";
-        String expectedCase7 = "4,000*1500*6000";
-        String expectedCase8 = "4x1500x6000";
-        String expectedCase9 = "4,000x1500x6000";
+        String testCase1 = "1.050x1250x2500";
+        String testCase2 = "1.050x1250.000x2500.000";
+        String testCase3 = "1.000x1250.000x2500.000";
+        String testCase4 = "10x1500x6000";
 
-        Assertions.assertEquals(expectedCase1, RegexUtil.removeFractionalPartWithZero(CASE_1));
-        Assertions.assertEquals(expectedCase2, RegexUtil.removeFractionalPartWithZero(CASE_2));
-        Assertions.assertEquals(expectedCase3, RegexUtil.removeFractionalPartWithZero(CASE_3));
-        Assertions.assertEquals(expectedCase4, RegexUtil.removeFractionalPartWithZero(CASE_4));
-        Assertions.assertEquals(expectedCase5, RegexUtil.removeFractionalPartWithZero(CASE_5));
-        Assertions.assertEquals(expectedCase6, RegexUtil.removeFractionalPartWithZero(CASE_6));
-        Assertions.assertEquals(expectedCase7, RegexUtil.removeFractionalPartWithZero(CASE_7));
-        Assertions.assertEquals(expectedCase8, RegexUtil.removeFractionalPartWithZero(CASE_8));
-        Assertions.assertEquals(expectedCase9, RegexUtil.removeFractionalPartWithZero(CASE_9));
+        String expectedCase1 = "1.05x1250x2500";
+        String expectedCase2 = "1.05x1250x2500";
+        String expectedCase3 = "1x1250x2500";
+        String expectedCase4 = "10x1500x6000";
+
+        Assertions.assertEquals(expectedCase1, RegexUtil.removeFractionalPartWithZero(testCase1));
+        Assertions.assertEquals(expectedCase2, RegexUtil.removeFractionalPartWithZero(testCase2));
+        Assertions.assertEquals(expectedCase3, RegexUtil.removeFractionalPartWithZero(testCase3));
+        Assertions.assertEquals(expectedCase4, RegexUtil.removeFractionalPartWithZero(testCase4));
         Assertions.assertNull(RegexUtil.removeFractionalPartWithZero(nullCase));
+    }
+
+    @Test
+    void doubleToString() {
+        double testCase1 = 2.0;
+        double testCase2 = 1.150;
+        double testCase3 = 1.050;
+        double testCase4 = 4;
+
+        String expectedCase1 = "2";
+        String expectedCase2 = "1.15";
+        String expectedCase3 = "1.05";
+        String expectedCase4 = "4";
+
+        Assertions.assertEquals(expectedCase1, RegexUtil.doubleToString(testCase1));
+        Assertions.assertEquals(expectedCase2, RegexUtil.doubleToString(testCase2));
+        Assertions.assertEquals(expectedCase3, RegexUtil.doubleToString(testCase3));
+        Assertions.assertEquals(expectedCase4, RegexUtil.doubleToString(testCase4));
+    }
+
+    @Test
+    void findRegexInTextAndRemoveUnnecessary() {
+        String testCase1 = "Какой-то текст;\nШирина полки=10;\nЕще какой-то текст";
+        final String firstMeasureRegex = "(Ширина полки=[0-9]{1,3})";
+        final String firstMeasureRemovedString = "Ширина полки=";
+
+        String expectedCase1 = "10";
+
+        Assertions.assertEquals(expectedCase1, RegexUtil.findRegexInTextAndRemoveUnnecessary(testCase1,
+                firstMeasureRegex, firstMeasureRemovedString));
     }
 
 }

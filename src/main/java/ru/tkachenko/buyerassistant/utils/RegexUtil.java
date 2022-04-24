@@ -20,16 +20,34 @@ public class RegexUtil {
         return text.replace('x','*').replace('.', ',');
     }
 
-    //TODO rewrite for n.000 or n.00 or 1.500 etc...
     public static String removeFractionalPartWithZero(String text) {
         if (text == null) return null;
-        Pattern pattern = Pattern.compile("[.][1-9]{0,2}0{1,10}");
-        Matcher matcher = pattern.matcher(text);
-        //TODO возможно проще разбивать по разделителю и собирать сроку заного из массива строк
-//        ([.]{1}0{1,4})|(0{1,3})
-//        [.].{0,2}[0]{1,10}
-//        ([.]{1}[0]{1,10})
-//        return text.replace(".0", "");
+        if (!text.contains(".")) return text;
+        final String DELIMITER = "x";
+
+        String[] measures = text.split("x");
+        for (int i = 0; i < measures.length; i++) {
+            if(measures[i].contains(".")) {
+                char[] charArray = measures[i].toCharArray();
+                int endIndex = charArray.length - 1;
+                while(charArray[endIndex] == '0') {
+                    endIndex--;
+                }
+                measures[i] = measures[i].substring(0, endIndex+1);
+                if(measures[i].endsWith(".")) {
+                    measures[i] = measures[i].substring(0, measures[i].length()-1);
+                }
+            }
+        }
+        String result = convertStringArrayToString(measures, DELIMITER);
+        return result;
+    }
+
+    private static String convertStringArrayToString(String[] strArr, String delimiter) {
+        StringBuilder sb = new StringBuilder();
+        for (String str : strArr)
+            sb.append(str).append(delimiter);
+        return sb.substring(0, sb.length() - 1);
     }
 
     public static String doubleToString(double value) {
