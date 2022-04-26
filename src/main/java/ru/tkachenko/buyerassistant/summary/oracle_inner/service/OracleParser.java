@@ -19,6 +19,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.sql.Date;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -87,11 +88,12 @@ public class OracleParser {
         oracleDTO.setAcceptMonth(ExcelUtils.getIntValue(colIndexes[9], row));
         oracleDTO.setAccepted(ExcelUtils.getDoubleValue(colIndexes[10], row));
         oracleDTO.setShipped(ExcelUtils.getDoubleValue(colIndexes[11], row));
-        oracleDTO.setShippedDate(ExcelUtils.getDateValue(colIndexes[12], row));
+        SimpleDateFormat shippedDateFormat = new SimpleDateFormat("dd.MM.yyyy");
+        oracleDTO.setShippedDate(ExcelUtils.getDateValue(colIndexes[12], row, shippedDateFormat));
         oracleDTO.setVehicleNumber(ExcelUtils.getStringValue(colIndexes[13], row));
         oracleDTO.setInvoiceNumber(ExcelUtils.getIntValue(colIndexes[14], row));
-        oracleDTO.setInvoiceDate(ExcelUtils.getDateValue(colIndexes[15], row));
-
+        SimpleDateFormat invoiceDateFormat = new SimpleDateFormat("dd.MM.yyyy");
+        oracleDTO.setInvoiceDate(ExcelUtils.getDateValue(colIndexes[15], row, invoiceDateFormat));
         oracleDTO.setPriceWithoutNDS(ExcelUtils.getDoubleValue(colIndexes[16], row));
         oracleDTO.setPrt(ExcelUtils.getStringValue(colIndexes[17], row));
         oracleDTO.setStation(ExcelUtils.getStringValue(colIndexes[18], row));

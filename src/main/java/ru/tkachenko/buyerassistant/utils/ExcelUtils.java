@@ -3,6 +3,8 @@ package ru.tkachenko.buyerassistant.utils;
 import org.apache.poi.ss.usermodel.*;
 
 import java.sql.Date;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 
 public class ExcelUtils {
 
@@ -92,6 +94,26 @@ public class ExcelUtils {
             return 0;
         }
         return (int) cell.getNumericCellValue();
+    }
+
+    public static java.sql.Date getDateValue(int colIndex, Row row, SimpleDateFormat dateFormat) {
+        Cell cell = row.getCell(colIndex);
+        java.sql.Date sqlDate = null;
+        if(cell != null && cell.getCellType()!= CellType.BLANK) {
+            if(cell.getCellType() == CellType.STRING) {
+                String dateString = cell.getStringCellValue();
+                try {
+                    sqlDate = new Date(dateFormat.parse(dateString).getTime());
+                } catch (ParseException e) {
+                    throw new RuntimeException(e);
+                }
+//                sqlDate = java.sql.Date.valueOf(dateString);
+            } else {
+                java.util.Date javaDate = cell.getDateCellValue();
+                sqlDate = new java.sql.Date(javaDate.getTime());
+            }
+        }
+        return sqlDate;
     }
 
     public static java.sql.Date getDateValue(int colIndex, Row row) {
