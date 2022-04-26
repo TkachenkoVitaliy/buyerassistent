@@ -28,11 +28,11 @@ public class FileStorageService {
     }
 
     public Path storeFile(MultipartFile mmkAccept) throws IllegalFileExtensionException {
-        final String MMK_ACCEPT_STORAGE_FILENAME = "mmkAccept.xlsx";
+        final String MMK_ACCEPT_STORAGE_FILENAME = "mmkAccept.xls";
         Path mmkAcceptDestinationPath = TEMP_DIRECTORY.resolve(MMK_ACCEPT_STORAGE_FILENAME);
 
         try {
-            FileUtils.validateFileExtension(mmkAccept);
+            FileUtils.validateFileExtensionXls(mmkAccept);
             Files.createDirectories(TEMP_DIRECTORY);
             Files.copy(mmkAccept.getInputStream(), mmkAcceptDestinationPath, StandardCopyOption.REPLACE_EXISTING);
         } catch (IOException e) {
@@ -51,9 +51,9 @@ public class FileStorageService {
         List<Path> savedFilesPaths = new ArrayList<>();
 
         try {
-            FileUtils.validateFileExtension(otherFactories);
-            FileUtils.validateFileExtension(oracleMmk);
-            FileUtils.validateFileExtension(dependenciesMmk);
+            FileUtils.validateFileExtensionXlsx(otherFactories);
+            FileUtils.validateFileExtensionXlsx(oracleMmk);
+            FileUtils.validateFileExtensionXlsx(dependenciesMmk);
 
             Files.createDirectories(TEMP_DIRECTORY);
 

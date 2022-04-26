@@ -107,7 +107,6 @@ public class ExcelUtils {
                 } catch (ParseException e) {
                     throw new RuntimeException(e);
                 }
-//                sqlDate = java.sql.Date.valueOf(dateString);
             } else {
                 java.util.Date javaDate = cell.getDateCellValue();
                 sqlDate = new java.sql.Date(javaDate.getTime());

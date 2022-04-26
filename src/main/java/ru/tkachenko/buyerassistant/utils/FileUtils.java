@@ -10,8 +10,19 @@ import java.nio.file.Path;
 
 public class FileUtils {
 
-    public static boolean validateFileExtension(MultipartFile multipartFile) throws IllegalFileExtensionException {
+    public static boolean validateFileExtensionXlsx(MultipartFile multipartFile) throws IllegalFileExtensionException {
         final String CORRECT_EXTENSION = ".xlsx";
+
+        String fileName = multipartFile.getOriginalFilename();
+        if (fileName.endsWith(CORRECT_EXTENSION)) {
+            return true;
+        } else {
+            throw new IllegalFileExtensionException("Wrong Extension! File - " + multipartFile.getOriginalFilename());
+        }
+    }
+
+    public static boolean validateFileExtensionXls(MultipartFile multipartFile) throws IllegalFileExtensionException {
+        final String CORRECT_EXTENSION = ".xls";
 
         String fileName = multipartFile.getOriginalFilename();
         if (fileName.endsWith(CORRECT_EXTENSION)) {
