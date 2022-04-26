@@ -24,6 +24,12 @@ public class ExcelUtils {
         return result;
     }
 
+    public static int[] getEntityColumnsIndexes(Sheet sheet, int headerRowIndex, String[] entityColumnNames) {
+        Row header = sheet.getRow(headerRowIndex);
+        int[] colIndexes = ExcelUtils.getEntityColumnsIndexes(entityColumnNames, header);
+        return colIndexes;
+    }
+
     public static int[] getEntityColumnsIndexes(String[] arrayValues, Row row) {
 
         int[] resultArray = new int[arrayValues.length];
@@ -32,12 +38,6 @@ public class ExcelUtils {
             resultArray[i] = findColIndexByValue(value, row);
         }
         return resultArray;
-    }
-
-    public static int[] getEntityColumnsIndexes(Sheet sheet, int headerRowIndex, String[] entityColumnNames) {
-        Row header = sheet.getRow(headerRowIndex);
-        int[] colIndexes = ExcelUtils.getEntityColumnsIndexes(entityColumnNames, header);
-        return colIndexes;
     }
 
     public static int findFirstNotBlankRow(Sheet sheet) {
@@ -60,6 +60,15 @@ public class ExcelUtils {
         return false;
     }
 
+    public static String getStringValueWithoutQuote(int colIndex, Row row) {
+        return getStringValue(colIndex, row).replace("\"", "");
+    }
+
+    public static String getStringValue(int colIndex, Row row) {
+        Cell cell = row.getCell(colIndex);
+        return getAnyValueAsString(cell);
+    }
+
     public static String getAnyValueAsString(Cell cell) {
         if (cell == null) return null;
         if (cell.getCellType() == CellType.STRING) {
@@ -68,16 +77,6 @@ public class ExcelUtils {
             String stringValue = dataFormatter.formatCellValue(cell);
             return stringValue;
         }
-    }
-
-    public static String getStringValue(int colIndex, Row row) {
-        Cell cell = row.getCell(colIndex);
-        return getAnyValueAsString(cell);
-    }
-
-    public static String getStringValueWithoutQuote(int colIndex, Row row) {
-        Cell cell = row.getCell(colIndex);
-        return getAnyValueAsString(cell).replace("\"", "");
     }
 
     public static double getDoubleValue(int colIndex, Row row) {
@@ -105,7 +104,7 @@ public class ExcelUtils {
                 try {
                     sqlDate = new Date(dateFormat.parse(dateString).getTime());
                 } catch (ParseException e) {
-                    throw new RuntimeException(e);
+                    e.printStackTrace();
                 }
             } else {
                 java.util.Date javaDate = cell.getDateCellValue();
@@ -130,28 +129,28 @@ public class ExcelUtils {
         return sqlDate;
     }
 
-    public static void writeCellNotBlankValue(Row row, int columnIndex, String stringValue) {
-        if(stringValue != null) {
+    public static void writeCellNotNullValue(Row row, int columnIndex, String value) {
+        if(value != null) {
             Cell cell = row.createCell(columnIndex);
-            cell.setCellValue(stringValue);
+            cell.setCellValue(value);
         }
     }
 
-    public static void writeCellNotBlankValue(Row row, int columnIndex, int intValue) {
-        if(intValue != 0) {
+    public static void writeCellNotNullValue(Row row, int columnIndex, int value) {
+        if(value != 0) {
             Cell cell = row.createCell(columnIndex);
-            cell.setCellValue(intValue);
+            cell.setCellValue(value);
         }
     }
 
-    public static void writeCellNotBlankValue(Row row, int columnIndex, double doubleValue) {
-        if(doubleValue != 0.0) {
+    public static void writeCellNotNullValue(Row row, int columnIndex, double value) {
+        if(value != 0.0) {
             Cell cell = row.createCell(columnIndex);
-            cell.setCellValue(doubleValue);
+            cell.setCellValue(value);
         }
     }
 
-    public static void writeCellNotBlankDateValue(Row row, int columnIndex, Date dateValue, CellStyle dateCellStyle) {
+    public static void writeCellNotNullDateValue(Row row, int columnIndex, Date dateValue, CellStyle dateCellStyle) {
         if(dateValue != null) {
             Cell cell = row.createCell(columnIndex);
             cell.setCellValue(dateValue);

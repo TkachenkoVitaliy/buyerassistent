@@ -76,22 +76,22 @@ public class SummaryWriter {
     }
 
     private static void writeClippedEntityToRow(XSSFCellStyle dateStyle, SummaryRowEntity summaryRowEntity, Row row) {
-        ExcelUtils.writeCellNotBlankValue(row, 0, summaryRowEntity.getSupplier());
-        ExcelUtils.writeCellNotBlankValue(row, 1, summaryRowEntity.getMill());
-        ExcelUtils.writeCellNotBlankValue(row, 2,summaryRowEntity.getSellType());
-        ExcelUtils.writeCellNotBlankValue(row, 3,summaryRowEntity.getClient());
-        ExcelUtils.writeCellNotBlankValue(row, 4,summaryRowEntity.getConsignee());
-        ExcelUtils.writeCellNotBlankValue(row, 5,summaryRowEntity.getProductType());
-        ExcelUtils.writeCellNotBlankValue(row, 6,summaryRowEntity.getProfile());
-        ExcelUtils.writeCellNotBlankValue(row, 7,summaryRowEntity.getGrade());
-        ExcelUtils.writeCellNotBlankValue(row, 8,summaryRowEntity.getRal());
-        ExcelUtils.writeCellNotBlankValue(row, 9,summaryRowEntity.getSpec());
-        ExcelUtils.writeCellNotBlankValue(row, 10,summaryRowEntity.getPosition());
-        ExcelUtils.writeCellNotBlankValue(row, 11,summaryRowEntity.getAcceptMonth());
-        ExcelUtils.writeCellNotBlankValue(row, 12,summaryRowEntity.getYear());
-        ExcelUtils.writeCellNotBlankValue(row, 13,summaryRowEntity.getAccepted());
-        ExcelUtils.writeCellNotBlankValue(row, 14,summaryRowEntity.getShipped());
-        ExcelUtils.writeCellNotBlankDateValue(row, 15,summaryRowEntity.getShippedDate(), dateStyle);
-        ExcelUtils.writeCellNotBlankValue(row, 16,summaryRowEntity.getVehicleNumber());
+        ExcelUtils.writeCellNotNullValue(row, 0, summaryRowEntity.getSupplier());
+        ExcelUtils.writeCellNotNullValue(row, 1, summaryRowEntity.getMill());
+        ExcelUtils.writeCellNotNullValue(row, 2,summaryRowEntity.getSellType());
+        ExcelUtils.writeCellNotNullValue(row, 3,summaryRowEntity.getClient());
+        ExcelUtils.writeCellNotNullValue(row, 4,summaryRowEntity.getConsignee());
+        ExcelUtils.writeCellNotNullValue(row, 5,summaryRowEntity.getProductType());
+        ExcelUtils.writeCellNotNullValue(row, 6,summaryRowEntity.getProfile());
+        ExcelUtils.writeCellNotNullValue(row, 7,summaryRowEntity.getGrade());
+        ExcelUtils.writeCellNotNullValue(row, 8,summaryRowEntity.getRal());
+        ExcelUtils.writeCellNotNullValue(row, 9,summaryRowEntity.getSpec());
+        ExcelUtils.writeCellNotNullValue(row, 10,summaryRowEntity.getPosition());
+        ExcelUtils.writeCellNotNullValue(row, 11,summaryRowEntity.getAcceptMonth());
+        ExcelUtils.writeCellNotNullValue(row, 12,summaryRowEntity.getYear());
+        ExcelUtils.writeCellNotNullValue(row, 13,summaryRowEntity.getAccepted());
+        ExcelUtils.writeCellNotNullValue(row, 14,summaryRowEntity.getShipped());
+        ExcelUtils.writeCellNotNullDateValue(row, 15,summaryRowEntity.getShippedDate(), dateStyle);
+        ExcelUtils.writeCellNotNullValue(row, 16,summaryRowEntity.getVehicleNumber());
     }
 }
