@@ -1,5 +1,6 @@
 package ru.tkachenko.buyerassistant.summary.service;
 
+import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.xssf.usermodel.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -106,7 +107,7 @@ public class SummaryService {
         try(FileOutputStream fos = new FileOutputStream(targetFilePath.toString());
             XSSFWorkbook wb = new XSSFWorkbook()) {
             XSSFCreationHelper creationHelper = wb.getCreationHelper();
-            XSSFCellStyle dateStyle = wb.createCellStyle();
+            CellStyle dateStyle = wb.createCellStyle();
             dateStyle.setDataFormat(creationHelper.createDataFormat().getFormat("dd.MM.yyyy"));
             XSSFSheet sheet = wb.createSheet();
 
@@ -152,7 +153,7 @@ public class SummaryService {
         try(FileOutputStream fos = new FileOutputStream(filePath.toString());
         XSSFWorkbook wb = new XSSFWorkbook()) {
             XSSFCreationHelper creationHelper = wb.getCreationHelper();
-            XSSFCellStyle dateStyle = wb.createCellStyle();
+            CellStyle dateStyle = wb.createCellStyle();
             dateStyle.setDataFormat(creationHelper.createDataFormat().getFormat("dd.MM.yyyy"));
             for(int i = 1; i <=12; i++) {
                 List<SummaryRowEntity> entities = summaryDBService.findByBranchAndAcceptMonth(branchName, i);

@@ -1,6 +1,7 @@
 package ru.tkachenko.buyerassistant.summary.service;
 
 import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.xssf.usermodel.XSSFCellStyle;
 import ru.tkachenko.buyerassistant.summary.entity.SummaryRowEntity;
@@ -32,7 +33,7 @@ public class SummaryWriter {
         }
     }
 
-    public static void writeEntityToRow(XSSFCellStyle dateStyle, SummaryRowEntity summaryRowEntity, Row row, boolean isFullCopy) {
+    public static void writeEntityToRow(CellStyle dateStyle, SummaryRowEntity summaryRowEntity, Row row, boolean isFullCopy) {
         if (isFullCopy) {
             writeFullEntityToRow(dateStyle, summaryRowEntity, row);
         } else {
@@ -41,7 +42,7 @@ public class SummaryWriter {
     }
 
 
-    private static void writeFullEntityToRow(XSSFCellStyle dateStyle, SummaryRowEntity summaryRowEntity, Row row) {
+    private static void writeFullEntityToRow(CellStyle dateStyle, SummaryRowEntity summaryRowEntity, Row row) {
         row.createCell(0).setCellValue(summaryRowEntity.getSupplier());
         row.createCell(1).setCellValue(summaryRowEntity.getMill());
         row.createCell(2).setCellValue(summaryRowEntity.getBranch());
@@ -75,7 +76,7 @@ public class SummaryWriter {
         row.createCell(26).setCellValue(summaryRowEntity.getFinalCost());
     }
 
-    private static void writeClippedEntityToRow(XSSFCellStyle dateStyle, SummaryRowEntity summaryRowEntity, Row row) {
+    private static void writeClippedEntityToRow(CellStyle dateStyle, SummaryRowEntity summaryRowEntity, Row row) {
         ExcelUtils.writeCellNotNullValue(row, 0, summaryRowEntity.getSupplier());
         ExcelUtils.writeCellNotNullValue(row, 1, summaryRowEntity.getMill());
         ExcelUtils.writeCellNotNullValue(row, 2,summaryRowEntity.getSellType());

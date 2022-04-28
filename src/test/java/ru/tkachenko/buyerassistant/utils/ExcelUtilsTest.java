@@ -6,7 +6,6 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
 
 class ExcelUtilsTest {
 
@@ -17,12 +16,16 @@ class ExcelUtilsTest {
     private static Row row0;
     private static Row row1;
     private static Row row2;
+    private static Row row3;
     private static Cell cell10;
     private static Cell cell11;
     private static Cell cell20;
     private static Cell cell21;
     private static Cell cell22;
     private static Cell cell23;
+    private static CreationHelper creationHelper = workbook.getCreationHelper();
+    private static CellStyle dateStyle = workbook.createCellStyle();
+
 
     @BeforeAll
     static void init() {
@@ -42,6 +45,10 @@ class ExcelUtilsTest {
         cell22.setCellValue("Поставщик");
         cell23 = row2.createCell(3);
         cell23.setCellValue("Вид поставки");
+
+        row3 = sheet.createRow(3);
+
+        dateStyle.setDataFormat(creationHelper.createDataFormat().getFormat("dd.MM.yyyy"));
     }
 
     @Test
@@ -84,10 +91,20 @@ class ExcelUtilsTest {
 
     @Test
     void findFirstNotBlankRow() {
+        int actualResult = ExcelUtils.findFirstNotBlankRow(sheet);
+        int expectedResult = 2;
+        Assertions.assertEquals(expectedResult, actualResult);
     }
 
     @Test
     void cellIsNullOrBlank() {
+        boolean actualResult1 = ExcelUtils.cellIsNullOrBlank(cell20);
+        boolean actualResult2 = ExcelUtils.cellIsNullOrBlank(cell10);
+        boolean actualResult3 = ExcelUtils.cellIsNullOrBlank(cell11);
+
+        Assertions.assertFalse(actualResult1);
+        Assertions.assertTrue(actualResult2);
+        Assertions.assertTrue(actualResult3);
     }
 
     @Test
@@ -119,18 +136,73 @@ class ExcelUtilsTest {
     }
 
     @Test
-    void writeCellNotNullValue() {
+    void testWriteCellNotNullValueString() {
     }
 
     @Test
-    void testWriteCellNotNullValue() {
+    void testWriteCellNotNullValueInt() {
+        //test case 1 (positive)
+        int inputColIndex = 5;
+        int inputValue = 10;
+
+        ExcelUtils.writeCellNotNullValue(row3, inputColIndex, inputValue);
+
+        int expectedResult = 10;
+
+        Cell actualCell = row3.getCell(5);
+        double actualResult = actualCell.getNumericCellValue();
+
+        //TODO как можно проверить что записалось именно int значение, возможно взять значение как строку и проверить его
+        Assertions.assertEquals(expectedResult, actualResult);
+
+        //test case 2 (negative)
+        int inputColIndexNull = 4;
+        int inputValueNull = 0;
+        ExcelUtils.writeCellNotNullValue(row3, inputColIndexNull, inputValueNull);
+        Assertions.assertNull(row3.getCell(4));
     }
 
     @Test
-    void testWriteCellNotNullValue1() {
+    void testWriteCellNotNullValueDouble() {
+        //test case 1 (positive)
+        int inputColIndex = 3;
+        double inputValue = 145.584;
+
+        ExcelUtils.writeCellNotNullValue(row3, inputColIndex, inputValue);
+
+        double expectedResult = 145.584;
+
+        Cell actualCell = row3.getCell(3);
+        double actualResult = actualCell.getNumericCellValue();
+
+        Assertions.assertEquals(expectedResult, actualResult);
+
+        //test case 2 (negative)
+        int inputColIndexNull = 2;
+        double inputValueNull = 0.0;
+        ExcelUtils.writeCellNotNullValue(row3, inputColIndexNull, inputValueNull);
+        Assertions.assertNull(row3.getCell(2));
     }
 
     @Test
     void writeCellNotNullDateValue() {
+        //test case 1 (positive)
+        int inputColIndex = 1;
+        java.sql.Date inputDate = new java.sql.Date(2022, 4, 29);
+        ExcelUtils.writeCellNotNullDateValue(row3, inputColIndex, inputDate, dateStyle);
+
+        java.util.Date exceptedDate = new java.util.Date(2022, 4, 29);
+
+        Cell actualCell = row3.getCell(inputColIndex);
+        java.util.Date actualResult = actualCell.getDateCellValue();
+
+        Assertions.assertEquals(exceptedDate, actualResult);
+
+        //test case 2 (negative)
+        int inputColIndexNull = 0;
+
+        ExcelUtils.writeCellNotNullDateValue(row3, inputColIndexNull, null, dateStyle);
+
+        Assertions.assertNull(row3.getCell(inputColIndexNull));
     }
 }
