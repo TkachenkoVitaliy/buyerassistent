@@ -17,16 +17,6 @@ class RegexUtilTest {
     public static final String CASE_9 = "4,000x1500x6000";
     public static final String nullCase = null;
 
-//    String expectedCase1 = "1,5x1250x2500";
-//    String expectedCase2 = "1,5*1250*2500";
-//    String expectedCase3 = "1.5x1250x2500";
-//    String expectedCase4 = "1.5*1250*2500";
-//    String expectedCase5 = "4.0*1500*6000";
-//    String expectedCase6 = "4.000*1500.000*6000.000";
-//    String expectedCase7 = "4,000*1500*6000";
-//    String expectedCase8 = "4.000x1500x6000";
-//    String expectedCase9 = "4,000x1500x6000";
-
     @Test
     void replaceDelimiter() {
         String expectedCase1 = "1,5*1250*2500";

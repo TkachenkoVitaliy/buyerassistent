@@ -10,6 +10,21 @@ public class ExcelUtils {
 
     private final static DataFormatter dataFormatter = new DataFormatter();
 
+    public static int[] getEntityColumnsIndexes(Sheet sheet, int headerRowIndex, String[] entityColumnNames) {
+        Row header = sheet.getRow(headerRowIndex);
+        int[] colIndexes = ExcelUtils.getEntityColumnsIndexes(entityColumnNames, header);
+        return colIndexes;
+    }
+
+    public static int[] getEntityColumnsIndexes(String[] arrayValues, Row row) {
+        int[] resultArray = new int[arrayValues.length];
+        for (int i = 0; i < arrayValues.length; i++) {
+            String value = arrayValues[i];
+            resultArray[i] = findColIndexByValue(value, row);
+        }
+        return resultArray;
+    }
+
     public static int findColIndexByValue(String value, Row row) {
         int result = -1;
         for (Cell cell : row) {
@@ -22,22 +37,6 @@ public class ExcelUtils {
         }
 
         return result;
-    }
-
-    public static int[] getEntityColumnsIndexes(Sheet sheet, int headerRowIndex, String[] entityColumnNames) {
-        Row header = sheet.getRow(headerRowIndex);
-        int[] colIndexes = ExcelUtils.getEntityColumnsIndexes(entityColumnNames, header);
-        return colIndexes;
-    }
-
-    public static int[] getEntityColumnsIndexes(String[] arrayValues, Row row) {
-
-        int[] resultArray = new int[arrayValues.length];
-        for (int i = 0; i < arrayValues.length; i++) {
-            String value = arrayValues[i];
-            resultArray[i] = findColIndexByValue(value, row);
-        }
-        return resultArray;
     }
 
     public static int findFirstNotBlankRow(Sheet sheet) {
