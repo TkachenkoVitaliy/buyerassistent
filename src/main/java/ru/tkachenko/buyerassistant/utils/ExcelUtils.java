@@ -65,6 +65,7 @@ public class ExcelUtils {
 
     public static String getStringValue(int colIndex, Row row) {
         Cell cell = row.getCell(colIndex);
+        if(cell == null) return null;
         return getAnyValueAsString(cell);
     }
 
@@ -113,20 +114,24 @@ public class ExcelUtils {
         return sqlDate;
     }
 
-    public static java.sql.Date getDateValue(int colIndex, Row row) {
-        Cell cell = row.getCell(colIndex);
-        java.sql.Date sqlDate = null;
-        if(cell != null && cell.getCellType()!= CellType.BLANK) {
-            if(cell.getCellType() == CellType.STRING) {
-                String dateString = cell.getStringCellValue();
-                sqlDate = java.sql.Date.valueOf(dateString);
-            } else {
-                java.util.Date javaDate = cell.getDateCellValue();
-                sqlDate = new java.sql.Date(javaDate.getTime());
-            }
-        }
-        return sqlDate;
-    }
+//    public static java.sql.Date getDateValue(int colIndex, Row row, SimpleDateFormat dateFormat) {
+//        Cell cell = row.getCell(colIndex);
+//        java.sql.Date sqlDate = null;
+//        if(cell != null && cell.getCellType()!= CellType.BLANK) {
+//            if(cell.getCellType() == CellType.STRING) {
+//                String dateString = cell.getStringCellValue();
+//                try {
+//                    sqlDate = new Date(dateFormat.parse(dateString).getTime());
+//                } catch (ParseException e) {
+//                    e.printStackTrace();
+//                }
+//            } else {
+//                java.util.Date javaDate = cell.getDateCellValue();
+//                sqlDate = new java.sql.Date(javaDate.getTime());
+//            }
+//        }
+//        return sqlDate;
+//    }
 
     public static void writeCellNotNullValue(Row row, int columnIndex, String value) {
         if(value != null) {

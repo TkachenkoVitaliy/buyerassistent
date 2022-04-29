@@ -14,6 +14,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.sql.Date;
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Objects;
 
@@ -31,7 +32,8 @@ public class OtherFactoriesParser {
     public void parse(Path filePath) {
         try(FileInputStream fis = new FileInputStream(filePath.toString());
             XSSFWorkbook wb = new XSSFWorkbook(fis);) {
-            Arrays.stream(monthSheetNames).parallel()
+            Arrays.stream(monthSheetNames)
+                    .parallel()
                     .map(wb::getSheet)
                     .filter(Objects::nonNull)
                     .forEach(this::parseSheet);
@@ -75,10 +77,16 @@ public class OtherFactoriesParser {
         double acceptedCost = ExcelUtils.getDoubleValue(colIndexes[18], row);
         double shipped = ExcelUtils.getDoubleValue(colIndexes[19], row);
         double shippedCost = ExcelUtils.getDoubleValue(colIndexes[20], row);
-        Date shippedDate = ExcelUtils.getDateValue(colIndexes[21], row);
+
+        SimpleDateFormat shippedDateFormat = new SimpleDateFormat("dd.MM.yyyy");
+        Date shippedDate = ExcelUtils.getDateValue(colIndexes[21], row, shippedDateFormat);
+
         String vehicleNumber = ExcelUtils.getStringValue(colIndexes[22], row);
         int invoiceNumber = ExcelUtils.getIntValue(colIndexes[23], row);
-        Date invoiceDate = ExcelUtils.getDateValue(colIndexes[24], row);
+
+        SimpleDateFormat invoiceDateFormat = new SimpleDateFormat("dd.MM.yyyy");
+        Date invoiceDate = ExcelUtils.getDateValue(colIndexes[24], row, invoiceDateFormat);
+
         double finalPrice = ExcelUtils.getDoubleValue(colIndexes[25], row);
         double finalCost = ExcelUtils.getDoubleValue(colIndexes[26], row);
 
