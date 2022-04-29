@@ -135,7 +135,8 @@ public class SummaryService {
         List<Path> branchFilesPaths = null;
         try {
             Files.createDirectories(ZIP_DIRECTORY);
-            branchFilesPaths = Arrays.stream(allBranchesNames).parallel()
+            branchFilesPaths = Arrays.stream(allBranchesNames)
+                    .parallel()
                     .map(this::createBranchFile)
                     .collect(Collectors.toList());
         } catch (IOException e) {
@@ -156,7 +157,8 @@ public class SummaryService {
             CellStyle dateStyle = wb.createCellStyle();
             dateStyle.setDataFormat(creationHelper.createDataFormat().getFormat("dd.MM.yyyy"));
             for(int i = 1; i <=12; i++) {
-                List<SummaryRowEntity> entities = summaryDBService.findByBranchAndAcceptMonth(branchName, i);
+//  TODO think about best way              List<SummaryRowEntity> entities = summaryDBService.findByBranchAndAcceptMonth(branchName, i);
+                List<SummaryRowEntity> entities = summaryDBService.findByBranchAndAcceptMonthSorted(branchName, i);
                 if(!entities.isEmpty()) {
                     XSSFSheet sheet = wb.createSheet(monthSheetsNames[i - 1]);
                     XSSFRow headerRow = sheet.createRow(0);

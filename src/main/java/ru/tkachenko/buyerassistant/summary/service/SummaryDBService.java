@@ -31,8 +31,10 @@ public class SummaryDBService {
         return summaryRowRepository.findAll();
     }
 
-    List<SummaryRowEntity> findByBranchAndAcceptMonth(String branchName, int acceptMonth) {
-        return summaryRowRepository.findByBranchAndAcceptMonth(branchName, acceptMonth);
+
+    List<SummaryRowEntity> findByBranchAndAcceptMonthSorted (String branchName, int acceptMonth) {
+        return summaryRowRepository.findByBranchAndAcceptMonthOrderBySupplierProductTypeSpecPosition(branchName,
+                acceptMonth);
     }
 
     List<SummaryRowEntity> findZeroAcceptMonth() {
