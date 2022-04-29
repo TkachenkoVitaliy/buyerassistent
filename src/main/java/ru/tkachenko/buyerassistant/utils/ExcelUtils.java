@@ -64,6 +64,7 @@ public class ExcelUtils {
     }
 
     public static String getStringValue(int colIndex, Row row) {
+        if(row == null) return null;
         Cell cell = row.getCell(colIndex);
         if(cell == null) return null;
         return getAnyValueAsString(cell);
