@@ -12,10 +12,11 @@ vitaliy@45.155.207.175:/home/vitaliy/
 echo 'Restart server ...'
 
 #pgrep java | xargs kill -9
+#killall java
 ssh -tt -i ~/.ssh/id_rsa vitaliy@45.155.207.175 <<EOF
-
-killall java
-sleep 15 && nohup java -jar BuyerAssistant-1.0.0.jar > log.txt &
+pgrep java | xargs kill -KILL
+wait
+nohup java -jar BuyerAssistant-1.0.0.jar > log.txt &
 sleep 5 && exit
 EOF
 
