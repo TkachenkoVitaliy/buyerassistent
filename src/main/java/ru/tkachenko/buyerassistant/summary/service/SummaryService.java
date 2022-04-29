@@ -12,6 +12,7 @@ import ru.tkachenko.buyerassistant.summary.oracle_inner.service.OracleParser;
 import ru.tkachenko.buyerassistant.summary.other_factory_inner.service.OtherFactoriesParser;
 import ru.tkachenko.buyerassistant.summary.dependency_inner.service.DependencyParser;
 import ru.tkachenko.buyerassistant.utils.CurrentDate;
+import ru.tkachenko.buyerassistant.utils.ExcelUtils;
 import ru.tkachenko.buyerassistant.utils.FileUtils;
 
 import java.io.FileOutputStream;
@@ -161,6 +162,9 @@ public class SummaryService {
                 List<SummaryRowEntity> entities = summaryDBService.findByBranchAndAcceptMonthSorted(branchName, i);
                 if(!entities.isEmpty()) {
                     XSSFSheet sheet = wb.createSheet(monthSheetsNames[i - 1]);
+                    //TODO доделать оформление страницы
+                    ExcelUtils.setColumnWidthBranchFile(sheet);
+                    //TODO доделать оформление страницы
                     XSSFRow headerRow = sheet.createRow(0);
                     SummaryWriter.writeHeader(headerRow, false);
                     for (int rowNum = 1; rowNum <= entities.size(); rowNum++) {

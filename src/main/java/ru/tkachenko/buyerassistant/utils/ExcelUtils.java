@@ -1,6 +1,7 @@
 package ru.tkachenko.buyerassistant.utils;
 
 import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.xssf.usermodel.XSSFCellStyle;
 
 import java.sql.Date;
 import java.text.ParseException;
@@ -142,5 +143,23 @@ public class ExcelUtils {
             cell.setCellValue(dateValue);
             cell.setCellStyle(dateCellStyle);
         }
+    }
+
+    public static void setColumnWidthBranchFile(Sheet sheet) {
+        sheet.setColumnWidth(0, 24*256);
+        sheet.setColumnWidth(1, 5*256);
+        sheet.setColumnWidth(2, 13*256);
+        sheet.setColumnWidth(3, 26*256);
+        sheet.setColumnWidth(4, 29*256);
+        sheet.setColumnWidth(5, 20*256);
+        sheet.setColumnWidth(6, 14*256);
+        sheet.setColumnWidth(7, 10*256);
+        sheet.setColumnWidth(8, 13*256);
+        sheet.setColumnWidth(9, 8*256);
+        sheet.setColumnWidth(10, 8*256);
+        sheet.setColumnWidth(11, 10*256);
+        sheet.setColumnWidth(12, 15*256);
+        sheet.setColumnWidth(13, 14*256);
+        sheet.setColumnWidth(14, 18*256);
     }
 }
