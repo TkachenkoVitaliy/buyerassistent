@@ -80,19 +80,17 @@ public class SummaryWriter {
         ExcelUtils.writeCellNotNullValue(row, 0, summaryRowEntity.getSupplier());
         ExcelUtils.writeCellNotNullValue(row, 1, summaryRowEntity.getMill());
         ExcelUtils.writeCellNotNullValue(row, 2,summaryRowEntity.getSellType());
-        ExcelUtils.writeCellNotNullValue(row, 3,summaryRowEntity.getClient());
-        ExcelUtils.writeCellNotNullValue(row, 4,summaryRowEntity.getConsignee());
-        ExcelUtils.writeCellNotNullValue(row, 5,summaryRowEntity.getProductType());
-        ExcelUtils.writeCellNotNullValue(row, 6,summaryRowEntity.getProfile());
-        ExcelUtils.writeCellNotNullValue(row, 7,summaryRowEntity.getGrade());
-        ExcelUtils.writeCellNotNullValue(row, 8,summaryRowEntity.getRal());
-        ExcelUtils.writeCellNotNullValue(row, 9,summaryRowEntity.getSpec());
-        ExcelUtils.writeCellNotNullValue(row, 10,summaryRowEntity.getPosition());
-        ExcelUtils.writeCellNotNullValue(row, 11,summaryRowEntity.getAcceptMonth());
-        ExcelUtils.writeCellNotNullValue(row, 12,summaryRowEntity.getYear());
-        ExcelUtils.writeCellNotNullValue(row, 13,summaryRowEntity.getAccepted());
-        ExcelUtils.writeCellNotNullValue(row, 14,summaryRowEntity.getShipped());
-        ExcelUtils.writeCellNotNullDateValue(row, 15,summaryRowEntity.getShippedDate(), dateStyle);
-        ExcelUtils.writeCellNotNullValue(row, 16,summaryRowEntity.getVehicleNumber());
+        ExcelUtils.writeCellNotNullValue(row, 3,summaryRowEntity.getConsignee());
+        ExcelUtils.writeCellNotNullValue(row, 4,summaryRowEntity.getProductType());
+        ExcelUtils.writeCellNotNullValue(row, 5,summaryRowEntity.getProfile());
+        ExcelUtils.writeCellNotNullValue(row, 6,summaryRowEntity.getGrade());
+        ExcelUtils.writeCellNotNullValue(row, 7,summaryRowEntity.getRal());
+        ExcelUtils.writeCellNotNullValue(row, 8,summaryRowEntity.getSpec());
+        ExcelUtils.writeCellNotNullValue(row, 9,summaryRowEntity.getPosition());
+        ExcelUtils.writeCellNotNullValue(row, 10,summaryRowEntity.getAcceptMonth());
+        ExcelUtils.writeCellNotNullValue(row, 11,summaryRowEntity.getAccepted());
+        ExcelUtils.writeCellNotNullValue(row, 12,summaryRowEntity.getShipped());
+        ExcelUtils.writeCellNotNullDateValue(row, 13,summaryRowEntity.getShippedDate(), dateStyle);
+        ExcelUtils.writeCellNotNullValue(row, 14,summaryRowEntity.getVehicleNumber());
     }
 }
