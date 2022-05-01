@@ -128,12 +128,12 @@ class ExcelUtilsTest {
 
     @Test
     void getStringValueWithoutQuote() {
+        String expectedResult = "Текст с названием ООО CТАЛЬЭКС";
+        String expectedResult1 = "Текстовое";
+
         String actualResult = ExcelUtils.getStringValueWithoutQuote(4, row4);
         String actualResult1 = ExcelUtils.getStringValue(0, row4);
 
-        String expectedResult = "Текст с названием ООО CТАЛЬЭКС";
-        String expectedResult1 = "Текстовое";
-        
         Assertions.assertEquals(expectedResult, actualResult);
         Assertions.assertEquals(expectedResult1, actualResult1);
         Assertions.assertNull(ExcelUtils.getStringValue(5, row4));
@@ -142,30 +142,35 @@ class ExcelUtilsTest {
 
     @Test
     void getStringValue() {
-        String actualTest1 = ExcelUtils.getStringValue(0, row4);
-        String actualTest2 = ExcelUtils.getStringValue(1, row4);
-        String actualTest3 = ExcelUtils.getStringValue(2, row4);
+        int input1 = 0;
+        int input2 = 1;
+        int input3 = 2;
+        int inputNull = 5;
 
         String expectedResult1 = "Текстовое";
         String expectedResult2 = "1.453";
         String expectedResult3 = "";
+
+        String actualTest1 = ExcelUtils.getStringValue(input1, row4);
+        String actualTest2 = ExcelUtils.getStringValue(input2, row4);
+        String actualTest3 = ExcelUtils.getStringValue(input3, row4);
 
         Assertions.assertEquals(expectedResult1, actualTest1);
         Assertions.assertEquals(expectedResult2, actualTest2);
         Assertions.assertEquals(expectedResult3, actualTest3);
-        Assertions.assertNull(ExcelUtils.getStringValue(5, row4));
-        Assertions.assertNull(ExcelUtils.getStringValue(5, sheet.getRow(5)));
+        Assertions.assertNull(ExcelUtils.getStringValue(inputNull, row4));
+        Assertions.assertNull(ExcelUtils.getStringValue(inputNull, sheet.getRow(5)));
     }
 
     @Test
     void getAnyValueAsString() {
-        String actualTest1 = ExcelUtils.getAnyValueAsString(cell40);
-        String actualTest2 = ExcelUtils.getAnyValueAsString(cell41);
-        String actualTest3 = ExcelUtils.getAnyValueAsString(cell42);
-
         String expectedResult1 = "Текстовое";
         String expectedResult2 = "1.453";
         String expectedResult3 = "";
+
+        String actualTest1 = ExcelUtils.getAnyValueAsString(cell40);
+        String actualTest2 = ExcelUtils.getAnyValueAsString(cell41);
+        String actualTest3 = ExcelUtils.getAnyValueAsString(cell42);
 
         Assertions.assertEquals(expectedResult1, actualTest1);
         Assertions.assertEquals(expectedResult2, actualTest2);
@@ -191,6 +196,26 @@ class ExcelUtilsTest {
 
     @Test
     void testWriteCellNotNullValueString() {
+        //TODO возможно стоить переделать метод чтобы не записывал пустые строки - "", а может и нет; нужно обдумать
+        //test case 1 (positive)
+        int inputColIndex = 7;
+        String inputValue = "ММК";
+
+        ExcelUtils.writeCellNotNullValue(row3, 7, inputValue);
+
+        String expectedResult = "ММК";
+
+        Cell actualCell = row3.getCell(7);
+        String actualResult = actualCell.getStringCellValue();
+
+        Assertions.assertEquals(expectedResult, actualResult);
+
+        //test case 2 (negative)
+        int inputColIndexNull = 6;
+        String inputValueNull = null;
+        ExcelUtils.writeCellNotNullValue(row3, inputColIndexNull, inputValueNull);
+        Assertions.assertNull(row3.getCell(6));
+
     }
 
     @Test
