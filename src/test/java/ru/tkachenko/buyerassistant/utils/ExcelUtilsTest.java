@@ -6,6 +6,8 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
+import java.text.SimpleDateFormat;
+
 
 class ExcelUtilsTest {
 
@@ -25,14 +27,11 @@ class ExcelUtilsTest {
     private static Cell cell21;
     private static Cell cell22;
     private static Cell cell23;
-
     private static Cell cell40;
-
     private static Cell cell41;
-
     private static Cell cell42;
-
     private static Cell cell44;
+    private static Cell cell49;
     private static CreationHelper creationHelper = workbook.getCreationHelper();
     private static CellStyle dateStyle = workbook.createCellStyle();
 
@@ -66,7 +65,8 @@ class ExcelUtilsTest {
         cell42 = row4.createCell(2);
         cell44 = row4.createCell(4);
         cell44.setCellValue("Текст с названием ООО \"CТАЛЬЭКС\"");
-
+        cell49 = row4.createCell(9);
+        cell49.setCellValue(49);
         dateStyle.setDataFormat(creationHelper.createDataFormat().getFormat("dd.MM.yyyy"));
     }
 
@@ -142,30 +142,30 @@ class ExcelUtilsTest {
 
     @Test
     void getStringValue() {
-        int input1 = 0;
-        int input2 = 1;
-        int input3 = 2;
-        int inputNull = 5;
+        int inputColIndex1 = 0;
+        int inputColIndex2 = 1;
+        int inputColIndex3 = 2;
+        int inputColIndexNull = 5;
 
         String expectedResult1 = "Текстовое";
-        String expectedResult2 = "1.453";
+        String expectedResult2 = "1,453";
         String expectedResult3 = "";
 
-        String actualTest1 = ExcelUtils.getStringValue(input1, row4);
-        String actualTest2 = ExcelUtils.getStringValue(input2, row4);
-        String actualTest3 = ExcelUtils.getStringValue(input3, row4);
+        String actualTest1 = ExcelUtils.getStringValue(inputColIndex1, row4);
+        String actualTest2 = ExcelUtils.getStringValue(inputColIndex2, row4);
+        String actualTest3 = ExcelUtils.getStringValue(inputColIndex3, row4);
 
         Assertions.assertEquals(expectedResult1, actualTest1);
         Assertions.assertEquals(expectedResult2, actualTest2);
         Assertions.assertEquals(expectedResult3, actualTest3);
-        Assertions.assertNull(ExcelUtils.getStringValue(inputNull, row4));
-        Assertions.assertNull(ExcelUtils.getStringValue(inputNull, sheet.getRow(5)));
+        Assertions.assertNull(ExcelUtils.getStringValue(inputColIndexNull, row4));
+        Assertions.assertNull(ExcelUtils.getStringValue(inputColIndexNull, sheet.getRow(5)));
     }
 
     @Test
     void getAnyValueAsString() {
         String expectedResult1 = "Текстовое";
-        String expectedResult2 = "1.453";
+        String expectedResult2 = "1,453";
         String expectedResult3 = "";
 
         String actualTest1 = ExcelUtils.getAnyValueAsString(cell40);
@@ -180,22 +180,57 @@ class ExcelUtilsTest {
 
     @Test
     void getDoubleValue() {
+        int inputColIndex1 = 1;
+        int inputColIndex2 = 2;
+        int inputColIndex3 = 10;
+
+        double expectedResult1 = 1.453;
+        double expectedResultZero = 0.0;
+
+        double actualResult1 = ExcelUtils.getDoubleValue(inputColIndex1, row4);
+        double actualResult2 = ExcelUtils.getDoubleValue(inputColIndex2, row4);
+        double actualResult3 = ExcelUtils.getDoubleValue(inputColIndex3, row4);
+
+        Assertions.assertEquals(expectedResult1, actualResult1);
+        Assertions.assertEquals(expectedResultZero, actualResult2);
+        Assertions.assertEquals(expectedResultZero, actualResult3);
     }
 
     @Test
     void getIntValue() {
+        int inputColIndex1 = 9;
+        int inputColIndex2 = 2;
+        int inputColIndex3 = 10;
+
+        int expectedResult1 = 49;
+        int expectedResultZero = 0;
+
+        int actualResult1 = ExcelUtils.getIntValue(inputColIndex1, row4);
+        int actualResult2 = ExcelUtils.getIntValue(inputColIndex2, row4);
+        int actualResult3 = ExcelUtils.getIntValue(inputColIndex3, row4);
+
+        Assertions.assertEquals(expectedResult1, actualResult1);
+        Assertions.assertEquals(expectedResultZero, actualResult2);
+        Assertions.assertEquals(expectedResultZero, actualResult3);
     }
 
     @Test
     void getDateValue() {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy");
+
+        String inputDate = "01.04.1992";
+        Cell cellWithDate = row4.createCell(8);
+        cellWithDate.setCellValue(inputDate);
+
+        java.sql.Date expectedDate = java.sql.Date.valueOf("1992-04-01");
+
+        java.sql.Date actualDate = ExcelUtils.getDateValue(8, row4, dateFormat);
+
+        Assertions.assertEquals(expectedDate, actualDate);
     }
 
     @Test
-    void testGetDateValue() {
-    }
-
-    @Test
-    void testWriteCellNotNullValueString() {
+    void writeCellNotNullValueString() {
         //TODO возможно стоить переделать метод чтобы не записывал пустые строки - "", а может и нет; нужно обдумать
         //test case 1 (positive)
         int inputColIndex = 7;
@@ -219,7 +254,7 @@ class ExcelUtilsTest {
     }
 
     @Test
-    void testWriteCellNotNullValueInt() {
+    void writeCellNotNullValueInt() {
         //test case 1 (positive)
         int inputColIndex = 5;
         int inputValue = 10;
@@ -242,7 +277,7 @@ class ExcelUtilsTest {
     }
 
     @Test
-    void testWriteCellNotNullValueDouble() {
+    void writeCellNotNullValueDouble() {
         //test case 1 (positive)
         int inputColIndex = 3;
         double inputValue = 145.584;
@@ -287,6 +322,16 @@ class ExcelUtilsTest {
 
     @Test
     void setColumnWidthBranchFile() {
+        int[] expectedResults = {24*256, 5*256, 13*256, 26*256, 29*256, 20*256, 14*256, 10*256, 13*256, 8*256, 8*256,
+                10*256, 15*256, 14*256, 18*256};
 
+        ExcelUtils.setColumnWidthBranchFile(sheet);
+        int[] actualResults = new int[15];
+        for (int i = 0; i <= 14; i++) {
+            int width = sheet.getColumnWidth(i);
+            actualResults[i] = width;
+        }
+
+        Assertions.assertArrayEquals(expectedResults, actualResults);
     }
 }
