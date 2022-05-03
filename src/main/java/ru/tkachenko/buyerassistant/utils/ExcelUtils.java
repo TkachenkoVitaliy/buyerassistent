@@ -116,48 +116,51 @@ public class ExcelUtils {
         return sqlDate;
     }
 
-    public static void writeCellNotNullValue(Row row, int columnIndex, String value) {
+    public static void writeCellNotNullValue(Row row, int columnIndex, String value, CellStyleContainer cellStyles) {
+        Cell cell = row.createCell(columnIndex);
+        cell.setCellStyle(cellStyles.getStringAndIntCellStyle());
         if(value != null) {
-            Cell cell = row.createCell(columnIndex);
             cell.setCellValue(value);
         }
     }
 
-    public static void writeCellNotNullValue(Row row, int columnIndex, int value) {
+    public static void writeCellNotNullValue(Row row, int columnIndex, int value, CellStyleContainer cellStyles) {
+        Cell cell = row.createCell(columnIndex);
+        cell.setCellStyle(cellStyles.getStringAndIntCellStyle());
         if(value != 0) {
-            Cell cell = row.createCell(columnIndex);
             cell.setCellValue(value);
         }
     }
 
-    public static void writeCellNotNullValue(Row row, int columnIndex, double value) {
+    public static void writeCellNotNullValue(Row row, int columnIndex, double value, CellStyleContainer cellStyles) {
+        Cell cell = row.createCell(columnIndex);
+        cell.setCellStyle(cellStyles.getDoubleCellStyle());
         if(value != 0.0) {
-            Cell cell = row.createCell(columnIndex);
             cell.setCellValue(value);
         }
     }
 
-    public static void writeCellNotNullDateValue(Row row, int columnIndex, Date dateValue, CellStyle dateCellStyle) {
+    public static void writeCellNotNullDateValue(Row row, int columnIndex, Date dateValue, CellStyleContainer cellStyles) {
+        Cell cell = row.createCell(columnIndex);
+        cell.setCellStyle(cellStyles.getDateCellStyle());
         if(dateValue != null) {
-            Cell cell = row.createCell(columnIndex);
             cell.setCellValue(dateValue);
-            cell.setCellStyle(dateCellStyle);
         }
     }
 
     public static void setColumnWidthBranchFile(Sheet sheet) {
         sheet.setColumnWidth(0, 24*256);
-        sheet.setColumnWidth(1, 5*256);
+        sheet.setColumnWidth(1, 7*256);
         sheet.setColumnWidth(2, 13*256);
         sheet.setColumnWidth(3, 26*256);
         sheet.setColumnWidth(4, 29*256);
         sheet.setColumnWidth(5, 20*256);
-        sheet.setColumnWidth(6, 14*256);
+        sheet.setColumnWidth(6, 13*256);
         sheet.setColumnWidth(7, 10*256);
         sheet.setColumnWidth(8, 13*256);
-        sheet.setColumnWidth(9, 8*256);
-        sheet.setColumnWidth(10, 8*256);
-        sheet.setColumnWidth(11, 10*256);
+        sheet.setColumnWidth(9, 9*256);
+        sheet.setColumnWidth(10, 9*256);
+        sheet.setColumnWidth(11, 11*256);
         sheet.setColumnWidth(12, 15*256);
         sheet.setColumnWidth(13, 14*256);
         sheet.setColumnWidth(14, 18*256);

@@ -11,6 +11,7 @@ import ru.tkachenko.buyerassistant.summary.entity.SummaryRowEntity;
 import ru.tkachenko.buyerassistant.summary.oracle_inner.service.OracleParser;
 import ru.tkachenko.buyerassistant.summary.other_factory_inner.service.OtherFactoriesParser;
 import ru.tkachenko.buyerassistant.summary.dependency_inner.service.DependencyParser;
+import ru.tkachenko.buyerassistant.utils.CellStyleContainer;
 import ru.tkachenko.buyerassistant.utils.CurrentDate;
 import ru.tkachenko.buyerassistant.utils.ExcelUtils;
 import ru.tkachenko.buyerassistant.utils.FileUtils;
@@ -107,18 +108,19 @@ public class SummaryService {
 
         try(FileOutputStream fos = new FileOutputStream(targetFilePath.toString());
             XSSFWorkbook wb = new XSSFWorkbook()) {
+            CellStyleContainer cellStyles = new CellStyleContainer(wb);
             XSSFCreationHelper creationHelper = wb.getCreationHelper();
             CellStyle dateStyle = wb.createCellStyle();
             dateStyle.setDataFormat(creationHelper.createDataFormat().getFormat("dd.MM.yyyy"));
             XSSFSheet sheet = wb.createSheet();
 
             XSSFRow headerRow = sheet.createRow(0);
-            SummaryWriter.writeHeader(headerRow, true);
+            SummaryWriter.writeHeader(headerRow, true, cellStyles);
 
             for (int rowNum = 1; rowNum <= entities.size(); rowNum++) {
                 XSSFRow row = sheet.createRow(rowNum);
                 SummaryRowEntity rowEntity = entities.get(rowNum-1);
-                SummaryWriter.writeEntityToRow(dateStyle, rowEntity, row, true);
+                SummaryWriter.writeEntityToRow(cellStyles, rowEntity, row, true);
             }
 
             wb.write(fos);
@@ -154,6 +156,7 @@ public class SummaryService {
         Path filePath = ZIP_DIRECTORY.resolve(branchName+EXTENSION);
         try(FileOutputStream fos = new FileOutputStream(filePath.toString());
         XSSFWorkbook wb = new XSSFWorkbook()) {
+            CellStyleContainer cellStyles = new CellStyleContainer(wb);
             XSSFCreationHelper creationHelper = wb.getCreationHelper();
             CellStyle dateStyle = wb.createCellStyle();
             dateStyle.setDataFormat(creationHelper.createDataFormat().getFormat("dd.MM.yyyy"));
@@ -166,11 +169,11 @@ public class SummaryService {
                     ExcelUtils.setColumnWidthBranchFile(sheet);
                     //TODO доделать оформление страницы
                     XSSFRow headerRow = sheet.createRow(0);
-                    SummaryWriter.writeHeader(headerRow, false);
+                    SummaryWriter.writeHeader(headerRow, false, cellStyles);
                     for (int rowNum = 1; rowNum <= entities.size(); rowNum++) {
                         XSSFRow row = sheet.createRow(rowNum);
                         SummaryRowEntity rowEntity = entities.get(rowNum-1);
-                        SummaryWriter.writeEntityToRow(dateStyle, rowEntity, row, false);
+                        SummaryWriter.writeEntityToRow(cellStyles, rowEntity, row, false);
                     }
                 }
             }

@@ -5,15 +5,16 @@ import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.xssf.usermodel.XSSFCellStyle;
 import ru.tkachenko.buyerassistant.summary.entity.SummaryRowEntity;
+import ru.tkachenko.buyerassistant.utils.CellStyleContainer;
 import ru.tkachenko.buyerassistant.utils.ExcelUtils;
 
 public class SummaryWriter {
 
-    public static void writeHeader(Row headerRow, boolean isFullCopy) {
+    public static void writeHeader(Row headerRow, boolean isFullCopy, CellStyleContainer cellStyles) {
         if (isFullCopy) {
             writeFullHeader(headerRow);
         } else {
-            writeClippedHeader(headerRow);
+            writeClippedHeader(headerRow, cellStyles);
         }
     }
 
@@ -25,24 +26,28 @@ public class SummaryWriter {
         }
     }
 
-    private static void writeClippedHeader(Row headerRow) {
+    private static void writeClippedHeader(Row headerRow, CellStyleContainer cellStyles) {
+        CellStyle headerCellStyle = cellStyles.getHeaderCellStyle();
         String[] headerColumnNames = SummaryInfoUtil.getClippedFileColumnsNames();
         for (int i = 0; i < headerColumnNames.length; i++) {
             Cell cell = headerRow.createCell(i);
             cell.setCellValue(headerColumnNames[i]);
+            cell.setCellStyle(headerCellStyle);
         }
     }
 
-    public static void writeEntityToRow(CellStyle dateStyle, SummaryRowEntity summaryRowEntity, Row row, boolean isFullCopy) {
+    public static void writeEntityToRow(CellStyleContainer cellStyles, SummaryRowEntity summaryRowEntity, Row row, boolean isFullCopy) {
         if (isFullCopy) {
-            writeFullEntityToRow(dateStyle, summaryRowEntity, row);
+            writeFullEntityToRow(cellStyles, summaryRowEntity, row);
         } else {
-            writeClippedEntityToRow(dateStyle, summaryRowEntity, row);
+            writeClippedEntityToRow(cellStyles, summaryRowEntity, row);
         }
     }
 
 
-    private static void writeFullEntityToRow(CellStyle dateStyle, SummaryRowEntity summaryRowEntity, Row row) {
+    private static void writeFullEntityToRow(CellStyleContainer cellStyles, SummaryRowEntity summaryRowEntity, Row row) {
+        CellStyle dateStyle = cellStyles.getSimpleDateCellStyle();
+
         row.createCell(0).setCellValue(summaryRowEntity.getSupplier());
         row.createCell(1).setCellValue(summaryRowEntity.getMill());
         row.createCell(2).setCellValue(summaryRowEntity.getBranch());
@@ -76,21 +81,23 @@ public class SummaryWriter {
         row.createCell(26).setCellValue(summaryRowEntity.getFinalCost());
     }
 
-    private static void writeClippedEntityToRow(CellStyle dateStyle, SummaryRowEntity summaryRowEntity, Row row) {
-        ExcelUtils.writeCellNotNullValue(row, 0, summaryRowEntity.getSupplier());
-        ExcelUtils.writeCellNotNullValue(row, 1, summaryRowEntity.getMill());
-        ExcelUtils.writeCellNotNullValue(row, 2,summaryRowEntity.getSellType());
-        ExcelUtils.writeCellNotNullValue(row, 3,summaryRowEntity.getConsignee());
-        ExcelUtils.writeCellNotNullValue(row, 4,summaryRowEntity.getProductType());
-        ExcelUtils.writeCellNotNullValue(row, 5,summaryRowEntity.getProfile());
-        ExcelUtils.writeCellNotNullValue(row, 6,summaryRowEntity.getGrade());
-        ExcelUtils.writeCellNotNullValue(row, 7,summaryRowEntity.getRal());
-        ExcelUtils.writeCellNotNullValue(row, 8,summaryRowEntity.getSpec());
-        ExcelUtils.writeCellNotNullValue(row, 9,summaryRowEntity.getPosition());
-        ExcelUtils.writeCellNotNullValue(row, 10,summaryRowEntity.getAcceptMonth());
-        ExcelUtils.writeCellNotNullValue(row, 11,summaryRowEntity.getAccepted());
-        ExcelUtils.writeCellNotNullValue(row, 12,summaryRowEntity.getShipped());
-        ExcelUtils.writeCellNotNullDateValue(row, 13,summaryRowEntity.getShippedDate(), dateStyle);
-        ExcelUtils.writeCellNotNullValue(row, 14,summaryRowEntity.getVehicleNumber());
+    private static void writeClippedEntityToRow(CellStyleContainer cellStyles, SummaryRowEntity summaryRowEntity,
+                                                Row row) {
+
+        ExcelUtils.writeCellNotNullValue(row, 0, summaryRowEntity.getSupplier(), cellStyles);
+        ExcelUtils.writeCellNotNullValue(row, 1, summaryRowEntity.getMill(), cellStyles);
+        ExcelUtils.writeCellNotNullValue(row, 2,summaryRowEntity.getSellType(), cellStyles);
+        ExcelUtils.writeCellNotNullValue(row, 3,summaryRowEntity.getConsignee(), cellStyles);
+        ExcelUtils.writeCellNotNullValue(row, 4,summaryRowEntity.getProductType(), cellStyles);
+        ExcelUtils.writeCellNotNullValue(row, 5,summaryRowEntity.getProfile(), cellStyles);
+        ExcelUtils.writeCellNotNullValue(row, 6,summaryRowEntity.getGrade(), cellStyles);
+        ExcelUtils.writeCellNotNullValue(row, 7,summaryRowEntity.getRal(), cellStyles);
+        ExcelUtils.writeCellNotNullValue(row, 8,summaryRowEntity.getSpec(), cellStyles);
+        ExcelUtils.writeCellNotNullValue(row, 9,summaryRowEntity.getPosition(), cellStyles);
+        ExcelUtils.writeCellNotNullValue(row, 10,summaryRowEntity.getAcceptMonth(), cellStyles);
+        ExcelUtils.writeCellNotNullValue(row, 11,summaryRowEntity.getAccepted(), cellStyles);
+        ExcelUtils.writeCellNotNullValue(row, 12,summaryRowEntity.getShipped(), cellStyles);
+        ExcelUtils.writeCellNotNullDateValue(row, 13,summaryRowEntity.getShippedDate(), cellStyles);
+        ExcelUtils.writeCellNotNullValue(row, 14,summaryRowEntity.getVehicleNumber(), cellStyles);
     }
 }
