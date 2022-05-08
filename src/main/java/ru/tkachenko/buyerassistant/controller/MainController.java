@@ -3,15 +3,19 @@ package ru.tkachenko.buyerassistant.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.http.ResponseEntity;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.ModelAndView;
 import ru.tkachenko.buyerassistant.file_storage.exceptions.IllegalFileExtensionException;
 import ru.tkachenko.buyerassistant.file_storage.service.FileDownloadService;
 import ru.tkachenko.buyerassistant.file_storage.service.FileStorageService;
 import ru.tkachenko.buyerassistant.mmk_accept.service.MmkAcceptService;
+import ru.tkachenko.buyerassistant.settings.entity.BranchEntity;
+import ru.tkachenko.buyerassistant.settings.service.BranchService;
 import ru.tkachenko.buyerassistant.summary.service.SummaryService;
 import ru.tkachenko.buyerassistant.utils.TimerUtil;
 
@@ -27,13 +31,16 @@ public class MainController {
     private final MmkAcceptService mmkAcceptService;
     private final SummaryService summaryService;
 
+    private final BranchService branchService;
+
     @Autowired
     public MainController(FileStorageService fileStorageService, FileDownloadService fileDownloadService, MmkAcceptService mmkAcceptService,
-                          SummaryService summaryService) {
+                          SummaryService summaryService, BranchService branchService) {
         this.fileStorageService = fileStorageService;
         this.fileDownloadService = fileDownloadService;
         this.mmkAcceptService = mmkAcceptService;
         this.summaryService = summaryService;
+        this.branchService = branchService;
     }
 
     @PostMapping("/uploadAccept")
@@ -83,5 +90,16 @@ public class MainController {
         } finally {
             timerUtilDownloadAllFiles.consoleLogTime("createAllFiles");
         }
+    }
+
+    @GetMapping("/settings")
+    public ModelAndView settingsPage(Model model) {
+
+        List<BranchEntity> allBranches = branchService.getAllBranchEntities();
+        System.out.println(allBranches);
+        model.addAttribute("branchEntities", allBranches);
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("settings");
+        return modelAndView;
     }
 }
