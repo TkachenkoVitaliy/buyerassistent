@@ -12,7 +12,6 @@ vitaliy@45.155.207.175:/home/vitaliy/
 echo 'Restart server ...'
 
 #pgrep java | xargs kill -9
-#killall java
 ssh -tt -i ~/.ssh/id_rsa vitaliy@45.155.207.175 <<EOF
 pgrep java | xargs kill -KILL
 wait
