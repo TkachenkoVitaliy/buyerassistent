@@ -10,4 +10,6 @@ import java.util.List;
 public interface BranchStartMonthRepository extends JpaRepository<BranchStartMonthEntity, Long> {
 
     public List<BranchStartMonthEntity> findBranchStartMonthEntitiesByNameIsNotNullOrderById();
+
+    public BranchStartMonthEntity findFirstByName(String branchName);
 }

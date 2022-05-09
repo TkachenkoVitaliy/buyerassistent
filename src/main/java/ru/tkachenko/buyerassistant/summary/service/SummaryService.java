@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import ru.tkachenko.buyerassistant.file_storage.entity.SavedFileEntity;
 import ru.tkachenko.buyerassistant.file_storage.service.FileDBService;
 import ru.tkachenko.buyerassistant.property.FileStorageProperties;
+import ru.tkachenko.buyerassistant.settings.service.BranchStartMonthService;
 import ru.tkachenko.buyerassistant.summary.entity.SummaryRowEntity;
 import ru.tkachenko.buyerassistant.summary.oracle_inner.service.OracleParser;
 import ru.tkachenko.buyerassistant.summary.other_factory_inner.service.OtherFactoriesParser;
@@ -35,18 +36,22 @@ public class SummaryService {
     private final DependencyParser dependencyParser;
     private final OtherFactoriesParser otherFactoriesParser;
     private final OracleParser oracleParser;
+
+    private final BranchStartMonthService branchStartMonthService;
     private final Path FILE_STORAGE_LOCATION;
     private final Path ZIP_DIRECTORY;
 
     @Autowired
     public SummaryService(SummaryDBService summaryDBService, DependencyParser dependencyParser,
                           OtherFactoriesParser otherFactoriesParser, OracleParser oracleParser,
-                          FileStorageProperties fileStorageProperties, FileDBService fileDBService) {
+                          BranchStartMonthService branchStartMonthService, FileStorageProperties fileStorageProperties,
+                          FileDBService fileDBService) {
         this.summaryDBService = summaryDBService;
         this.fileDBService = fileDBService;
         this.dependencyParser = dependencyParser;
         this.otherFactoriesParser = otherFactoriesParser;
         this.oracleParser = oracleParser;
+        this.branchStartMonthService = branchStartMonthService;
         this.FILE_STORAGE_LOCATION = Paths.get(fileStorageProperties.getUploadDir()).toAbsolutePath().normalize();
         this.ZIP_DIRECTORY = FILE_STORAGE_LOCATION.resolve("forZip");
     }
@@ -152,6 +157,7 @@ public class SummaryService {
 
     private Path createBranchFile(String branchName) {
         String[] monthSheetsNames = SummaryInfoUtil.getMonthSheetNames();
+        int startMonth = branchStartMonthService.getBranchStartMonth(branchName);
 
         Path filePath = ZIP_DIRECTORY.resolve(branchName+EXTENSION);
         try(FileOutputStream fos = new FileOutputStream(filePath.toString());
@@ -160,14 +166,12 @@ public class SummaryService {
             XSSFCreationHelper creationHelper = wb.getCreationHelper();
             CellStyle dateStyle = wb.createCellStyle();
             dateStyle.setDataFormat(creationHelper.createDataFormat().getFormat("dd.MM.yyyy"));
-            for(int i = 1; i <=12; i++) {
+            for(int i = startMonth; i <=12; i++) {
 //  TODO think about best way              List<SummaryRowEntity> entities = summaryDBService.findByBranchAndAcceptMonth(branchName, i);
                 List<SummaryRowEntity> entities = summaryDBService.findByBranchAndAcceptMonthSorted(branchName, i);
                 if(!entities.isEmpty()) {
                     XSSFSheet sheet = wb.createSheet(monthSheetsNames[i - 1]);
-                    //TODO доделать оформление страницы
                     ExcelUtils.setColumnWidthBranchFile(sheet);
-                    //TODO доделать оформление страницы
                     XSSFRow headerRow = sheet.createRow(0);
                     SummaryWriter.writeHeader(headerRow, false, cellStyles);
                     for (int rowNum = 1; rowNum <= entities.size(); rowNum++) {
