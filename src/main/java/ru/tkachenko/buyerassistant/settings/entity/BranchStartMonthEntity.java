@@ -7,7 +7,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "branches_settings_table")
-public class BranchEntity {
+public class BranchStartMonthEntity {
 
     @Id
     @Column(name = "id")
@@ -19,13 +19,13 @@ public class BranchEntity {
     @Column(name = "start_month")
     private int startMonth;
 
-    public BranchEntity(Long id, String name, int startMonth) {
+    public BranchStartMonthEntity(Long id, String name, int startMonth) {
         this.id = id;
         this.name = name;
         this.startMonth = startMonth;
     }
 
-    public BranchEntity() {
+    public BranchStartMonthEntity() {
     }
 
     public Long getId() {

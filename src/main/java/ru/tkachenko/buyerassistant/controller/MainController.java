@@ -14,8 +14,8 @@ import ru.tkachenko.buyerassistant.file_storage.exceptions.IllegalFileExtensionE
 import ru.tkachenko.buyerassistant.file_storage.service.FileDownloadService;
 import ru.tkachenko.buyerassistant.file_storage.service.FileStorageService;
 import ru.tkachenko.buyerassistant.mmk_accept.service.MmkAcceptService;
-import ru.tkachenko.buyerassistant.settings.entity.BranchEntity;
-import ru.tkachenko.buyerassistant.settings.service.BranchService;
+import ru.tkachenko.buyerassistant.settings.entity.BranchStartMonthEntity;
+import ru.tkachenko.buyerassistant.settings.service.BranchStartMonthService;
 import ru.tkachenko.buyerassistant.summary.service.SummaryService;
 import ru.tkachenko.buyerassistant.utils.TimerUtil;
 
@@ -31,16 +31,16 @@ public class MainController {
     private final MmkAcceptService mmkAcceptService;
     private final SummaryService summaryService;
 
-    private final BranchService branchService;
+    private final BranchStartMonthService branchStartMonthService;
 
     @Autowired
     public MainController(FileStorageService fileStorageService, FileDownloadService fileDownloadService, MmkAcceptService mmkAcceptService,
-                          SummaryService summaryService, BranchService branchService) {
+                          SummaryService summaryService, BranchStartMonthService branchStartMonthService) {
         this.fileStorageService = fileStorageService;
         this.fileDownloadService = fileDownloadService;
         this.mmkAcceptService = mmkAcceptService;
         this.summaryService = summaryService;
-        this.branchService = branchService;
+        this.branchStartMonthService = branchStartMonthService;
     }
 
     @PostMapping("/uploadAccept")
@@ -94,10 +94,11 @@ public class MainController {
 
     @GetMapping("/settings")
     public ModelAndView settingsPage(Model model) {
-
-        List<BranchEntity> allBranches = branchService.getAllBranchEntities();
-        System.out.println(allBranches);
+        List<String> months = List.of("Январь", "Февраль", "Март", "Апрель", "Май", "Июнь", "Июль", "Август",
+                "Сентябрь", "Октябрь", "Ноябрь", "Декабрь");
+        List<BranchStartMonthEntity> allBranches = branchStartMonthService.getAllBranchStartMonthEntitiesOrdered();
         model.addAttribute("branchEntities", allBranches);
+        model.addAttribute("months", months);
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("settings");
         return modelAndView;

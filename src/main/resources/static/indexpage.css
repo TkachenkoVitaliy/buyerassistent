@@ -1,4 +1,9 @@
+.body_container {
+    display: inline-flex;
+}
+
 .main_container {
+    display: inline-block;
     font-size: 24px;
 }
 
@@ -30,4 +35,16 @@
     width: 454px;
     margin-top: 20px;
     margin-bottom: 20px;
+}
+
+.settings_container{
+    margin: 20px;
+    vertical-align: top;
+    display: inline-block;
+}
+
+.settings_btn{
+    font-size: 36px;
+    width: 400px;
+    height: 100px;
 }

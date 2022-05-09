@@ -1,0 +1,34 @@
+.body_container {
+    font-size: 18px;
+}
+
+.table_for_each_branch {
+    border-collapse: collapse;
+    border: 3px solid grey;
+}
+
+.table_for_each_branch_header{
+    border: 2px solid darkblue;
+    text-align: center;
+    background-color: lightskyblue;
+}
+
+.table_for_each_branch_row:last-child{
+    border: 2px solid darkblue;
+    text-align: center;
+    background-color: lightskyblue;
+}
+
+.table_for_each_branch_data{
+    border: 1px solid darkblue;
+    text-align: center;
+}
+
+select{
+    font-size: 18px;
+    width: 154px;
+}
+
+option{
+    font-size: 18px;
+}
