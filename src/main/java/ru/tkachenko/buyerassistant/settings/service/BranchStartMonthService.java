@@ -30,13 +30,7 @@ public class BranchStartMonthService {
     }
 
     public int getBranchStartMonth(String branchName) {
-        //TODO remove
-        System.out.println(branchName);
-        //TODO remove
         BranchStartMonthEntity branchStartMonthEntity = branchStartMonthRepository.findFirstByName(branchName);
-        //TODO remove
-        System.out.println(branchName + branchStartMonthEntity);
-        //TODO remove
         return branchStartMonthEntity.getStartMonth();
     }
 }
