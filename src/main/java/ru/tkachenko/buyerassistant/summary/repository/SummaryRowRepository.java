@@ -20,8 +20,8 @@ public interface SummaryRowRepository extends JpaRepository<SummaryRowEntity, Lo
 
     @Query(value = "SELECT * FROM summary_table " +
             "row WHERE row.branch = :branch AND row.accept_month = :acceptMonth " +
-            "ORDER BY supplier, product_type, spec, position, accepted DESC;", nativeQuery = true)
-    List<SummaryRowEntity> findByBranchAndAcceptMonthOrderBySupplierProductTypeSpecPosition(
+            "ORDER BY supplier, product_type, spec, position, profile, accepted DESC;", nativeQuery = true)
+    List<SummaryRowEntity> findByBranchAndAcceptMonthOrderBySupplierProductTypeSpecPositionProfileAccept(
             @Param("branch") String branch,
             @Param ("acceptMonth") int acceptMonth);
 

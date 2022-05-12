@@ -33,7 +33,7 @@ public class SummaryDBService {
 
 
     List<SummaryRowEntity> findByBranchAndAcceptMonthSorted (String branchName, int acceptMonth) {
-        return summaryRowRepository.findByBranchAndAcceptMonthOrderBySupplierProductTypeSpecPosition(branchName,
+        return summaryRowRepository.findByBranchAndAcceptMonthOrderBySupplierProductTypeSpecPositionProfileAccept(branchName,
                 acceptMonth);
     }
 
