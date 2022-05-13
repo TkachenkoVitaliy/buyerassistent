@@ -36,7 +36,6 @@ public class FileStorageService {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
         return mmkAcceptDestinationPath;
     }
 
@@ -45,7 +44,6 @@ public class FileStorageService {
         String otherFactoriesFileName = "otherFactories.xlsx";
         String oracleMmkFileName = "oracleMMK.xlsx";
         String dependenciesMmkFileName = "dependenciesMMK.xlsx";
-
         List<Path> savedFilesPaths = new ArrayList<>();
 
         try {
@@ -55,21 +53,18 @@ public class FileStorageService {
 
             Files.createDirectories(TEMP_DIRECTORY);
 
-            Path otherFactoriesPath = TEMP_DIRECTORY.resolve(otherFactoriesFileName);
-            Files.copy(otherFactories.getInputStream(), otherFactoriesPath, StandardCopyOption.REPLACE_EXISTING);
-            savedFilesPaths.add(otherFactoriesPath);
-
-            Path oracleMmkPath = TEMP_DIRECTORY.resolve(oracleMmkFileName);
-            Files.copy(oracleMmk.getInputStream(), oracleMmkPath, StandardCopyOption.REPLACE_EXISTING);
-            savedFilesPaths.add(oracleMmkPath);
-
-            Path dependenciesMmkPath = TEMP_DIRECTORY.resolve(dependenciesMmkFileName);
-            Files.copy(dependenciesMmk.getInputStream(), dependenciesMmkPath, StandardCopyOption.REPLACE_EXISTING);
-            savedFilesPaths.add(dependenciesMmkPath);
+            savedFilesPaths.add(saveFileToFileSystem(otherFactories, otherFactoriesFileName));
+            savedFilesPaths.add(saveFileToFileSystem(oracleMmk, oracleMmkFileName));
+            savedFilesPaths.add(saveFileToFileSystem(dependenciesMmk, dependenciesMmkFileName));
         } catch (IOException e) {
             e.printStackTrace();
         }
-
         return savedFilesPaths;
+    }
+
+    private Path saveFileToFileSystem(MultipartFile file, String fileNameForSave) throws IOException {
+        Path savedFilePath = TEMP_DIRECTORY.resolve(fileNameForSave);
+        Files.copy(file.getInputStream(), savedFilePath, StandardCopyOption.REPLACE_EXISTING);
+        return savedFilePath;
     }
 }
