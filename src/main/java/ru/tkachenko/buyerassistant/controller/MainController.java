@@ -113,8 +113,7 @@ public class MainController {
 
     private ModelAndView createUserResponse(Model model, String message) {
         model.addAttribute("userResponse", message);
-        ModelAndView modelAndView = new ModelAndView("response");
-        return modelAndView;
+        return new ModelAndView("response");
     }
 
 }
