@@ -44,36 +44,36 @@ public class MainController {
     }
 
     @PostMapping("/uploadAccept")
-    public String uploadAccept(@RequestParam("mmkAccept") MultipartFile mmkAccept) {
+    public ModelAndView uploadAccept(@RequestParam("mmkAccept") MultipartFile mmkAccept, Model model) {
         //TODO remove timer
         TimerUtil timerUtil = new TimerUtil();
         //TODO remove timer
         try {
             Path mmkAcceptPath = fileStorageService.storeFile(mmkAccept);
             mmkAcceptService.parseFileToDatabase(mmkAcceptPath);
-            return "Accept Uploaded";
+            return createUserResponse(model, "Accept Uploaded");
         } catch (IllegalFileExtensionException e) {
             e.printStackTrace();
-            return e.getMessage();
+            return createUserResponse(model, e.getMessage());
         } finally { //TODO remove timer
             timerUtil.consoleLogTime("uploadAccept");
         } //TODO remove timer
     }
 
     @PostMapping("/uploadMultipleFiles")
-    public String uploadMultipleFiles(@RequestParam("otherFactories") MultipartFile otherFactories,
+    public ModelAndView uploadMultipleFiles(@RequestParam("otherFactories") MultipartFile otherFactories,
                                       @RequestParam("oracleMmk") MultipartFile oracleMmk,
-                                      @RequestParam("dependenciesMmk") MultipartFile dependenciesMmk) {
+                                      @RequestParam("dependenciesMmk") MultipartFile dependenciesMmk, Model model) {
         //TODO remove timer
         TimerUtil timerUtil = new TimerUtil();
         //TODO remove timer
         try {
-            List<Path> savedFilesPaths = fileStorageService.storeFiles(otherFactories, oracleMmk,dependenciesMmk);
+            List<Path> savedFilesPaths = fileStorageService.storeFiles(otherFactories, oracleMmk, dependenciesMmk);
             summaryService.parseFilesToSummary(savedFilesPaths);
-            return "Files Uploaded";
+            return createUserResponse(model, "Files Uploaded");
         } catch (IllegalFileExtensionException e) {
             e.printStackTrace();
-            return e.getMessage();
+            return createUserResponse(model, e.getMessage());
         } finally { //TODO remove timer
             timerUtil.consoleLogTime("upload and write to DB MultipleFiles");
         } //TODO remove timer
@@ -103,4 +103,18 @@ public class MainController {
         modelAndView.setViewName("settings");
         return modelAndView;
     }
+
+    @GetMapping("/main")
+    public ModelAndView getMainPage() {
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("index");
+        return modelAndView;
+    }
+
+    private ModelAndView createUserResponse(Model model, String message) {
+        model.addAttribute("userResponse", message);
+        ModelAndView modelAndView = new ModelAndView("response");
+        return modelAndView;
+    }
+
 }
