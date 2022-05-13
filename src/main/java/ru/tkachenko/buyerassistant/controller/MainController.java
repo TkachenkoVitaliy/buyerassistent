@@ -25,7 +25,6 @@ import java.util.List;
 
 @RestController
 public class MainController {
-
     private final FileStorageService fileStorageService;
     private final FileDownloadService fileDownloadService;
     private final MmkAcceptService mmkAcceptService;
@@ -115,5 +114,4 @@ public class MainController {
         model.addAttribute("userResponse", message);
         return new ModelAndView("response");
     }
-
 }

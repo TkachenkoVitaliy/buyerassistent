@@ -12,22 +12,22 @@ public class FileUtils {
 
     public static boolean validateFileExtensionXlsx(MultipartFile multipartFile) throws IllegalFileExtensionException {
         final String CORRECT_EXTENSION = ".xlsx";
-
-        String fileName = multipartFile.getOriginalFilename();
-        if (fileName.endsWith(CORRECT_EXTENSION)) {
-            return true;
-        } else {
-            throw new IllegalFileExtensionException("Wrong Extension! File - " + multipartFile.getOriginalFilename());
-        }
+        return validateFileExtension(CORRECT_EXTENSION, multipartFile);
     }
 
     public static boolean validateFileExtensionXls(MultipartFile multipartFile) throws IllegalFileExtensionException {
         final String CORRECT_EXTENSION = ".xls";
+        return validateFileExtension(CORRECT_EXTENSION, multipartFile);
+    }
 
+    private static boolean validateFileExtension (String extension, MultipartFile multipartFile) throws IllegalFileExtensionException {
         String fileName = multipartFile.getOriginalFilename();
-        if (fileName.endsWith(CORRECT_EXTENSION)) {
+        if (fileName != null && fileName.endsWith(extension)) {
             return true;
-        } else {
+        }
+        if(fileName == null) {
+            throw new IllegalFileExtensionException("File doesn't have name");
+        }else {
             throw new IllegalFileExtensionException("Wrong Extension! File - " + multipartFile.getOriginalFilename());
         }
     }

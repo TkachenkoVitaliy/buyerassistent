@@ -17,13 +17,11 @@ import java.util.List;
 
 @Service
 public class FileStorageService {
-
-    private final Path FILE_STORAGE_LOCATION;
     private final Path TEMP_DIRECTORY;
 
     @Autowired
     public FileStorageService(FileStorageProperties fileStorageProperties) {
-        this.FILE_STORAGE_LOCATION = Paths.get(fileStorageProperties.getUploadDir()).toAbsolutePath().normalize();
+        Path FILE_STORAGE_LOCATION = Paths.get(fileStorageProperties.getUploadDir()).toAbsolutePath().normalize();
         this.TEMP_DIRECTORY = FILE_STORAGE_LOCATION.resolve("temp");
     }
 
