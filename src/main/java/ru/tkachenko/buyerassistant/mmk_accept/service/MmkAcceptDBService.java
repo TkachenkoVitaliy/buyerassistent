@@ -3,6 +3,7 @@ package ru.tkachenko.buyerassistant.mmk_accept.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.tkachenko.buyerassistant.mmk_accept.entity.MmkAcceptRowEntity;
+import ru.tkachenko.buyerassistant.mmk_accept.exception.AcceptParseException;
 import ru.tkachenko.buyerassistant.mmk_accept.repository.MmkAcceptRepository;
 
 
@@ -16,7 +17,7 @@ public class MmkAcceptDBService {
         this.mmkAcceptRepository = mmkAcceptRepository;
     }
 
-    public void addUniqueEntity(MmkAcceptRowEntity entityFromFile) {
+    public void addUniqueEntity(MmkAcceptRowEntity entityFromFile) throws AcceptParseException {
         if (entityFromFile.getSpec() != null && entityFromFile.getPosition() != 0) {
             MmkAcceptRowEntity entityFromDB = mmkAcceptRepository.findFirstBySpecAndPosition(entityFromFile.getSpec(),
                     entityFromFile.getPosition());
@@ -26,8 +27,10 @@ public class MmkAcceptDBService {
                 updateEntity(entityFromDB, entityFromFile);
                 mmkAcceptRepository.save(entityFromDB);
             }
+        } else {
+            throw new AcceptParseException("Can't parse AcceptFile because file contains row with Specification number "
+                    + "or position number - blank value");
         }
-        //TODO add Exception for situation when we get entity with spec = null or position = 0
     }
 
     private MmkAcceptRowEntity updateEntity(MmkAcceptRowEntity targetEntity, MmkAcceptRowEntity sourceEntity) {

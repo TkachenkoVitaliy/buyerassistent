@@ -13,6 +13,7 @@ import org.springframework.web.servlet.ModelAndView;
 import ru.tkachenko.buyerassistant.file_storage.exceptions.IllegalFileExtensionException;
 import ru.tkachenko.buyerassistant.file_storage.service.FileDownloadService;
 import ru.tkachenko.buyerassistant.file_storage.service.FileStorageService;
+import ru.tkachenko.buyerassistant.mmk_accept.exception.AcceptParseException;
 import ru.tkachenko.buyerassistant.mmk_accept.service.MmkAcceptService;
 import ru.tkachenko.buyerassistant.settings.entity.BranchStartMonthEntity;
 import ru.tkachenko.buyerassistant.settings.service.BranchStartMonthService;
@@ -51,7 +52,7 @@ public class MainController {
             Path mmkAcceptPath = fileStorageService.storeFile(mmkAccept);
             mmkAcceptService.parseFileToDatabase(mmkAcceptPath);
             return createUserResponse(model, "Accept Uploaded");
-        } catch (IllegalFileExtensionException e) {
+        } catch (IllegalFileExtensionException | AcceptParseException e) {
             e.printStackTrace();
             return createUserResponse(model, e.getMessage());
         } finally { //TODO remove timer

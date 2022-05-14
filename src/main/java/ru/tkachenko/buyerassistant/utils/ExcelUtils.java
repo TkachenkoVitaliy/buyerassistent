@@ -1,7 +1,6 @@
 package ru.tkachenko.buyerassistant.utils;
 
 import org.apache.poi.ss.usermodel.*;
-import org.apache.poi.xssf.usermodel.XSSFCellStyle;
 
 import java.sql.Date;
 import java.text.ParseException;
@@ -13,8 +12,7 @@ public class ExcelUtils {
 
     public static int[] getEntityColumnsIndexes(Sheet sheet, int headerRowIndex, String[] entityColumnNames) {
         Row header = sheet.getRow(headerRowIndex);
-        int[] colIndexes = ExcelUtils.getEntityColumnsIndexes(entityColumnNames, header);
-        return colIndexes;
+        return ExcelUtils.getEntityColumnsIndexes(entityColumnNames, header);
     }
 
     public static int[] getEntityColumnsIndexes(String[] arrayValues, Row row) {
@@ -36,7 +34,6 @@ public class ExcelUtils {
                 }
             }
         }
-
         return result;
     }
 

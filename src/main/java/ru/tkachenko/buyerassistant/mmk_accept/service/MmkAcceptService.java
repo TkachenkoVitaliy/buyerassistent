@@ -3,11 +3,10 @@ package ru.tkachenko.buyerassistant.mmk_accept.service;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.xssf.usermodel.XSSFSheet;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.tkachenko.buyerassistant.mmk_accept.entity.MmkAcceptRowEntity;
+import ru.tkachenko.buyerassistant.mmk_accept.exception.AcceptParseException;
 import ru.tkachenko.buyerassistant.utils.ExcelUtils;
 
 import java.io.FileInputStream;
@@ -39,7 +38,7 @@ public class MmkAcceptService {
         this.mmkAcceptDBService = mmkAcceptDBService;
     }
 
-    public void parseFileToDatabase(Path filePath) {
+    public void parseFileToDatabase(Path filePath) throws AcceptParseException {
 
         try (FileInputStream fileInputStream = new FileInputStream(filePath.toString());
              HSSFWorkbook workbook = new HSSFWorkbook(fileInputStream)) {
