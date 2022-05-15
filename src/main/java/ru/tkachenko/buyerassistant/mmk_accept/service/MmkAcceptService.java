@@ -41,7 +41,8 @@ public class MmkAcceptService {
     public void parseFileToDatabase(Path filePath) throws AcceptParseException {
 
         try (FileInputStream fileInputStream = new FileInputStream(filePath.toString());
-             HSSFWorkbook workbook = new HSSFWorkbook(fileInputStream)) {
+            HSSFWorkbook workbook = new HSSFWorkbook(fileInputStream))
+        {
             Sheet sheet = workbook.getSheetAt(0);
             int headerRowIndex = ExcelUtils.findFirstNotBlankRow(sheet);
             int firstRowIndex = headerRowIndex + 1;
@@ -53,10 +54,8 @@ public class MmkAcceptService {
                 MmkAcceptRowEntity entity = parseMmkAcceptEntityFromRow(colIndexes, currentRow);
                 mmkAcceptDBService.addUniqueEntity(entity);
             }
-        } catch (FileNotFoundException e) {
+        } catch (IOException e) {
             e.printStackTrace();
-        } catch (IOException ioException) {
-            ioException.printStackTrace();
         }
     }
 

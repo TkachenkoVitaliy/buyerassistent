@@ -10,7 +10,6 @@ import java.util.List;
 
 @Service
 public class SummaryDBService {
-
     private final SummaryRowRepository summaryRowRepository;
 
     @Autowired

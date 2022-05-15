@@ -56,7 +56,6 @@ public class SummaryService {
         this.ZIP_DIRECTORY = FILE_STORAGE_LOCATION.resolve("forZip");
     }
 
-    //TODO parseFilesToSummary need to return Path summaryFile and after need save this fileEntity in DB
     public void parseFilesToSummary(List<Path> filesPaths) {
         Path otherFactoriesPath = filesPaths.get(0);
         Path oracleMmkPath = filesPaths.get(1);

@@ -32,16 +32,16 @@ public class DependencyParser {
         try(FileInputStream fis = new FileInputStream(dependenciesMmkPath.toString());
             XSSFWorkbook wb = new XSSFWorkbook(fis)) {
             dependencyDBService.truncateTable();
-            parseSheet(wb.getSheet(defaultSheetName), 1);
-            parseSheet(wb.getSheet(transitsSheetName), 2);
-            parseSheet(wb.getSheet(containersSheetName), 3);
-            parseSheet(wb.getSheet(exceptionalSheetName), 4);
+            parseSheetToDatabase(wb.getSheet(defaultSheetName), 1);
+            parseSheetToDatabase(wb.getSheet(transitsSheetName), 2);
+            parseSheetToDatabase(wb.getSheet(containersSheetName), 3);
+            parseSheetToDatabase(wb.getSheet(exceptionalSheetName), 4);
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    public void parseSheet(Sheet sheet, int priority) {
+    public void parseSheetToDatabase(Sheet sheet, int priority) {
         int headerRowIndex = ExcelUtils.findFirstNotBlankRow(sheet);
         int firstRowIndex = headerRowIndex + 1;
         int lastRowIndex = sheet.getLastRowNum();
@@ -55,24 +55,14 @@ public class DependencyParser {
 
 
     private DependencyEntity parseRowToEntity(int[] colIndexes, Row row, int priority) {
-        String consignee = null;
-        if(colIndexes[0] != -1) consignee = ExcelUtils.getStringValue(colIndexes[0], row);
 
-        String station = null;
-        if(colIndexes[1] != -1) station = ExcelUtils.getStringValue(colIndexes[1], row);
-
-        String spec = null;
-        if(colIndexes[2] != -1) spec = ExcelUtils.getStringValue(colIndexes[2], row);
-
-        int position = -1;
-        if(colIndexes[3] != -1) position = ExcelUtils.getIntValue(colIndexes[3], row);
-
+        String consignee = (colIndexes[0] != -1) ? ExcelUtils.getStringValue(colIndexes[0], row) : null;
+        String station = (colIndexes[1] != -1) ? ExcelUtils.getStringValue(colIndexes[1], row) : null;
+        String spec = (colIndexes[2] != -1) ? ExcelUtils.getStringValue(colIndexes[2], row) : null;
+        int position = (colIndexes[3] != -1) ? ExcelUtils.getIntValue(colIndexes[3], row) : -1;
         String branch = ExcelUtils.getStringValue(colIndexes[4], row);
-
         String sellType = ExcelUtils.getStringValue(colIndexes[5], row);
-
         String client = ExcelUtils.getStringValue(colIndexes[6], row);
-
         return new DependencyEntity(consignee, station, spec, position, branch, sellType, client, priority);
 
     }

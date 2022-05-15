@@ -24,7 +24,6 @@ public class DependencyDBService {
 
     @Transactional
     public void truncateTable() {
-
         dependencyRepository.truncateTable();
     }
 
