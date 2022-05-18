@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
+import ru.tkachenko.buyerassistant.email.EmailSenderService;
 import ru.tkachenko.buyerassistant.file_storage.exceptions.IllegalFileExtensionException;
 import ru.tkachenko.buyerassistant.file_storage.service.FileDownloadService;
 import ru.tkachenko.buyerassistant.file_storage.service.FileStorageService;
@@ -20,7 +21,9 @@ import ru.tkachenko.buyerassistant.settings.service.BranchStartMonthService;
 import ru.tkachenko.buyerassistant.summary.service.SummaryService;
 import ru.tkachenko.buyerassistant.utils.TimerUtil;
 
+import javax.mail.MessagingException;
 import javax.servlet.http.HttpServletRequest;
+import java.io.FileNotFoundException;
 import java.nio.file.Path;
 import java.util.List;
 
@@ -30,16 +33,18 @@ public class MainController {
     private final FileDownloadService fileDownloadService;
     private final MmkAcceptService mmkAcceptService;
     private final SummaryService summaryService;
+    private final EmailSenderService emailSenderService;
 
     private final BranchStartMonthService branchStartMonthService;
 
     @Autowired
     public MainController(FileStorageService fileStorageService, FileDownloadService fileDownloadService, MmkAcceptService mmkAcceptService,
-                          SummaryService summaryService, BranchStartMonthService branchStartMonthService) {
+                          SummaryService summaryService, EmailSenderService emailSenderService, BranchStartMonthService branchStartMonthService) {
         this.fileStorageService = fileStorageService;
         this.fileDownloadService = fileDownloadService;
         this.mmkAcceptService = mmkAcceptService;
         this.summaryService = summaryService;
+        this.emailSenderService = emailSenderService;
         this.branchStartMonthService = branchStartMonthService;
     }
 
@@ -91,6 +96,26 @@ public class MainController {
             timerUtilDownloadAllFiles.consoleLogTime("createAllFiles");
         }
     }
+
+    @GetMapping("/sendAllFiles")
+    public ModelAndView sendAllFiles(Model model) {
+        String litovchenko = "a.litovchenko@steeleks.ru";
+        String tkachenko = "v.tkachenko@steeleks.ru";
+        String subject = "Акцепт-отгрузка";
+        String message = "Это автоматическая рассылка, не нужно отвечать на это письмо";
+        List<Path> createdBranchesFiles = summaryService.createAllBranchesFiles();
+        for (Path filePath : createdBranchesFiles) {
+            try {
+                emailSenderService.sendMailWithAttachment(litovchenko, subject, message, filePath.toString());
+                emailSenderService.sendMailWithAttachment(tkachenko, subject, message, filePath.toString());
+            } catch (MessagingException | FileNotFoundException e) {
+                e.printStackTrace();
+                return createUserResponse(model, e.getMessage());
+            }
+        }
+        return createUserResponse(model, "ALL FILES SENDED");
+    }
+
 
     @GetMapping("/settings")
     public ModelAndView settingsPage(Model model) {
