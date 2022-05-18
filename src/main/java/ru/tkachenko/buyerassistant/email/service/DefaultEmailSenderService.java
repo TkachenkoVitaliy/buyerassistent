@@ -1,4 +1,4 @@
-package ru.tkachenko.buyerassistant.email;
+package ru.tkachenko.buyerassistant.email.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.FileSystemResource;
@@ -28,7 +28,7 @@ public class DefaultEmailSenderService implements EmailSenderService {
         FileSystemResource file = new FileSystemResource(ResourceUtils.getFile(attachmentPath));
         messageHelper.setFrom("zakup@vtkachenko.ru");
         messageHelper.setTo(toAddress);
-        messageHelper.setSubject(subject + " " + file.getFilename());
+        messageHelper.setSubject(subject);
         messageHelper.setText(message);
         messageHelper.addAttachment(file.getFilename(), file);
         javaMailSender.send(mimeMessage);

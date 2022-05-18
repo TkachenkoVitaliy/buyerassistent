@@ -11,40 +11,89 @@
 </head>
 
 <body>
+
     <div class="body_container">
-        <table class="table_for_each_branch">
-            <tr class="table_for_each_branch_row">
-                <th class="table_for_each_branch_header">Филиал</th>
-                <th class="table_for_each_branch_header">Стартовый месяц</th>
-            </tr>
+        <div class="inner_container">
+            <table class="table_for_each_branch">
+                <tr class="table_for_each_branch_row">
+                    <th class="table_for_each_branch_header">Филиал</th>
+                    <th class="table_for_each_branch_header">Стартовый месяц</th>
+                </tr>
 
-            <tr th:each="branch : ${branchEntities}" class="table_for_each_branch_row">
-                <td th:text="${branch.name}" class="table_for_each_branch_data">
-                </td>
-                <td class="table_for_each_branch_data">
-                        <select form="start_month_for_each" name="values[]">
-                            <option th:each="i : ${#numbers.sequence(1, 12)}"
-                                    th:value="${i}"
-                                    th:with="index=(${i}-1)"
-                                    th:text="${months.get(index)}"
-                                    th:selected="${i==branch.startMonth}">
-                            </option>
-                        </select>
-                </td>
-            </tr>
-
-            <tr class="table_for_each_branch_row">
-                <form id="start_month_for_each" method="post">
-                    <td class="table_for_each_branch_data">
-                        <input type="submit" value="СОХРАНИТЬ И ВЫЙТИ" formaction="/settings/save_month_settings/to_main_page">
+                <tr th:each="branch : ${branchEntities}" class="table_for_each_branch_row">
+                    <td th:text="${branch.name}" class="table_for_each_branch_data">
                     </td>
                     <td class="table_for_each_branch_data">
-                        <input type="submit" value="СОХРАНИТЬ" formaction="/settings/save_month_settings">
+                            <select form="start_month_for_each" name="values[]">
+                                <option th:each="i : ${#numbers.sequence(1, 12)}"
+                                        th:value="${i}"
+                                        th:with="index=(${i}-1)"
+                                        th:text="${months.get(index)}"
+                                        th:selected="${i==branch.startMonth}">
+                                </option>
+                            </select>
                     </td>
-                </form>
-            </tr>
-        </table>
+                </tr>
+
+                <tr class="table_for_each_branch_row">
+                    <form id="start_month_for_each" method="post">
+                        <td class="table_for_each_branch_data">
+                            <input type="submit" value="СОХРАНИТЬ И ВЫЙТИ" formaction="/settings/save_month_settings/to_main_page">
+                        </td>
+                        <td class="table_for_each_branch_data">
+                            <input type="submit" value="СОХРАНИТЬ" formaction="/settings/save_month_settings">
+                        </td>
+                    </form>
+                </tr>
+            </table>
+        </div>
+
+        <div class="inner_container">
+            <table class="table_for_each_branch">
+                <tr class="table_for_each_branch_row">
+                    <th class="table_for_each_branch_header">Филиал</th>
+                    <th class="table_for_each_branch_header">Почта</th>
+                </tr>
+
+                <tr th:each="email : ${emails}" class="table_for_each_branch_row">
+                    <td th:text="${email.branchName}" class="table_for_each_branch_data">
+                    </td>
+                    <td th:text="${email.emailAddress}" class="table_for_each_branch_data">
+                    </td>
+                    <td class="table_for_each_branch_data">
+<!--                        <form th:action="@{/settings/mail/}" th:method="delete">-->
+<!--                            <input type="submit" th:value="${email.id}" name="removeId">-->
+<!--                        <form th:action="@{/settings/mail/{id} (id=*{email.id})}" th:method="delete">-->
+                        <form th:action="@{/settings/mail/}" method="post">
+                            <input type="number" hidden th:value="${email.id}" name="removeId">
+                            <input type="hidden" name="_method" value="delete"/>
+                            <input type="submit" value="remove">
+                        </form>
+                    </td>
+                </tr>
+
+                <tr class="table_for_each_branch_row">
+                    <td class="table_for_each_branch_data">
+                        <form id="mail_form" method="post">
+                            <select form="mail_form" name="selectedBranch" required>
+                                <option disabled selected></option>
+                                <option th:each="branch : ${branchEntities}" th:text="${branch.name}">
+                                </option>
+                            </select>
+                        </form>
+                    </td>
+                    <td class="table_for_each_branch_data">
+                        <input form="mail_form" type="email" name="addedEmail">
+                    </td>
+                    <td class="table_for_each_branch_data">
+                        <input form="mail_form" type="submit" value="Добавить" formaction="/settings/mail">
+                    </td>
+                </tr>
+            </table>
+        </div>
+
     </div>
+
 </body>
 
 </html>

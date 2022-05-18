@@ -10,7 +10,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
-import ru.tkachenko.buyerassistant.email.EmailSenderService;
+import ru.tkachenko.buyerassistant.email.entity.MailEntity;
+import ru.tkachenko.buyerassistant.email.service.EmailSenderService;
+import ru.tkachenko.buyerassistant.email.service.MailService;
 import ru.tkachenko.buyerassistant.file_storage.exceptions.IllegalFileExtensionException;
 import ru.tkachenko.buyerassistant.file_storage.service.FileDownloadService;
 import ru.tkachenko.buyerassistant.file_storage.service.FileStorageService;
@@ -34,17 +36,18 @@ public class MainController {
     private final MmkAcceptService mmkAcceptService;
     private final SummaryService summaryService;
     private final EmailSenderService emailSenderService;
-
+    private final MailService mailService;
     private final BranchStartMonthService branchStartMonthService;
 
     @Autowired
     public MainController(FileStorageService fileStorageService, FileDownloadService fileDownloadService, MmkAcceptService mmkAcceptService,
-                          SummaryService summaryService, EmailSenderService emailSenderService, BranchStartMonthService branchStartMonthService) {
+                          SummaryService summaryService, EmailSenderService emailSenderService, MailService mailService, BranchStartMonthService branchStartMonthService) {
         this.fileStorageService = fileStorageService;
         this.fileDownloadService = fileDownloadService;
         this.mmkAcceptService = mmkAcceptService;
         this.summaryService = summaryService;
         this.emailSenderService = emailSenderService;
+        this.mailService = mailService;
         this.branchStartMonthService = branchStartMonthService;
     }
 
@@ -99,15 +102,21 @@ public class MainController {
 
     @GetMapping("/sendAllFiles")
     public ModelAndView sendAllFiles(Model model) {
-        String litovchenko = "a.litovchenko@steeleks.ru";
-        String tkachenko = "v.tkachenko@steeleks.ru";
-        String subject = "Акцепт-отгрузка";
         String message = "Это автоматическая рассылка, не нужно отвечать на это письмо";
         List<Path> createdBranchesFiles = summaryService.createAllBranchesFiles();
         for (Path filePath : createdBranchesFiles) {
             try {
-                emailSenderService.sendMailWithAttachment(litovchenko, subject, message, filePath.toString());
-                emailSenderService.sendMailWithAttachment(tkachenko, subject, message, filePath.toString());
+                String branchName = filePath.getFileName().toString().replace(".xlsx","");
+                List<MailEntity> mailEntities = mailService.getMailsByName(branchName);
+//                if(mailEntities.isEmpty()) {
+//                    return createUserResponse(model,"Ошибка, отсутсвует почта закрепленная за филиалом - "
+//                            + branchName);
+//                }
+                for(MailEntity mailEntity : mailEntities ) {
+                    String emailAddress = mailEntity.getEmailAddress();
+                    String subject = "Акцепт-отгрузка " + branchName;
+                    emailSenderService.sendMailWithAttachment(emailAddress, subject, message, filePath.toString());
+                }
             } catch (MessagingException | FileNotFoundException e) {
                 e.printStackTrace();
                 return createUserResponse(model, e.getMessage());
@@ -124,6 +133,8 @@ public class MainController {
         List<BranchStartMonthEntity> allBranches = branchStartMonthService.getAllBranchStartMonthEntitiesOrdered();
         model.addAttribute("branchEntities", allBranches);
         model.addAttribute("months", months);
+        List<MailEntity> allEmails = mailService.getAllMails();
+        model.addAttribute("emails", allEmails);
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("settings");
         return modelAndView;

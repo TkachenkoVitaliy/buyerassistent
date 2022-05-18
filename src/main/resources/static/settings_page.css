@@ -1,5 +1,12 @@
 .body_container {
     font-size: 18px;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+}
+
+.inner_container {
+    margin: 5px;
 }
 
 .table_for_each_branch {
