@@ -23,7 +23,6 @@ BEGIN
 END
 ' LANGUAGE plpgsql;
 
-/*
 do '
 DECLARE
     valueCounts INTEGER;
@@ -62,6 +61,5 @@ BEGIN
         INSERT INTO mail_table (branch_name, email_address) values (''Новокузнецк'', ''k.shashenko@nsk.uralsibtrade.ru '');
     END IF;
 END
-' LANGUAGE plpgsql
-*/
+' LANGUAGE plpgsql;
 

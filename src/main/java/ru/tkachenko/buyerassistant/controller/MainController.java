@@ -27,6 +27,7 @@ import javax.mail.MessagingException;
 import javax.servlet.http.HttpServletRequest;
 import java.io.FileNotFoundException;
 import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -102,6 +103,7 @@ public class MainController {
 
     @GetMapping("/sendAllFiles")
     public ModelAndView sendAllFiles(Model model) {
+        List<String> resultForUser = new ArrayList<>();
         String message = "Это автоматическая рассылка, не нужно отвечать на это письмо";
         List<Path> createdBranchesFiles = summaryService.createAllBranchesFiles();
         for (Path filePath : createdBranchesFiles) {
@@ -116,13 +118,15 @@ public class MainController {
                     String emailAddress = mailEntity.getEmailAddress();
                     String subject = "Акцепт-отгрузка " + branchName;
                     emailSenderService.sendMailWithAttachment(emailAddress, subject, message, filePath.toString());
+                    resultForUser.add(branchName + " - " + emailAddress);
                 }
             } catch (MessagingException | FileNotFoundException e) {
                 e.printStackTrace();
                 return createUserResponse(model, e.getMessage());
             }
         }
-        return createUserResponse(model, "ALL FILES SENDED");
+
+        return createUserResponse(model, resultForUser.toString());
     }
 
 
