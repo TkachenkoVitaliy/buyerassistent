@@ -18,6 +18,9 @@ public class MmkAcceptDBService {
     }
 
     public void addUniqueEntity(MmkAcceptRowEntity entityFromFile) throws AcceptParseException {
+        if(entityFromFile == null) {
+            return;
+        }
         if (entityFromFile.getSpec() != null && entityFromFile.getSpec() != "" && entityFromFile.getPosition() != 0) {
             MmkAcceptRowEntity entityFromDB = mmkAcceptRepository.findFirstBySpecAndPosition(entityFromFile.getSpec(),
                     entityFromFile.getPosition());

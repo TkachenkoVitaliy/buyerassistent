@@ -47,7 +47,6 @@ public class OracleParser {
             int lastRowIndex = sheet.getLastRowNum();
             int[] oracleDTOColIndexes = ExcelUtils.getEntityColumnsIndexes(sheet, headerRowIndex, oracleDTOColumnsNames);
 
-            //TODO remove test stream parallel
             List<XSSFRow> rows = new ArrayList<>();
             for(int i = firstRowIndex; i <= lastRowIndex; i++) {
                 rows.add(sheet.getRow(i));
@@ -56,17 +55,6 @@ public class OracleParser {
                     .map(row -> parseToOracleDTO(oracleDTOColIndexes, row))
                     .map(this::parseSummaryEntityFromOracleDTOAndDependencies)
                     .forEach(summaryDBService::save);
-            //TODO remove test stream parallel
-
-
-            //TODO return for
-//            for (int i = firstRowIndex; i <= lastRowIndex; i++) {
-//                Row currentRow = sheet.getRow(i);
-//                OracleDTO oracleDTO = parseToOracleDTO(oracleDTOColIndexes, currentRow);
-//                SummaryRowEntity summaryRowEntity = parseSummaryEntityFromOracleDTOAndDependencies(oracleDTO);
-//                summaryDBService.save(summaryRowEntity);
-//            }
-            //TODO return for
 
 
         } catch (IOException e) {
