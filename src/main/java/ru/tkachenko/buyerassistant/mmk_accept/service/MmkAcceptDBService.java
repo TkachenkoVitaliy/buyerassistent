@@ -18,7 +18,7 @@ public class MmkAcceptDBService {
     }
 
     public void addUniqueEntity(MmkAcceptRowEntity entityFromFile) throws AcceptParseException {
-        if (entityFromFile.getSpec() != null && entityFromFile.getPosition() != 0) {
+        if (entityFromFile.getSpec() != null && entityFromFile.getSpec() != "" && entityFromFile.getPosition() != 0) {
             MmkAcceptRowEntity entityFromDB = mmkAcceptRepository.findFirstBySpecAndPosition(entityFromFile.getSpec(),
                     entityFromFile.getPosition());
             if (entityFromDB == null) {
@@ -28,11 +28,11 @@ public class MmkAcceptDBService {
                 mmkAcceptRepository.save(entityFromDB);
             }
         }
-        if(entityFromFile.getSpec() == null && entityFromFile.getPosition() != 0) {
+        if((entityFromFile.getSpec() == null || entityFromFile.getSpec() == "") && entityFromFile.getPosition() != 0) {
             throw new AcceptParseException("Can't parse AcceptFile because file contains row with Specification number "
                     + "or position number - blank value");
         }
-        if(entityFromFile.getSpec() != null && entityFromFile.getPosition() == 0) {
+        if((entityFromFile.getSpec() != null && entityFromFile.getSpec() != "") && entityFromFile.getPosition() == 0) {
             throw new AcceptParseException("Can't parse AcceptFile because file contains row with Specification number "
                     + "or position number - blank value");
         }

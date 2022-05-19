@@ -155,4 +155,22 @@ public class MmkAcceptRowEntity {
     public void setAdditionalRequirements(String additionalRequirements) {
         this.additionalRequirements = additionalRequirements;
     }
+
+    @Override
+    public String toString() {
+        return "MmkAcceptRowEntity{" +
+                "id=" + id +
+                ", spec='" + spec + '\'' +
+                ", position=" + position +
+                ", nomenclature='" + nomenclature + '\'' +
+                ", grade='" + grade + '\'' +
+                ", thickness=" + thickness +
+                ", width=" + width +
+                ", length=" + length +
+                ", alterProfile='" + alterProfile + '\'' +
+                ", accepted=" + accepted +
+                ", acceptMonth=" + acceptMonth +
+                ", additionalRequirements='" + additionalRequirements + '\'' +
+                '}';
+    }
 }
