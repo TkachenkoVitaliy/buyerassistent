@@ -6,7 +6,7 @@
 
     <groupId>ru.tkachenko</groupId>
     <artifactId>BuyerAssistant</artifactId>
-    <version>1.2.1</version>
+    <version>1.2.2</version>
 
     <parent>
         <groupId>org.springframework.boot</groupId>

@@ -6,7 +6,7 @@ echo 'Copy files ...'
 
 #scp -i Users/vitaliy/.ssh/id_rsa
 scp -i ~/.ssh/id_rsa \
-target/BuyerAssistant-1.2.1.jar \
+target/BuyerAssistant-1.2.2.jar \
 vitaliy@45.155.207.175:/home/vitaliy/
 
 echo 'Restart server ...'
@@ -15,7 +15,7 @@ echo 'Restart server ...'
 ssh -tt -i ~/.ssh/id_rsa vitaliy@45.155.207.175 <<EOF
 pgrep java | xargs kill -KILL
 wait
-nohup java -jar BuyerAssistant-1.2.1.jar > log.txt &
+nohup java -jar BuyerAssistant-1.2.2.jar > log.txt &
 sleep 5 && exit
 EOF
 

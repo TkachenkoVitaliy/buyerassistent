@@ -27,7 +27,12 @@ public class MmkAcceptDBService {
                 updateEntity(entityFromDB, entityFromFile);
                 mmkAcceptRepository.save(entityFromDB);
             }
-        } else {
+        }
+        if(entityFromFile.getSpec() == null && entityFromFile.getPosition() != 0) {
+            throw new AcceptParseException("Can't parse AcceptFile because file contains row with Specification number "
+                    + "or position number - blank value");
+        }
+        if(entityFromFile.getSpec() != null && entityFromFile.getPosition() == 0) {
             throw new AcceptParseException("Can't parse AcceptFile because file contains row with Specification number "
                     + "or position number - blank value");
         }
