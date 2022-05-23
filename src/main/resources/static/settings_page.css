@@ -9,24 +9,24 @@
     margin: 5px;
 }
 
-.table_for_each_branch {
+.default_table {
     border-collapse: collapse;
     border: 3px solid grey;
 }
 
-.table_for_each_branch_header{
+.table_header{
     border: 2px solid darkblue;
     text-align: center;
     background-color: lightskyblue;
 }
 
-.table_for_each_branch_row:last-child{
+.table_row:last-child{
     border: 2px solid darkblue;
     text-align: center;
     background-color: lightskyblue;
 }
 
-.table_for_each_branch_data{
+.table_data{
     border: 1px solid darkblue;
     text-align: center;
 }

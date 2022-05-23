@@ -110,15 +110,11 @@ public class MainController {
             try {
                 String branchName = filePath.getFileName().toString().replace(".xlsx","");
                 List<MailEntity> mailEntities = mailService.getMailsByName(branchName);
-//                if(mailEntities.isEmpty()) {
-//                    return createUserResponse(model,"Ошибка, отсутсвует почта закрепленная за филиалом - "
-//                            + branchName);
-//                }
                 for(MailEntity mailEntity : mailEntities ) {
                     String emailAddress = mailEntity.getEmailAddress();
                     String subject = "Акцепт-отгрузка " + branchName;
                     emailSenderService.sendMailWithAttachment(emailAddress, subject, message, filePath.toString());
-                    resultForUser.add(branchName + " - " + emailAddress);
+                    resultForUser.add(branchName + " - " + emailAddress + "\n");
                 }
             } catch (MessagingException | FileNotFoundException e) {
                 e.printStackTrace();

@@ -26,7 +26,7 @@ public class MailSenderService {
             throws MessagingException, FileNotFoundException {
         MimeMessage mimeMessage = javaMailSender.createMimeMessage();
         MimeMessageHelper messageHelper = new MimeMessageHelper(mimeMessage, true);
-        messageHelper.setFrom("VTKACHENKO.RU");
+        messageHelper.setFrom("supply@vtkachenko.ru");
         messageHelper.setTo(toAddress);
         messageHelper.setSubject(subject);
         messageHelper.setText("Это автоматическая рассылка, пожалуйста не отвечайте на это письмо");
