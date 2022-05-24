@@ -104,7 +104,7 @@ public class MainController {
 
     @GetMapping("/sendAllFiles")
     public ModelAndView sendAllFiles(Model model) {
-        long sleepTime = 15l;
+        long sleepTime = 1l;
         List<String> resultForUser = new ArrayList<>();
         String message = "Это автоматическая рассылка, не нужно отвечать на это письмо";
         List<Path> createdBranchesFiles = summaryService.createAllBranchesFiles();
@@ -118,7 +118,7 @@ public class MainController {
                     emailSenderService.sendMailWithAttachment(emailAddress, subject, message, filePath.toString());
                     resultForUser.add(branchName + " - " + emailAddress + "   ");
                     TimeUnit.SECONDS.sleep(sleepTime);
-                    sleepTime = sleepTime + 2l;
+                    sleepTime = sleepTime + 1l;
                 }
             } catch (MessagingException | FileNotFoundException | InterruptedException e) {
                 e.printStackTrace();
@@ -126,7 +126,8 @@ public class MainController {
             }
 
         }
-        return createUserResponse(model, resultForUser.toString());
+        model.addAttribute("sendEmails",resultForUser);
+        return createUserResponse(model, "Email send complete");
     }
 
 
