@@ -26,7 +26,7 @@ public class DefaultEmailSenderService implements EmailSenderService {
         MimeMessage mimeMessage = javaMailSender.createMimeMessage();
         MimeMessageHelper messageHelper = new MimeMessageHelper(mimeMessage, true);
         FileSystemResource file = new FileSystemResource(ResourceUtils.getFile(attachmentPath));
-        messageHelper.setFrom("zakup@vtkachenko.ru");
+        messageHelper.setFrom("supply@vtkachenko.ru");
         messageHelper.setTo(toAddress);
         messageHelper.setSubject(subject);
         messageHelper.setText(message);
