@@ -1,5 +1,7 @@
 package ru.tkachenko.buyerassistant.summary.service;
 
+import ru.tkachenko.buyerassistant.utils.CurrentDate;
+
 public class SummaryInfoUtil {
     private final static String KRASNODAR = "Краснодар";
     private final static String ROSTOV = "Ростов";
@@ -57,8 +59,21 @@ public class SummaryInfoUtil {
             POSITION_COL_NAME, ACCEPT_MONTH_COL_NAME, ACCEPTED_COL_NAME, SHIPPED_COL_NAME, SHIPPED_DATE_COL_NAME,
             VEHICLE_NUMBER_COL_NAME};
 
-    private final static String[] monthSheetNames = {"Январь_2022", "Февраль_2022", "Март_2022", "Апрель_2022", "Май_2022",
-            "Июнь_2022", "Июль_2022", "Август_2022", "Сентябрь_2022", "Октябрь_2022", "Ноябрь_2022", "Декабрь_2022"};
+    private final static CurrentDate currentDate = new CurrentDate();
+    private final static String[] monthSheetNames = {
+            "Январь_" + currentDate.getYear(),
+            "Февраль_" + currentDate.getYear(),
+            "Март_" + currentDate.getYear(),
+            "Апрель_" + currentDate.getYear(),
+            "Май_" + currentDate.getYear(),
+            "Июнь_" + currentDate.getYear(),
+            "Июль_" + currentDate.getYear(),
+            "Август_" + currentDate.getYear(),
+            "Сентябрь_" + currentDate.getYear(),
+            "Октябрь_" + currentDate.getYear(),
+            "Ноябрь_" + currentDate.getYear(),
+            "Декабрь_" + currentDate.getYear()
+    };
 
     public static String[] getFileColumnsNamesForEntity() {
         return fileColumnsNamesForEntity;

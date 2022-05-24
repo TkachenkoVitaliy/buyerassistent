@@ -12,6 +12,7 @@ import ru.tkachenko.buyerassistant.summary.entity.SummaryRowEntity;
 import ru.tkachenko.buyerassistant.summary.dependency_inner.service.DependencyWorker;
 import ru.tkachenko.buyerassistant.summary.service.ProfileParser;
 import ru.tkachenko.buyerassistant.summary.service.SummaryDBService;
+import ru.tkachenko.buyerassistant.utils.CurrentDate;
 import ru.tkachenko.buyerassistant.utils.ExcelUtils;
 import ru.tkachenko.buyerassistant.utils.RegexUtil;
 
@@ -51,7 +52,9 @@ public class OracleParser {
             for(int i = firstRowIndex; i <= lastRowIndex; i++) {
                 rows.add(sheet.getRow(i));
             }
+
             rows.parallelStream()
+                    .filter(row -> filterLastYearRows(oracleDTOColIndexes, row)) //
                     .map(row -> parseToOracleDTO(oracleDTOColIndexes, row))
                     .map(this::parseSummaryEntityFromOracleDTOAndDependencies)
                     .forEach(summaryDBService::save);
@@ -143,4 +146,13 @@ public class OracleParser {
                 shippedCost, shippedDate, vehicleNumber, invoiceNumber, invoiceDate, finalPrice, finalCost);
     }
 
+    private boolean filterLastYearRows(int[] colIndexes, Row row) {
+        CurrentDate currentDate = new CurrentDate();
+        SimpleDateFormat shippedDateFormat = new SimpleDateFormat("dd.MM.yyyy");
+        int orderYear = ExcelUtils.getDateValue(colIndexes[23], row, shippedDateFormat).getYear() + 1900;
+        //The month value returned is between 0 and 11
+        int orderMonth =  ExcelUtils.getDateValue(colIndexes[23], row, shippedDateFormat).getMonth();
+        int currentYear = Integer.parseInt(currentDate.getYear());
+        return currentYear != orderYear - 1 && orderMonth != (10 | 11);
+    }
 }
