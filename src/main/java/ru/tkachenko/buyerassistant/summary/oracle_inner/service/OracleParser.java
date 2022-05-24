@@ -153,6 +153,11 @@ public class OracleParser {
         //The month value returned is between 0 and 11
         int orderMonth =  ExcelUtils.getDateValue(colIndexes[23], row, shippedDateFormat).getMonth();
         int currentYear = Integer.parseInt(currentDate.getYear());
-        return currentYear != orderYear - 1 && orderMonth != (10 | 11);
+        if (currentYear > orderYear){
+            if (orderMonth == (10 | 11)){
+                return false;
+            }
+        }
+        return true;
     }
 }
