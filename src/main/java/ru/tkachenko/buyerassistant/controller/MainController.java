@@ -29,6 +29,7 @@ import java.io.FileNotFoundException;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 @RestController
 public class MainController {
@@ -103,6 +104,7 @@ public class MainController {
 
     @GetMapping("/sendAllFiles")
     public ModelAndView sendAllFiles(Model model) {
+        long sleepTime = 15l;
         List<String> resultForUser = new ArrayList<>();
         String message = "Это автоматическая рассылка, не нужно отвечать на это письмо";
         List<Path> createdBranchesFiles = summaryService.createAllBranchesFiles();
@@ -114,14 +116,16 @@ public class MainController {
                     String emailAddress = mailEntity.getEmailAddress();
                     String subject = "Акцепт-отгрузка " + branchName;
                     emailSenderService.sendMailWithAttachment(emailAddress, subject, message, filePath.toString());
-                    resultForUser.add(branchName + " - " + emailAddress + "\n");
+                    resultForUser.add(branchName + " - " + emailAddress + "   ");
+                    TimeUnit.SECONDS.sleep(sleepTime);
+                    sleepTime = sleepTime + 2l;
                 }
-            } catch (MessagingException | FileNotFoundException e) {
+            } catch (MessagingException | FileNotFoundException | InterruptedException e) {
                 e.printStackTrace();
                 return createUserResponse(model, e.getMessage());
             }
-        }
 
+        }
         return createUserResponse(model, resultForUser.toString());
     }
 
