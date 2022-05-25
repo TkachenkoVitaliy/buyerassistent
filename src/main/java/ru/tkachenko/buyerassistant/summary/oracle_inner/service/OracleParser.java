@@ -52,9 +52,8 @@ public class OracleParser {
             for(int i = firstRowIndex; i <= lastRowIndex; i++) {
                 rows.add(sheet.getRow(i));
             }
-
             rows.parallelStream()
-                    .filter(row -> filterLastYearRows(oracleDTOColIndexes, row)) //
+                    .filter(row -> filterLastYearRows(oracleDTOColIndexes, row))
                     .map(row -> parseToOracleDTO(oracleDTOColIndexes, row))
                     .map(this::parseSummaryEntityFromOracleDTOAndDependencies)
                     .forEach(summaryDBService::save);
@@ -97,6 +96,7 @@ public class OracleParser {
     }
 
     private SummaryRowEntity parseSummaryEntityFromOracleDTOAndDependencies(OracleDTO oracleDTO) {
+        CurrentDate currentDate = new CurrentDate();
         String supplier = "ММК";
         int mill = oracleDTO.getMill();
 
@@ -128,7 +128,7 @@ public class OracleParser {
         String spec = oracleDTO.getSpec();
         int position = oracleDTO.getPosition();
         int acceptMonth = oracleDTO.getAcceptMonth();//TODO check != 0
-        int year = 2022;
+        int year = Integer.parseInt(currentDate.getYear());
         double accepted = oracleDTO.getAccepted();
         double price = oracleDTO.getPriceWithoutNDS() * 1.2;
         double acceptedCost = accepted * price;
@@ -150,13 +150,10 @@ public class OracleParser {
         CurrentDate currentDate = new CurrentDate();
         SimpleDateFormat shippedDateFormat = new SimpleDateFormat("dd.MM.yyyy");
         int orderYear = ExcelUtils.getDateValue(colIndexes[23], row, shippedDateFormat).getYear() + 1900;
-        //The month value returned is between 0 and 11
-        int orderMonth =  ExcelUtils.getDateValue(colIndexes[23], row, shippedDateFormat).getMonth();
+        int shippedMonth =  ExcelUtils.getIntValue(colIndexes[9], row);// what happens if collum is empty?
         int currentYear = Integer.parseInt(currentDate.getYear());
         if (currentYear > orderYear){
-            if (orderMonth == (10 | 11)){
-                return false;
-            }
+            return shippedMonth != 11 && shippedMonth != 12;
         }
         return true;
     }
