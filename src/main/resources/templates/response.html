@@ -15,6 +15,10 @@
     <form method="get" action="/main">
             <input type="submit" value="ВЕРНУТЬСЯ НА ГЛАВНУЮ СТРАНИЦУ">
     </form>
+
+    <div th:each="result : ${sendEmails}">
+        <div th:text="${result}"></div>
+    </div>
 </body>
 
 </html>
