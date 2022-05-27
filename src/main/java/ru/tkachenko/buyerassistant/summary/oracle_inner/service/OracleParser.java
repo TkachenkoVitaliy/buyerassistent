@@ -10,6 +10,8 @@ import ru.tkachenko.buyerassistant.summary.oracle_inner.dto.OracleDTO;
 import ru.tkachenko.buyerassistant.summary.dependency_inner.entity.DependencyEntity;
 import ru.tkachenko.buyerassistant.summary.entity.SummaryRowEntity;
 import ru.tkachenko.buyerassistant.summary.dependency_inner.service.DependencyWorker;
+import ru.tkachenko.buyerassistant.summary.oracle_inner.utils.OracleParserFilterUtil;
+import ru.tkachenko.buyerassistant.summary.oracle_inner.utils.OracleInfoUtil;
 import ru.tkachenko.buyerassistant.summary.service.ProfileParser;
 import ru.tkachenko.buyerassistant.summary.service.SummaryDBService;
 import ru.tkachenko.buyerassistant.utils.CurrentDate;
@@ -53,7 +55,7 @@ public class OracleParser {
                 rows.add(sheet.getRow(i));
             }
             rows.parallelStream()
-                    .filter(row -> filterLastYearRows(oracleDTOColIndexes, row))
+                    .filter(row -> OracleParserFilterUtil.filterLastYearRows(oracleDTOColIndexes, row))
                     .map(row -> parseToOracleDTO(oracleDTOColIndexes, row))
                     .map(this::parseSummaryEntityFromOracleDTOAndDependencies)
                     .forEach(summaryDBService::save);
@@ -146,15 +148,5 @@ public class OracleParser {
                 shippedCost, shippedDate, vehicleNumber, invoiceNumber, invoiceDate, finalPrice, finalCost);
     }
 
-    private boolean filterLastYearRows(int[] colIndexes, Row row) {
-        CurrentDate currentDate = new CurrentDate();
-        SimpleDateFormat shippedDateFormat = new SimpleDateFormat("dd.MM.yyyy");
-        int orderYear = ExcelUtils.getDateValue(colIndexes[23], row, shippedDateFormat).getYear() + 1900;
-        int shippedMonth =  ExcelUtils.getIntValue(colIndexes[9], row);// what happens if collum is empty?
-        int currentYear = Integer.parseInt(currentDate.getYear());
-        if (currentYear > orderYear){
-            return shippedMonth != 11 && shippedMonth != 12;
-        }
-        return true;
-    }
+
 }

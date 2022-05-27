@@ -1,4 +1,4 @@
-package ru.tkachenko.buyerassistant.summary.oracle_inner.service;
+package ru.tkachenko.buyerassistant.summary.oracle_inner.utils;
 
 public class OracleInfoUtil {
     private final static String MILL_COL_NAME = "Стан";
