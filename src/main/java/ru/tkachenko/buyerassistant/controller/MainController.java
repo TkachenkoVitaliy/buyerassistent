@@ -136,7 +136,9 @@ public class MainController {
     public ModelAndView settingsPage(Model model) {
         List<String> months = List.of("Январь", "Февраль", "Март", "Апрель", "Май", "Июнь", "Июль", "Август",
                 "Сентябрь", "Октябрь", "Ноябрь", "Декабрь");
+        List<Integer> years = List.of(2021, 2022, 2023, 2024, 2025, 2026);
         List<BranchStartMonthEntity> allBranches = branchStartMonthService.getAllBranchStartMonthEntitiesOrdered();
+        model.addAttribute("years", years);
         model.addAttribute("branchEntities", allBranches);
         model.addAttribute("months", months);
         List<MailEntity> allEmails = mailService.getAllMails();

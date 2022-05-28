@@ -59,22 +59,9 @@ public class SummaryInfoUtil {
             POSITION_COL_NAME, ACCEPT_MONTH_COL_NAME, ACCEPTED_COL_NAME, SHIPPED_COL_NAME, SHIPPED_DATE_COL_NAME,
             VEHICLE_NUMBER_COL_NAME};
 
-    //не уверен что так делать правильно
-    private final static CurrentDate currentDate = new CurrentDate();
     private final static String[] monthSheetNames = {
-            "Январь_" + currentDate.getYear(),
-            "Февраль_" + currentDate.getYear(),
-            "Март_" + currentDate.getYear(),
-            "Апрель_" + currentDate.getYear(),
-            "Май_" + currentDate.getYear(),
-            "Июнь_" + currentDate.getYear(),
-            "Июль_" + currentDate.getYear(),
-            "Август_" + currentDate.getYear(),
-            "Сентябрь_" + currentDate.getYear(),
-            "Октябрь_" + currentDate.getYear(),
-            "Ноябрь_" + currentDate.getYear(),
-            "Декабрь_" + currentDate.getYear()
-    };
+            "Январь", "Февраль", "Март", "Апрель", "Май", "Июнь", "Июль", "Август", "Сентябрь", "Октябрь", "Ноябрь",
+            "Декабрь"};
 
     public static String[] getFileColumnsNamesForEntity() {
         return fileColumnsNamesForEntity;

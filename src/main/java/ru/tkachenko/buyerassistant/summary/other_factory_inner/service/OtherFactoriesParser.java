@@ -15,25 +15,32 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.sql.Date;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Objects;
 
 @Service
 public class OtherFactoriesParser {
 
-    private final String[] monthSheetNames = SummaryInfoUtil.getMonthSheetNames();
+    private final List<String> monthSheetNames = new ArrayList<>();
     private final SummaryDBService summaryDBService;
 
     @Autowired
     public OtherFactoriesParser(SummaryDBService summaryDBService) {
         this.summaryDBService = summaryDBService;
+        String[] months = SummaryInfoUtil.getMonthSheetNames();
+        for(int i = 2021; i <= 2026; i++) {
+            for (String month : months) {
+                monthSheetNames.add(month + "_" + i);
+            }
+        }
     }
 
     public void parse(Path filePath) {
         try(FileInputStream fis = new FileInputStream(filePath.toString());
             XSSFWorkbook wb = new XSSFWorkbook(fis)) {
-            Arrays.stream(monthSheetNames)
-                    .parallel()
+            monthSheetNames.parallelStream()
                     .map(wb::getSheet)
                     .filter(Objects::nonNull)
                     .forEach(this::parseSheet);

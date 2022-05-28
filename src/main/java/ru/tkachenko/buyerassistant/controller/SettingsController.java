@@ -17,6 +17,7 @@ public class SettingsController {
     private final MailService mailService;
     private final List<String> months = List.of("Январь", "Февраль", "Март", "Апрель", "Май", "Июнь",
             "Июль", "Август", "Сентябрь", "Октябрь", "Ноябрь", "Декабрь");
+    private final List<Integer> years = List.of(2021, 2022, 2023, 2024, 2025, 2026);
 
     @Autowired
     public SettingsController(BranchStartMonthService branchStartMonthService, MailService mailService) {
@@ -25,10 +26,11 @@ public class SettingsController {
     }
 
     @PostMapping("/settings/save_month_settings")
-    public ModelAndView saveMonthSettingsAndStay(@RequestParam("values[]") List<Integer> values, Model model) {
-        branchStartMonthService.saveMonthSettings(values);
-
+    public ModelAndView saveMonthSettingsAndStay(@RequestParam("values[]") List<Integer> values,
+                                                 @RequestParam("yearValues[]") List<Integer> yearValues, Model model) {
+        branchStartMonthService.saveMonthSettings(values, yearValues);
         List<BranchStartMonthEntity> allBranches = branchStartMonthService.getAllBranchStartMonthEntitiesOrdered();
+        model.addAttribute("years", years);
         model.addAttribute("branchEntities", allBranches);
         model.addAttribute("months", months);
         List<MailEntity> allEmails = mailService.getAllMails();
@@ -37,8 +39,9 @@ public class SettingsController {
     }
 
     @PostMapping("/settings/save_month_settings/to_main_page")
-    public ModelAndView saveMonthSettingsAndGoToMainPage(@RequestParam("values[]") List<Integer> values) {
-        branchStartMonthService.saveMonthSettings(values);
+    public ModelAndView saveMonthSettingsAndGoToMainPage(@RequestParam("values[]") List<Integer> values,
+                                                         @RequestParam("yearValues[]") List<Integer> yearValues) {
+        branchStartMonthService.saveMonthSettings(values, yearValues);
         return new ModelAndView("index");
     }
     @PostMapping("/settings/mail")
@@ -50,6 +53,7 @@ public class SettingsController {
         mailService.save(mailEntity);
 
         List<BranchStartMonthEntity> allBranches = branchStartMonthService.getAllBranchStartMonthEntitiesOrdered();
+        model.addAttribute("years", years);
         model.addAttribute("branchEntities", allBranches);
         model.addAttribute("months", months);
         List<MailEntity> allEmails = mailService.getAllMails();
@@ -65,6 +69,7 @@ public class SettingsController {
         mailService.deleteById(id);
 
         List<BranchStartMonthEntity> allBranches = branchStartMonthService.getAllBranchStartMonthEntitiesOrdered();
+        model.addAttribute("years", years);
         model.addAttribute("branchEntities", allBranches);
         model.addAttribute("months", months);
         List<MailEntity> allEmails = mailService.getAllMails();

@@ -18,6 +18,7 @@
                 <tr class="table_row">
                     <th class="table_header">Филиал</th>
                     <th class="table_header">Стартовый месяц</th>
+                    <th class="table_header">Стартовый год</th>
                 </tr>
 
                 <tr th:each="branch : ${branchEntities}" class="table_row">
@@ -33,6 +34,15 @@
                                 </option>
                             </select>
                     </td>
+                    <td class="table_data">
+                        <select form="start_month_for_each" name="yearValues[]">
+                            <option th:each="yearvalue : ${years}"
+                                    th:text="${yearvalue}"
+                                    th:value="${yearvalue}"
+                                    th:selected="${yearvalue==branch.startYear}">
+                            </option>
+                        </select>
+                    </td>
                 </tr>
 
                 <tr class="table_row">
@@ -44,6 +54,11 @@
                             <input type="submit" value="СОХРАНИТЬ" formaction="/settings/save_month_settings">
                         </td>
                     </form>
+<!--                    <form id="start_year_month_for_each" method="post">-->
+<!--                        <td class="table_data">-->
+<!--                            <input type="submit" value="СОХРАНИТЬ ГОД" formaction="/settings/save_month_settings">-->
+<!--                        </td>-->
+<!--                    </form>-->
                 </tr>
             </table>
         </div>

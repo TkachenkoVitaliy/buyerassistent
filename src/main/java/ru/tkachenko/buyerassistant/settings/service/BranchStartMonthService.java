@@ -17,11 +17,12 @@ public class BranchStartMonthService {
         this.branchStartMonthRepository = branchStartMonthRepository;
     }
 
-    public void saveMonthSettings(List<Integer> values) {
+    public void saveMonthSettings(List<Integer> values, List<Integer> yearValues) {
         List<BranchStartMonthEntity> branchStartMonthEntities = getAllBranchStartMonthEntitiesOrdered();
         for(int i = 0; i < branchStartMonthEntities.size(); i++) {
             BranchStartMonthEntity branchStartMonthEntity = branchStartMonthEntities.get(i);
             branchStartMonthEntity.setStartMonth(values.get(i));
+            branchStartMonthEntity.setStartYear(yearValues.get(i));
             updateBranchStartMonthEntity(branchStartMonthEntity);
         }
     }
@@ -37,6 +38,11 @@ public class BranchStartMonthService {
     public int getBranchStartMonth(String branchName) {
         BranchStartMonthEntity branchStartMonthEntity = branchStartMonthRepository.findFirstByName(branchName);
         return branchStartMonthEntity.getStartMonth();
+    }
+
+    public int getBranchStartYear(String branchName) {
+        BranchStartMonthEntity branchStartMonthEntity = branchStartMonthRepository.findFirstByName(branchName);
+        return branchStartMonthEntity.getStartYear();
     }
 
 }

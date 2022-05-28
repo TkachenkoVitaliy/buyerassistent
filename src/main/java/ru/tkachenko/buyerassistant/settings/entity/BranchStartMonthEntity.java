@@ -19,10 +19,14 @@ public class BranchStartMonthEntity {
     @Column(name = "start_month")
     private int startMonth;
 
-    public BranchStartMonthEntity(Long id, String name, int startMonth) {
+    @Column(name = "start_year")
+    private int startYear;
+
+    public BranchStartMonthEntity(Long id, String name, int startMonth, int startYear) {
         this.id = id;
         this.name = name;
         this.startMonth = startMonth;
+        this.startYear = startYear;
     }
 
     public BranchStartMonthEntity() {
@@ -40,6 +44,8 @@ public class BranchStartMonthEntity {
         return startMonth;
     }
 
+    public int getStartYear() {return startYear;}
+
     public void setName(String name) {
         this.name = name;
     }
@@ -48,12 +54,15 @@ public class BranchStartMonthEntity {
         this.startMonth = startMonth;
     }
 
+    public void setStartYear(int startYear) {this.startYear = startYear;}
+
     @Override
     public String toString() {
-        return "BranchEntity{" +
+        return "BranchStartMonthEntity{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", startMonth=" + startMonth +
+                ", startYear=" + startYear +
                 '}';
     }
 }
