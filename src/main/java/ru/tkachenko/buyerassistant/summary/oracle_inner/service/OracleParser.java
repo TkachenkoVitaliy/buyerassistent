@@ -10,8 +10,11 @@ import ru.tkachenko.buyerassistant.summary.oracle_inner.dto.OracleDTO;
 import ru.tkachenko.buyerassistant.summary.dependency_inner.entity.DependencyEntity;
 import ru.tkachenko.buyerassistant.summary.entity.SummaryRowEntity;
 import ru.tkachenko.buyerassistant.summary.dependency_inner.service.DependencyWorker;
+import ru.tkachenko.buyerassistant.summary.oracle_inner.utils.OracleParserFilterUtil;
+import ru.tkachenko.buyerassistant.summary.oracle_inner.utils.OracleInfoUtil;
 import ru.tkachenko.buyerassistant.summary.service.ProfileParser;
 import ru.tkachenko.buyerassistant.summary.service.SummaryDBService;
+import ru.tkachenko.buyerassistant.utils.CurrentDate;
 import ru.tkachenko.buyerassistant.utils.ExcelUtils;
 import ru.tkachenko.buyerassistant.utils.RegexUtil;
 
@@ -52,6 +55,7 @@ public class OracleParser {
                 rows.add(sheet.getRow(i));
             }
             rows.parallelStream()
+                    .filter(row -> OracleParserFilterUtil.filterLastYearRows(oracleDTOColIndexes, row))
                     .map(row -> parseToOracleDTO(oracleDTOColIndexes, row))
                     .map(this::parseSummaryEntityFromOracleDTOAndDependencies)
                     .forEach(summaryDBService::save);
@@ -94,6 +98,7 @@ public class OracleParser {
     }
 
     private SummaryRowEntity parseSummaryEntityFromOracleDTOAndDependencies(OracleDTO oracleDTO) {
+        CurrentDate currentDate = new CurrentDate();
         String supplier = "ММК";
         int mill = oracleDTO.getMill();
 
@@ -125,7 +130,7 @@ public class OracleParser {
         String spec = oracleDTO.getSpec();
         int position = oracleDTO.getPosition();
         int acceptMonth = oracleDTO.getAcceptMonth();//TODO check != 0
-        int year = 2022;
+        int year = Integer.parseInt(currentDate.getYear());
         double accepted = oracleDTO.getAccepted();
         double price = oracleDTO.getPriceWithoutNDS() * 1.2;
         double acceptedCost = accepted * price;
@@ -142,5 +147,6 @@ public class OracleParser {
                 ral, issued, contract, spec, position, acceptMonth, year, accepted, price, acceptedCost, shipped,
                 shippedCost, shippedDate, vehicleNumber, invoiceNumber, invoiceDate, finalPrice, finalCost);
     }
+
 
 }
