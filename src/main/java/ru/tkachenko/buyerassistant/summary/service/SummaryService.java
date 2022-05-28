@@ -83,6 +83,7 @@ public class SummaryService {
             SummaryRowEntity entityWithAcceptMonth = summaryDBService.findSameSpecWithNotZeroAcceptMonth(entity);
             if (entityWithAcceptMonth != null) {
                 entity.setAcceptMonth(entityWithAcceptMonth.getAcceptMonth());
+                entity.setYear(entityWithAcceptMonth.getYear());
                 summaryDBService.save(entity);
             }
         }

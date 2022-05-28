@@ -31,7 +31,7 @@ public class OtherFactoriesParser {
 
     public void parse(Path filePath) {
         try(FileInputStream fis = new FileInputStream(filePath.toString());
-            XSSFWorkbook wb = new XSSFWorkbook(fis);) {
+            XSSFWorkbook wb = new XSSFWorkbook(fis)) {
             Arrays.stream(monthSheetNames)
                     .parallel()
                     .map(wb::getSheet)

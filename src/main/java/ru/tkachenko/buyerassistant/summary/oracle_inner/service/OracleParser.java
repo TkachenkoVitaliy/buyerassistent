@@ -10,11 +10,10 @@ import ru.tkachenko.buyerassistant.summary.oracle_inner.dto.OracleDTO;
 import ru.tkachenko.buyerassistant.summary.dependency_inner.entity.DependencyEntity;
 import ru.tkachenko.buyerassistant.summary.entity.SummaryRowEntity;
 import ru.tkachenko.buyerassistant.summary.dependency_inner.service.DependencyWorker;
-import ru.tkachenko.buyerassistant.summary.oracle_inner.utils.OracleParserFilterUtil;
 import ru.tkachenko.buyerassistant.summary.oracle_inner.utils.OracleInfoUtil;
+import ru.tkachenko.buyerassistant.summary.oracle_inner.utils.OracleResolver;
 import ru.tkachenko.buyerassistant.summary.service.ProfileParser;
 import ru.tkachenko.buyerassistant.summary.service.SummaryDBService;
-import ru.tkachenko.buyerassistant.utils.CurrentDate;
 import ru.tkachenko.buyerassistant.utils.ExcelUtils;
 import ru.tkachenko.buyerassistant.utils.RegexUtil;
 
@@ -54,8 +53,9 @@ public class OracleParser {
             for(int i = firstRowIndex; i <= lastRowIndex; i++) {
                 rows.add(sheet.getRow(i));
             }
+
             rows.parallelStream()
-                    .filter(row -> OracleParserFilterUtil.filterLastYearRows(oracleDTOColIndexes, row))
+//                    .filter(row -> OracleParserFilterUtil.filterLastYearRows(oracleDTOColIndexes, row))
                     .map(row -> parseToOracleDTO(oracleDTOColIndexes, row))
                     .map(this::parseSummaryEntityFromOracleDTOAndDependencies)
                     .forEach(summaryDBService::save);
@@ -80,12 +80,16 @@ public class OracleParser {
         oracleDTO.setAcceptMonth(ExcelUtils.getIntValue(colIndexes[9], row));
         oracleDTO.setAccepted(ExcelUtils.getDoubleValue(colIndexes[10], row));
         oracleDTO.setShipped(ExcelUtils.getDoubleValue(colIndexes[11], row));
+
         SimpleDateFormat shippedDateFormat = new SimpleDateFormat("dd.MM.yyyy");
         oracleDTO.setShippedDate(ExcelUtils.getDateValue(colIndexes[12], row, shippedDateFormat));
+
         oracleDTO.setVehicleNumber(ExcelUtils.getStringValue(colIndexes[13], row));
         oracleDTO.setInvoiceNumber(ExcelUtils.getIntValue(colIndexes[14], row));
+
         SimpleDateFormat invoiceDateFormat = new SimpleDateFormat("dd.MM.yyyy");
         oracleDTO.setInvoiceDate(ExcelUtils.getDateValue(colIndexes[15], row, invoiceDateFormat));
+
         oracleDTO.setPriceWithoutNDS(ExcelUtils.getDoubleValue(colIndexes[16], row));
         oracleDTO.setPrt(ExcelUtils.getStringValue(colIndexes[17], row));
         oracleDTO.setStation(ExcelUtils.getStringValue(colIndexes[18], row));
@@ -94,11 +98,14 @@ public class OracleParser {
         oracleDTO.setLength(ExcelUtils.getDoubleValue(colIndexes[21], row));
         oracleDTO.setAdditionalRequirements(ExcelUtils.getStringValue(colIndexes[22], row));
 
+        SimpleDateFormat orderDateFormat = new SimpleDateFormat("dd.MM.yyyy");
+        oracleDTO.setOrderDate(ExcelUtils.getDateValue(colIndexes[23],row, orderDateFormat));
+
         return oracleDTO;
     }
 
     private SummaryRowEntity parseSummaryEntityFromOracleDTOAndDependencies(OracleDTO oracleDTO) {
-        CurrentDate currentDate = new CurrentDate();
+        OracleResolver oracleResolver = new OracleResolver();
         String supplier = "ММК";
         int mill = oracleDTO.getMill();
 
@@ -130,7 +137,7 @@ public class OracleParser {
         String spec = oracleDTO.getSpec();
         int position = oracleDTO.getPosition();
         int acceptMonth = oracleDTO.getAcceptMonth();//TODO check != 0
-        int year = Integer.parseInt(currentDate.getYear());
+        int year = oracleResolver.resolveYear(oracleDTO);
         double accepted = oracleDTO.getAccepted();
         double price = oracleDTO.getPriceWithoutNDS() * 1.2;
         double acceptedCost = accepted * price;

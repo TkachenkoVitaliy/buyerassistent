@@ -27,12 +27,13 @@ public class OracleDTO {
     private double width;
     private double length;
     private String additionalRequirements;
+    private Date orderDate;
 
     public OracleDTO(int mill, String consignee, String productType, String profile, String grade, String ral,
                      String contract, String spec, int position, int accept_month, double accepted, double shipped,
                      Date shipped_date, String vehicle_number, int invoice_number, Date invoice_date,
                      double priceWithoutNDS, String prt, String station, double thickness, double width, double length,
-                     String additionalRequirements) {
+                     String additionalRequirements, Date orderDate) {
         this.mill = mill;
         this.consignee = consignee;
         this.productType = productType;
@@ -56,6 +57,7 @@ public class OracleDTO {
         this.width = width;
         this.length = length;
         this.additionalRequirements = additionalRequirements;
+        this.orderDate = orderDate;
     }
 
     public OracleDTO() {
@@ -239,6 +241,14 @@ public class OracleDTO {
 
     public String getAdditionalRequirements() {
         return additionalRequirements;
+    }
+
+    public Date getOrderDate() {
+        return orderDate;
+    }
+
+    public void setOrderDate(Date orderDate) {
+        this.orderDate = orderDate;
     }
 
     public void setAdditionalRequirements(String additionalRequirements) {

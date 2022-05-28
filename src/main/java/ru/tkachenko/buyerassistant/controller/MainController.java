@@ -42,8 +42,10 @@ public class MainController {
     private final BranchStartMonthService branchStartMonthService;
 
     @Autowired
-    public MainController(FileStorageService fileStorageService, FileDownloadService fileDownloadService, MmkAcceptService mmkAcceptService,
-                          SummaryService summaryService, EmailSenderService emailSenderService, MailService mailService, BranchStartMonthService branchStartMonthService) {
+    public MainController(FileStorageService fileStorageService, FileDownloadService fileDownloadService,
+                          MmkAcceptService mmkAcceptService, SummaryService summaryService,
+                          EmailSenderService emailSenderService, MailService mailService,
+                          BranchStartMonthService branchStartMonthService) {
         this.fileStorageService = fileStorageService;
         this.fileDownloadService = fileDownloadService;
         this.mmkAcceptService = mmkAcceptService;

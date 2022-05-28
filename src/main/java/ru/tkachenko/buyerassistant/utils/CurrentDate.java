@@ -38,4 +38,12 @@ public class CurrentDate {
     public String getTime() {
         return time;
     }
+
+    public int getYearInt() {
+        return Integer.parseInt(year);
+    }
+
+    public int getMonthInt() {
+        return Integer.parseInt(month);
+    }
 }
