@@ -6,11 +6,11 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import ru.tkachenko.buyerassistant.property.FileStorageProperties;
 
 @SpringBootApplication
-@EnableConfigurationProperties({ FileStorageProperties.class})
+@EnableConfigurationProperties({FileStorageProperties.class})
 
 public class Application {
 
-    public static void main (String[] args) {
+    public static void main(String[] args) {
         SpringApplication.run(Application.class, args);
     }
 }

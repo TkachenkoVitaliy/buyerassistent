@@ -32,4 +32,12 @@ public class ProductGroupEntity {
     public void setProductGroup(String productGroup) {
         this.productGroup = productGroup;
     }
+
+    @Override
+    public String toString() {
+        return "ProductGroupEntity{" +
+                "id=" + id +
+                ", productGroup='" + productGroup + '\'' +
+                '}';
+    }
 }

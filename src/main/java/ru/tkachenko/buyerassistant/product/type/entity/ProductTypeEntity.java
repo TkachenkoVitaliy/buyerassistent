@@ -20,7 +20,7 @@ public class ProductTypeEntity {
     private Long groupId;
 
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JoinColumn(name = "productGroup")
+    @JoinColumn(name = "product_group")
     private ProductGroupEntity productGroupEntity;
 
     public ProductTypeEntity(String productType, Long groupId) {
@@ -57,5 +57,15 @@ public class ProductTypeEntity {
 
     public void setProductGroupEntity(ProductGroupEntity productGroupEntity) {
         this.productGroupEntity = productGroupEntity;
+    }
+
+    @Override
+    public String toString() {
+        return "ProductTypeEntity{" +
+                "id=" + id +
+                ", productType='" + productType + '\'' +
+                ", groupId=" + groupId +
+                ", productGroupEntity=" + productGroupEntity +
+                '}';
     }
 }

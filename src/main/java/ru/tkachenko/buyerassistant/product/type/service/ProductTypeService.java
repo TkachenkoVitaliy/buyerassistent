@@ -17,7 +17,7 @@ public class ProductTypeService {
         this.productTypeRepository = productTypeRepository;
     }
 
-    public List<ProductTypeEntity> findProductTypeEntitiesByProductGroup(ProductGroupEntity productGroupEntity) {
-        return productTypeRepository.findAllByGroup(productGroupEntity);
+    public List<ProductTypeEntity> findProductTypeEntitiesByProductGroupId(ProductGroupEntity productGroupEntity) {
+        return productTypeRepository.findAllByGroupId(productGroupEntity.getId());
     }
 }

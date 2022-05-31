@@ -106,7 +106,7 @@ CREATE TABLE IF NOT EXISTS product_type_table
     product_type VARCHAR(50),
     product_group_id BIGINT REFERENCES product_group_table (id)
 
-);
+)
 
 
 
