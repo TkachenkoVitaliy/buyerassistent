@@ -1,6 +1,7 @@
 package ru.tkachenko.buyerassistant.product.group.entity;
 
 import javax.persistence.*;
+import java.util.Objects;
 
 @Entity
 @Table(name = "product_group_table")
@@ -39,5 +40,18 @@ public class ProductGroupEntity {
                 "id=" + id +
                 ", productGroup='" + productGroup + '\'' +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ProductGroupEntity that = (ProductGroupEntity) o;
+        return Objects.equals(productGroup, that.productGroup);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(productGroup);
     }
 }

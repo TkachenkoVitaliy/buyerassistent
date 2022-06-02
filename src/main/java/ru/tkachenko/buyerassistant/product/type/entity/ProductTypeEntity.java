@@ -19,7 +19,9 @@ public class ProductTypeEntity {
     @Column(name = "product_group_id")
     private Long groupId;
 
-    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @ManyToOne(targetEntity = ProductGroupEntity.class,
+            fetch = FetchType.EAGER,
+            cascade = CascadeType.ALL)
     @JoinColumn(name = "product_group")
     private ProductGroupEntity productGroupEntity;
 
