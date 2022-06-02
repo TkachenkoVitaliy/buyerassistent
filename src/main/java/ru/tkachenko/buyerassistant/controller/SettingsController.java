@@ -64,8 +64,6 @@ public class SettingsController {
     @DeleteMapping("/settings/mail")
     public ModelAndView removeMail(@RequestParam("removeId") Long id, Model model) {
 
-//    @DeleteMapping("/setting/mail/{id}")
-//    public ModelAndView removeMail(@PathVariable("id") Long id, Model model) {
         mailService.deleteById(id);
 
         List<BranchStartMonthEntity> allBranches = branchStartMonthService.getAllBranchStartMonthEntitiesOrdered();
