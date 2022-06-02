@@ -1,32 +1,42 @@
 package ru.tkachenko.buyerassistant.utils;
 
-import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
-import ru.tkachenko.buyerassistant.product.ProductService;
+import ru.tkachenko.buyerassistant.product.ProductParser;
 import ru.tkachenko.buyerassistant.product.group.entity.ProductGroupEntity;
+import ru.tkachenko.buyerassistant.product.group.service.ProductGroupService;
 import ru.tkachenko.buyerassistant.product.type.entity.ProductTypeEntity;
-import ru.tkachenko.buyerassistant.product.type.repository.ProductTypeRepository;
+import ru.tkachenko.buyerassistant.product.type.service.ProductTypeService;
 
 import java.nio.file.Path;
 import java.util.List;
 
 @RestController
 public class ProductController {
-    ProductService productService;
-    ProductTypeRepository productTypeRepository;
+    ProductParser productParser;
+    ProductTypeService productTypeService;
+    ProductGroupService productGroupService;
 
     @Autowired
-    public ProductController(ProductService productService, ProductTypeRepository productTypeRepository) {
-        this.productService = productService;
-        this.productTypeRepository = productTypeRepository;
+    public ProductController(ProductParser productParser, ProductTypeService productTypeService, ProductGroupService productGroupService) {
+        this.productParser = productParser;
+        this.productTypeService = productTypeService;
+        this.productGroupService = productGroupService;
     }
 
-    @Test
-    void checkParser() {
-        Path path = Path.of("C:\\Users\\Administrator\\Downloads\\Telegram Desktop\\type-group.xlsx");
-        productService.parseFileToDatabase(path);
-        List<ProductTypeEntity> entities = productTypeRepository.findAllByProductGroupEntity(new ProductGroupEntity("Фасон"));
+
+
+    @GetMapping("/test")
+    public String checkParser() {
+        Path path = Path.of("C:\\Users\\Admin\\Downloads\\Telegram Desktop\\type-group.xlsx");
+        productParser.parseFileToDatabase(path);
+        ProductGroupEntity en = productGroupService.findFirstByProductGroup("Арматура");
+        List<ProductTypeEntity> entities = productTypeService.findAllByGroupId(en.getId());
+        System.out.println(productTypeService.findAll().size());
+        System.out.println(productGroupService.findAll().size());
+        System.out.println(entities.size());
         entities.forEach(System.out::println);
+        return "HI";
     }
 }

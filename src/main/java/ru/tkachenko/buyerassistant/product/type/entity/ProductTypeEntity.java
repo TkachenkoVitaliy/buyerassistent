@@ -19,11 +19,6 @@ public class ProductTypeEntity {
     @Column(name = "product_group_id")
     private Long groupId;
 
-    @ManyToOne(targetEntity = ProductGroupEntity.class,
-            fetch = FetchType.EAGER,
-            cascade = CascadeType.ALL)
-    @JoinColumn(name = "product_group")
-    private ProductGroupEntity productGroupEntity;
 
     public ProductTypeEntity(String productType, Long groupId) {
         this.productType = productType;
@@ -53,21 +48,12 @@ public class ProductTypeEntity {
         this.groupId = groupId;
     }
 
-    public ProductGroupEntity getProductGroupEntity() {
-        return productGroupEntity;
-    }
-
-    public void setProductGroupEntity(ProductGroupEntity productGroupEntity) {
-        this.productGroupEntity = productGroupEntity;
-    }
-
     @Override
     public String toString() {
         return "ProductTypeEntity{" +
                 "id=" + id +
                 ", productType='" + productType + '\'' +
                 ", groupId=" + groupId +
-                ", productGroupEntity=" + productGroupEntity +
                 '}';
     }
 }

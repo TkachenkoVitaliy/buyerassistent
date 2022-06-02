@@ -100,13 +100,16 @@ CREATE TABLE IF NOT EXISTS product_group_table
 
 );
 
+CREATE SEQUENCE IF NOT EXISTS hibernate_sequence START WITH 1 INCREMENT BY 1;
+
 CREATE TABLE IF NOT EXISTS product_type_table
 (
     id BIGINT PRIMARY KEY,
     product_type VARCHAR(50),
     product_group_id BIGINT REFERENCES product_group_table (id)
 
-)
+);
+CREATE SEQUENCE IF NOT EXISTS hibernate_sequence START WITH 1 INCREMENT BY 1;
 
 
 
