@@ -9,7 +9,12 @@ public class OracleResolver {
 
     public int resolveYear(OracleDTO oracleDTO) {
         java.sql.Date orderDate = oracleDTO.getOrderDate();
-        int orderYear = orderDate.getYear() + 1900;
+        int orderYear = 0;
+        if(orderDate.getYear() < 0) {
+            orderYear = orderDate.getYear() + 1900 + 2000;
+        } else {
+            orderYear = orderDate.getYear() + 1900;
+        }
         int orderMonth = orderDate.getMonth() + 1;
         int orderCode = getMonthsCount(orderYear, orderMonth);
 
