@@ -14,11 +14,10 @@ public class ProductGroupEntity {
     @Column(name = "id")
     private Long id;
 
-    @Column(name = "product_group")
-    private String productGroup;
+    private String name;
 
     public ProductGroupEntity(String productGroup) {
-        this.productGroup = productGroup;
+        this.name = productGroup;
     }
 
     public ProductGroupEntity() {
@@ -28,19 +27,19 @@ public class ProductGroupEntity {
         return id;
     }
 
-    public String getProductGroup() {
-        return productGroup;
+    public String getName() {
+        return name;
     }
 
-    public void setProductGroup(String productGroup) {
-        this.productGroup = productGroup;
+    public void setName(String productGroup) {
+        this.name = productGroup;
     }
 
     @Override
     public String toString() {
         return "ProductGroupEntity{" +
                 "id=" + id +
-                ", productGroup='" + productGroup + '\'' +
+                ", productGroup='" + name + '\'' +
                 '}';
     }
 
@@ -49,11 +48,11 @@ public class ProductGroupEntity {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         ProductGroupEntity that = (ProductGroupEntity) o;
-        return Objects.equals(productGroup, that.productGroup);
+        return Objects.equals(name, that.name);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(productGroup);
+        return Objects.hash(name);
     }
 }

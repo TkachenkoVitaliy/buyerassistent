@@ -30,13 +30,13 @@ DECLARE
 BEGIN
     SELECT COUNT(*) INTO valueCounts FROM product_group_table;
     IF valueCounts = 0 THEN
-        INSERT INTO product_group_table (id, product_group) values (1, ''Арматура'');
-        INSERT INTO product_group_table (id, product_group) values (2, ''Прокат г/к'');
-        INSERT INTO product_group_table (id, product_group) values (3, ''Прокат х/к'');
-        INSERT INTO product_group_table (id, product_group) values (4, ''Прокат ГЦ'');
-        INSERT INTO product_group_table (id, product_group) values (5, ''Полимеры'');
-        INSERT INTO product_group_table (id, product_group) values (6, ''Фасон'');
-        INSERT INTO product_group_table (id, product_group) values (7, ''Труба'');
+        INSERT INTO product_group_table (name) values (''Арматура'');
+        INSERT INTO product_group_table (name) values (''Прокат г/к'');
+        INSERT INTO product_group_table (name) values (''Прокат х/к'');
+        INSERT INTO product_group_table (name) values (''Прокат ГЦ'');
+        INSERT INTO product_group_table (name) values (''Полимеры'');
+        INSERT INTO product_group_table (name) values (''Фасон'');
+        INSERT INTO product_group_table (name) values (''Труба'');
     END IF;
 END
 ' LANGUAGE plpgsql;
