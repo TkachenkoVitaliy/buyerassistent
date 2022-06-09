@@ -41,6 +41,7 @@ public class MainController {
     private final MailService mailService;
     private final BranchStartMonthService branchStartMonthService;
 
+
     @Autowired
     public MainController(FileStorageService fileStorageService, FileDownloadService fileDownloadService,
                           MmkAcceptService mmkAcceptService, SummaryService summaryService,
@@ -53,7 +54,10 @@ public class MainController {
         this.emailSenderService = emailSenderService;
         this.mailService = mailService;
         this.branchStartMonthService = branchStartMonthService;
+
+
     }
+
 
     @PostMapping("/uploadAccept")
     public ModelAndView uploadAccept(@RequestParam("mmkAccept") MultipartFile mmkAccept, Model model) {
@@ -74,8 +78,8 @@ public class MainController {
 
     @PostMapping("/uploadMultipleFiles")
     public ModelAndView uploadMultipleFiles(@RequestParam("otherFactories") MultipartFile otherFactories,
-                                      @RequestParam("oracleMmk") MultipartFile oracleMmk,
-                                      @RequestParam("dependenciesMmk") MultipartFile dependenciesMmk, Model model) {
+                                            @RequestParam("oracleMmk") MultipartFile oracleMmk,
+                                            @RequestParam("dependenciesMmk") MultipartFile dependenciesMmk, Model model) {
         //TODO remove timer
         TimerUtil timerUtil = new TimerUtil();
         //TODO remove timer
@@ -112,9 +116,9 @@ public class MainController {
         List<Path> createdBranchesFiles = summaryService.createAllBranchesFiles();
         for (Path filePath : createdBranchesFiles) {
             try {
-                String branchName = filePath.getFileName().toString().replace(".xlsx","");
+                String branchName = filePath.getFileName().toString().replace(".xlsx", "");
                 List<MailEntity> mailEntities = mailService.getMailsByName(branchName);
-                for(MailEntity mailEntity : mailEntities ) {
+                for (MailEntity mailEntity : mailEntities) {
                     String emailAddress = mailEntity.getEmailAddress();
                     String subject = "Акцепт-отгрузка " + branchName;
                     emailSenderService.sendMailWithAttachment(emailAddress, subject, message, filePath.toString());
@@ -127,7 +131,7 @@ public class MainController {
             }
 
         }
-        model.addAttribute("sendEmails",resultForUser);
+        model.addAttribute("sendEmails", resultForUser);
         return createUserResponse(model, "Email send complete");
     }
 

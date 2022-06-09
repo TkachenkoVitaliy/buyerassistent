@@ -114,4 +114,17 @@ CREATE TABLE IF NOT EXISTS usr_role
     FOREIGN KEY (role_id) REFERENCES role (role_id)
 );
 
+CREATE TABLE IF NOT EXISTS product_group_table
+(
+    id BIGINT PRIMARY KEY,
+    product_group VARCHAR(50)
 
+);
+
+CREATE TABLE IF NOT EXISTS product_type_table
+(
+    id BIGINT PRIMARY KEY,
+    product_type VARCHAR(50),
+    product_group_id BIGINT REFERENCES product_group_table (id)
+
+);
