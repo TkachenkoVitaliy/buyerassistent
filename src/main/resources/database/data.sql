@@ -28,24 +28,6 @@ do '
 DECLARE
     valueCounts INTEGER;
 BEGIN
-    SELECT COUNT(*) INTO valueCounts FROM product_group_table;
-    IF valueCounts = 0 THEN
-        INSERT INTO product_group_table (name) values (''Арматура'');
-        INSERT INTO product_group_table (name) values (''Прокат г/к'');
-        INSERT INTO product_group_table (name) values (''Прокат х/к'');
-        INSERT INTO product_group_table (name) values (''Прокат ГЦ'');
-        INSERT INTO product_group_table (name) values (''Полимеры'');
-        INSERT INTO product_group_table (name) values (''Фасон'');
-        INSERT INTO product_group_table (name) values (''Труба'');
-    END IF;
-END
-' LANGUAGE plpgsql;
-
-
-do '
-DECLARE
-    valueCounts INTEGER;
-BEGIN
     SELECT COUNT(*) INTO valueCounts FROM role;
     IF valueCounts = 0 THEN
         INSERT INTO role (name) values (''USER'');
@@ -71,39 +53,57 @@ do '
 DECLARE
     valueCounts INTEGER;
 BEGIN
+    SELECT COUNT(*) INTO valueCounts FROM product_group_table;
+    IF valueCounts = 0 THEN
+        INSERT INTO product_group_table (name) values (''Арматура'');
+        INSERT INTO product_group_table (name) values (''Прокат г/к'');
+        INSERT INTO product_group_table (name) values (''Прокат х/к'');
+        INSERT INTO product_group_table (name) values (''Прокат ГЦ'');
+        INSERT INTO product_group_table (name) values (''Полимеры'');
+        INSERT INTO product_group_table (name) values (''Фасон'');
+        INSERT INTO product_group_table (name) values (''Труба'');
+    END IF;
+END
+' LANGUAGE plpgsql;
+
+
+do '
+DECLARE
+    valueCounts INTEGER;
+BEGIN
     SELECT COUNT(*) INTO valueCounts FROM product_type_table;
     IF valueCounts = 0 THEN
-        INSERT INTO product_type_table (id, product_type, product_group_id) values (1, ''Лист г/к'', 2);
-        INSERT INTO product_type_table (id, product_type, product_group_id) values (2, ''Арматура'', 1);
-        INSERT INTO product_type_table (id, product_type, product_group_id) values (3, ''Полоса'', 6);
-        INSERT INTO product_type_table (id, product_type, product_group_id) values (4, ''лист х/к'', 3);
-        INSERT INTO product_type_table (id, product_type, product_group_id) values (5, ''лист г/к чечевица'', 2);
-        INSERT INTO product_type_table (id, product_type, product_group_id) values (6, ''лента г/к'', 2);
-        INSERT INTO product_type_table (id, product_type, product_group_id) values (7, ''квадрат'', 6);
-        INSERT INTO product_type_table (id, product_type, product_group_id) values (8, ''УГОЛ'', 6);
-        INSERT INTO product_type_table (id, product_type, product_group_id) values (9, ''уголок'', 6);
-        INSERT INTO product_type_table (id, product_type, product_group_id) values (10, ''швеллер'', 6);
-        INSERT INTO product_type_table (id, product_type, product_group_id) values (11, ''рулон х/к'', 3);
-        INSERT INTO product_type_table (id, product_type, product_group_id) values (12, ''рулон х/к цинк'', 4);
-        INSERT INTO product_type_table (id, product_type, product_group_id) values (13, ''лента х/к'', 3);
-        INSERT INTO product_type_table (id, product_type, product_group_id) values (14, ''лист гц'', 4);
-        INSERT INTO product_type_table (id, product_type, product_group_id) values (15, ''лента гц'', 4);
-        INSERT INTO product_type_table (id, product_type, product_group_id) values (16, ''лента гц'', 2);
-        INSERT INTO product_type_table (id, product_type, product_group_id) values (17, ''лист г/к ромбическое рифление'', 2);
-        INSERT INTO product_type_table (id, product_type, product_group_id) values (18, ''лист г/к чеч'', 2);
-        INSERT INTO product_type_table (id, product_type, product_group_id) values (19, ''лист г/к'', 2);
-        INSERT INTO product_type_table (id, product_type, product_group_id) values (20, ''лист г/к чечевичное рифление'', 2);
-        INSERT INTO product_type_table (id, product_type, product_group_id) values (21, ''рулон г/ц'', 4);
-        INSERT INTO product_type_table (id, product_type, product_group_id) values (22, ''Круг'', 1);
-        INSERT INTO product_type_table (id, product_type, product_group_id) values (23, ''Рулон ГЦ_полимер'', 5);
-        INSERT INTO product_type_table (id, product_type, product_group_id) values (24, ''Рулон ГЦ'', 4);
-        INSERT INTO product_type_table (id, product_type, product_group_id) values (25, ''Уголок г/к'', 6);
-        INSERT INTO product_type_table (id, product_type, product_group_id) values (26, ''Лист г/к травленый'', 2);
-        INSERT INTO product_type_table (id, product_type, product_group_id) values (27, ''Швеллер г/к'', 6);
-        INSERT INTO product_type_table (id, product_type, product_group_id) values (28, ''Профиль арматурный_моток'', 1);
-        INSERT INTO product_type_table (id, product_type, product_group_id) values (29, ''Спецпрофиль х/г'', 6);
-        INSERT INTO product_type_table (id, product_type, product_group_id) values (30, ''Рулон г/к'', 2);
-        INSERT INTO product_type_table (id, product_type, product_group_id) values (31, ''Спецпрофиль г/к'', 6);
+        INSERT INTO product_type_table (product_type, product_group_id) values (''Лист г/к'', 2);
+        INSERT INTO product_type_table (product_type, product_group_id) values (''Арматура'', 1);
+        INSERT INTO product_type_table (product_type, product_group_id) values (''Полоса'', 6);
+        INSERT INTO product_type_table (product_type, product_group_id) values (''лист х/к'', 3);
+        INSERT INTO product_type_table (product_type, product_group_id) values (''лист г/к чечевица'', 2);
+        INSERT INTO product_type_table (product_type, product_group_id) values (''лента г/к'', 2);
+        INSERT INTO product_type_table (product_type, product_group_id) values (''квадрат'', 6);
+        INSERT INTO product_type_table (product_type, product_group_id) values (''УГОЛ'', 6);
+        INSERT INTO product_type_table (product_type, product_group_id) values (''уголок'', 6);
+        INSERT INTO product_type_table (product_type, product_group_id) values (''швеллер'', 6);
+        INSERT INTO product_type_table (product_type, product_group_id) values (''рулон х/к'', 3);
+        INSERT INTO product_type_table (product_type, product_group_id) values (''рулон х/к цинк'', 4);
+        INSERT INTO product_type_table (product_type, product_group_id) values (''лента х/к'', 3);
+        INSERT INTO product_type_table (product_type, product_group_id) values (''лист гц'', 4);
+        INSERT INTO product_type_table (product_type, product_group_id) values (''лента гц'', 4);
+        INSERT INTO product_type_table (product_type, product_group_id) values (''лента гц'', 2);
+        INSERT INTO product_type_table (product_type, product_group_id) values (''лист г/к ромбическое рифление'', 2);
+        INSERT INTO product_type_table (product_type, product_group_id) values (''лист г/к чеч'', 2);
+        INSERT INTO product_type_table (product_type, product_group_id) values (''лист г/к'', 2);
+        INSERT INTO product_type_table (product_type, product_group_id) values (''лист г/к чечевичное рифление'', 2);
+        INSERT INTO product_type_table (product_type, product_group_id) values (''рулон г/ц'', 4);
+        INSERT INTO product_type_table (product_type, product_group_id) values (''Круг'', 1);
+        INSERT INTO product_type_table (product_type, product_group_id) values (''Рулон ГЦ_полимер'', 5);
+        INSERT INTO product_type_table (product_type, product_group_id) values (''Рулон ГЦ'', 4);
+        INSERT INTO product_type_table (product_type, product_group_id) values (''Уголок г/к'', 6);
+        INSERT INTO product_type_table (product_type, product_group_id) values (''Лист г/к травленый'', 2);
+        INSERT INTO product_type_table (product_type, product_group_id) values (''Швеллер г/к'', 6);
+        INSERT INTO product_type_table (product_type, product_group_id) values (''Профиль арматурный_моток'', 1);
+        INSERT INTO product_type_table (product_type, product_group_id) values (''Спецпрофиль х/г'', 6);
+        INSERT INTO product_type_table (product_type, product_group_id) values (''Рулон г/к'', 2);
+        INSERT INTO product_type_table (product_type, product_group_id) values (''Спецпрофиль г/к'', 6);
     END IF;
 END
 ' LANGUAGE plpgsql; 

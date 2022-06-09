@@ -13,16 +13,19 @@ public class ProductTypeEntity {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @Column(name = "product_type")
-    private String productType;
+    private String name;
 
     @Column(name = "product_group_id")
-    private Long groupId;
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinTable(name="product_group_table")
+    @JoinColumn(name="id")
+    private ProductGroupEntity productGroupEntity;
 
 
-    public ProductTypeEntity(String productType, Long groupId) {
-        this.productType = productType;
-        this.groupId = groupId;
+    public ProductTypeEntity(Long id, String name, ProductGroupEntity productGroupEntity) {
+        this.id = id;
+        this.name = name;
+        this.productGroupEntity = productGroupEntity;
     }
 
     public ProductTypeEntity() {
@@ -32,12 +35,12 @@ public class ProductTypeEntity {
         return id;
     }
 
-    public String getProductType() {
-        return productType;
+    public String getName() {
+        return name;
     }
 
-    public void setProductType(String productType) {
-        this.productType = productType;
+    public void setName(String productType) {
+        this.name = productType;
     }
 
     public Long getGroupId() {
@@ -52,7 +55,7 @@ public class ProductTypeEntity {
     public String toString() {
         return "ProductTypeEntity{" +
                 "id=" + id +
-                ", productType='" + productType + '\'' +
+                ", productType='" + name + '\'' +
                 ", groupId=" + groupId +
                 '}';
     }
