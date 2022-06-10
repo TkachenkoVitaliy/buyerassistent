@@ -10,12 +10,11 @@ public class ProductTypeEntity {
 
     @Id
     @Column(name = "id")
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String name;
 
-    @Column(name = "product_group_id")
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinTable(name="product_group_table")
     @JoinColumn(name="id")
@@ -43,20 +42,20 @@ public class ProductTypeEntity {
         this.name = productType;
     }
 
-    public Long getGroupId() {
-        return groupId;
+    public ProductGroupEntity getProductGroupEntity() {
+        return productGroupEntity;
     }
 
-    public void setGroupId(Long groupId) {
-        this.groupId = groupId;
+    public void setProductGroupEntity(ProductGroupEntity productGroupEntity) {
+        this.productGroupEntity = productGroupEntity;
     }
 
     @Override
     public String toString() {
         return "ProductTypeEntity{" +
                 "id=" + id +
-                ", productType='" + name + '\'' +
-                ", groupId=" + groupId +
+                ", name='" + name + '\'' +
+                ", productGroupEntity=" + productGroupEntity +
                 '}';
     }
 }
