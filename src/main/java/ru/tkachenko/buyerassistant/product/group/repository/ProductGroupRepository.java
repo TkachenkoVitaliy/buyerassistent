@@ -6,7 +6,7 @@ import ru.tkachenko.buyerassistant.product.group.entity.ProductGroupEntity;
 
 @Repository
 public interface ProductGroupRepository extends JpaRepository<ProductGroupEntity, Long> {
-    ProductGroupEntity findFirstByProductGroup(String group);
+    ProductGroupEntity findFirstByName(String name);
 
 
 }

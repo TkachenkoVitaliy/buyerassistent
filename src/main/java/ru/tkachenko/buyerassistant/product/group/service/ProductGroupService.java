@@ -27,8 +27,8 @@ public class ProductGroupService {
         productGroupRepository.deleteAll();
     }
 
-    public ProductGroupEntity findFirstByProductGroup(String productGroup){
-        return productGroupRepository.findFirstByProductGroup(productGroup);
+    public ProductGroupEntity findFirstByProductGroup(String name){
+        return productGroupRepository.findFirstByName(name);
     }
 
 }

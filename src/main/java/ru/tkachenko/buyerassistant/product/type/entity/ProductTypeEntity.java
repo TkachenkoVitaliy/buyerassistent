@@ -15,16 +15,14 @@ public class ProductTypeEntity {
 
     private String name;
 
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    @JoinTable(name="product_group_table")
-    @JoinColumn(name="id")
-    private ProductGroupEntity productGroupEntity;
+    @ManyToOne
+    private ProductGroupEntity productGroup;
 
 
-    public ProductTypeEntity(Long id, String name, ProductGroupEntity productGroupEntity) {
+    public ProductTypeEntity(Long id, String name, ProductGroupEntity productGroup) {
         this.id = id;
         this.name = name;
-        this.productGroupEntity = productGroupEntity;
+        this.productGroup = productGroup;
     }
 
     public ProductTypeEntity() {
@@ -42,12 +40,12 @@ public class ProductTypeEntity {
         this.name = productType;
     }
 
-    public ProductGroupEntity getProductGroupEntity() {
-        return productGroupEntity;
+    public ProductGroupEntity getProductGroup() {
+        return productGroup;
     }
 
-    public void setProductGroupEntity(ProductGroupEntity productGroupEntity) {
-        this.productGroupEntity = productGroupEntity;
+    public void setProductGroup(ProductGroupEntity productGroupEntity) {
+        this.productGroup = productGroupEntity;
     }
 
     @Override
@@ -55,7 +53,7 @@ public class ProductTypeEntity {
         return "ProductTypeEntity{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
-                ", productGroupEntity=" + productGroupEntity +
+                ", productGroupEntity=" + productGroup +
                 '}';
     }
 }

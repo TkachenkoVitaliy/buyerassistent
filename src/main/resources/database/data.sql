@@ -73,6 +73,7 @@ BEGIN
         INSERT INTO product_group_table (name) values (''Полимеры'');
         INSERT INTO product_group_table (name) values (''Фасон'');
         INSERT INTO product_group_table (name) values (''Труба'');
+        INSERT INTO product_group_table (name) values (''Не определена'');
     END IF;
 END
 ' LANGUAGE plpgsql;
@@ -91,6 +92,7 @@ BEGIN
         INSERT INTO product_type_table (name, product_group_id) values (''лист г/к чечевица'', 2);
         INSERT INTO product_type_table (name, product_group_id) values (''лента г/к'', 2);
         INSERT INTO product_type_table (name, product_group_id) values (''квадрат'', 6);
+        INSERT INTO product_type_table (name, product_group_id) values (''УГОЛ'', 6);
         INSERT INTO product_type_table (name, product_group_id) values (''уголок'', 6);
         INSERT INTO product_type_table (name, product_group_id) values (''швеллер'', 6);
         INSERT INTO product_type_table (name, product_group_id) values (''рулон х/к'', 3);
@@ -98,7 +100,7 @@ BEGIN
         INSERT INTO product_type_table (name, product_group_id) values (''лента х/к'', 3);
         INSERT INTO product_type_table (name, product_group_id) values (''лист гц'', 4);
         INSERT INTO product_type_table (name, product_group_id) values (''лента гц'', 4);
-        INSERT INTO product_type_table (name, product_group_id) values (''лента гц'', 2);
+        INSERT INTO product_type_table (name, product_group_id) values (''лист г/к чечевичка'', 2);
         INSERT INTO product_type_table (name, product_group_id) values (''лист г/к ромбическое рифление'', 2);
         INSERT INTO product_type_table (name, product_group_id) values (''лист г/к чеч'', 2);
         INSERT INTO product_type_table (name, product_group_id) values (''лист г/к'', 2);

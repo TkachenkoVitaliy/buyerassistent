@@ -9,8 +9,8 @@ import java.util.List;
 @Repository
 public interface ProductTypeRepository extends JpaRepository<ProductTypeEntity, Long> {
 
-    List<ProductTypeEntity> findAllByGroupId(Long id);
-
     List<ProductTypeEntity> findAll();
+
+    ProductTypeEntity findByName(String name);
 
 }

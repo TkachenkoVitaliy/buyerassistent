@@ -37,7 +37,7 @@ public class ProductGroupEntity {
     public String toString() {
         return "ProductGroupEntity{" +
                 "id=" + id +
-                ", productGroup='" + name + '\'' +
+                ", name='" + name + '\'' +
                 '}';
     }
 
