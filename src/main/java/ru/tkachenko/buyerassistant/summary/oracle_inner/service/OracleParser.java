@@ -127,7 +127,6 @@ public class OracleParser {
             profile = RegexUtil.replaceDelimiterAndDot(withoutFractional);
         } else {
             profile = profileParser.parse(oracleDTO.getProductType(), oracleDTO.getSpec(), oracleDTO.getPosition());
-            //TODO method for parse profile
         }
 
         String grade = oracleDTO.getGrade();
@@ -149,10 +148,12 @@ public class OracleParser {
         Date invoiceDate = oracleDTO.getInvoiceDate();
         double finalPrice = 0.0;
         double finalCost = shipped * price;
+        String additionalReq = profileParser.parseAdditionalReq(oracleDTO.getSpec(), oracleDTO.getPosition());
 
         return new SummaryRowEntity(supplier, mill, branch, sellType, client, consignee, productType, profile, grade,
                 ral, issued, contract, spec, position, acceptMonth, year, accepted, price, acceptedCost, shipped,
-                shippedCost, shippedDate, vehicleNumber, invoiceNumber, invoiceDate, finalPrice, finalCost);
+                shippedCost, shippedDate, vehicleNumber, invoiceNumber, invoiceDate, finalPrice, finalCost,
+                additionalReq);
     }
 
 

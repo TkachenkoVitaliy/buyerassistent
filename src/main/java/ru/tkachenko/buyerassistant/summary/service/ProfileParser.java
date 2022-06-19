@@ -219,4 +219,16 @@ public class ProfileParser {
         }
         return RegexUtil.replaceDotToComma(result);
     }
+
+    public String parseAdditionalReq(String spec, int position) {
+        MmkAcceptRowEntity acceptEntity = mmkAcceptDBService.findEntityBySpecAndPosition(spec, position);
+        if(acceptEntity != null) {
+            String additionalReq = acceptEntity.getAdditionalRequirements();
+            if (additionalReq != null && !additionalReq.equals("")) {
+                return additionalReq;
+            }
+        }
+
+        return "";
+    }
 }

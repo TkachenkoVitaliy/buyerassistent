@@ -93,12 +93,15 @@ public class SummaryRowEntity {
     @Column(name = "final_cost")//27
     private double finalCost;
 
+    @Column(name = "additional_req")//28
+    private String additionalReq;
+
     public SummaryRowEntity(String supplier, int mill, String branch, String sellType, String client, String consignee,
                             String productType, String profile, String grade, String ral, double issued,
                             String contract, String spec, int position, int acceptMonth, int year, double accepted,
                             double price, double acceptedCost, double shipped, double shippedCost, Date shippedDate,
                             String vehicleNumber, int invoiceNumber, Date invoiceDate, double finalPrice,
-                            double finalCost) {
+                            double finalCost, String additionalReq) {
         this.supplier = supplier;
         this.mill = mill;
         this.branch = branch;
@@ -126,6 +129,7 @@ public class SummaryRowEntity {
         this.invoiceDate = invoiceDate;
         this.finalPrice = finalPrice;
         this.finalCost = finalCost;
+        this.additionalReq = additionalReq;
     }
 
     public SummaryRowEntity() {
@@ -243,6 +247,10 @@ public class SummaryRowEntity {
         return finalCost;
     }
 
+    public String getAdditionalReq() {
+        return additionalReq;
+    }
+
     public void setSupplier(String supplier) {
         this.supplier = supplier;
     }
@@ -349,5 +357,9 @@ public class SummaryRowEntity {
 
     public void setFinalCost(double final_cost) {
         this.finalCost = final_cost;
+    }
+
+    public void setAdditionalReq(String additionalReq) {
+        this.additionalReq = additionalReq;
     }
 }

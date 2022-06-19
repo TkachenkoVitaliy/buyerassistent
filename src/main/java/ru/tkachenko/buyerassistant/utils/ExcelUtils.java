@@ -146,20 +146,21 @@ public class ExcelUtils {
     }
 
     public static void setColumnWidthBranchFile(Sheet sheet) {
-        sheet.setColumnWidth(0, 24*256);
-        sheet.setColumnWidth(1, 7*256);
-        sheet.setColumnWidth(2, 13*256);
-        sheet.setColumnWidth(3, 26*256);
-        sheet.setColumnWidth(4, 29*256);
-        sheet.setColumnWidth(5, 20*256);
-        sheet.setColumnWidth(6, 13*256);
-        sheet.setColumnWidth(7, 10*256);
-        sheet.setColumnWidth(8, 13*256);
-        sheet.setColumnWidth(9, 9*256);
-        sheet.setColumnWidth(10, 9*256);
-        sheet.setColumnWidth(11, 11*256);
-        sheet.setColumnWidth(12, 15*256);
-        sheet.setColumnWidth(13, 14*256);
-        sheet.setColumnWidth(14, 18*256);
+        sheet.setColumnWidth(0, 24*256);//поставщик
+        sheet.setColumnWidth(1, 7*256);//стан
+        sheet.setColumnWidth(2, 9*256);//вид поставки
+        sheet.setColumnWidth(3, 26*256);//грузополучатель
+        sheet.setColumnWidth(4, 19*256);//вид продукции
+        sheet.setColumnWidth(5, 19*256);//размеры/профиль
+        sheet.setColumnWidth(6, 11*256);//марка/класс
+        sheet.setColumnWidth(7, 10*256);//класс покрытия/ral
+        sheet.setColumnWidth(8, 17*256);//доп. требования
+        sheet.setColumnWidth(9, 13*256);//номер спец
+        sheet.setColumnWidth(10, 9*256);//номер позиции
+        sheet.setColumnWidth(11, 9*256);//месяц акцепта
+        sheet.setColumnWidth(12, 11*256);//акцепт, тн
+        sheet.setColumnWidth(13, 15*256);//отгруженно, тн
+        sheet.setColumnWidth(14, 14*256);//дата отгрузки
+        sheet.setColumnWidth(15, 15*256);//номер тс/вагона
     }
 }

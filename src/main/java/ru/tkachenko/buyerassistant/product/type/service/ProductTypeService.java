@@ -7,6 +7,7 @@ import ru.tkachenko.buyerassistant.product.type.entity.ProductTypeEntity;
 import ru.tkachenko.buyerassistant.product.type.repository.ProductTypeRepository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ProductTypeService {

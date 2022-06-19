@@ -41,7 +41,8 @@ CREATE TABLE IF NOT EXISTS summary_table
     invoice_number INTEGER,
     invoice_date date,
     final_price NUMERIC,
-    final_cost NUMERIC
+    final_cost NUMERIC,
+    additional_req VARCHAR
 );
 CREATE SEQUENCE IF NOT EXISTS hibernate_sequence START WITH 1 INCREMENT BY 1;
 

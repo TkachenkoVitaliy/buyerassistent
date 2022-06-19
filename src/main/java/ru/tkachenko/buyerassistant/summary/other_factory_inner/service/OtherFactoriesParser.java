@@ -96,10 +96,12 @@ public class OtherFactoriesParser {
 
         double finalPrice = ExcelUtils.getDoubleValue(colIndexes[25], row);
         double finalCost = ExcelUtils.getDoubleValue(colIndexes[26], row);
+        String additionalReq = "";
 
         return new SummaryRowEntity(supplier, mill, branch, sellType, client, consignee, productType, profile, grade,
                 ral, issued, contract, spec, position, acceptMonth, year, accepted, price, acceptedCost, shipped,
-                shippedCost, shippedDate, vehicleNumber, invoiceNumber, invoiceDate, finalPrice, finalCost);
+                shippedCost, shippedDate, vehicleNumber, invoiceNumber, invoiceDate, finalPrice, finalCost,
+                additionalReq);
     }
 
 }

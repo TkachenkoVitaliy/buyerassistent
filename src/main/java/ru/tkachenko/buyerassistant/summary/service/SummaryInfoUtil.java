@@ -1,7 +1,5 @@
 package ru.tkachenko.buyerassistant.summary.service;
 
-import ru.tkachenko.buyerassistant.utils.CurrentDate;
-
 public class SummaryInfoUtil {
     private final static String KRASNODAR = "Краснодар";
     private final static String ROSTOV = "Ростов";
@@ -48,16 +46,19 @@ public class SummaryInfoUtil {
     private final static String INVOICE_DATE_COL_NAME = "Дата СФ";
     private final static String FINAL_PRICE_COL_NAME = "Пересмотр, руб/тн";
     private final static String FINAL_COST_COL_NAME = "Итоговая стоимость, тн";
+
+    private final static String ADDITIONAL_REQ_COL_NAME = "Доп. требования";
     private final static String[] fileColumnsNamesForEntity = {SUPPLIER_COL_NAME, MILL_COL_NAME, BRANCH_COL_NAME,
             SELL_TYPE_COL_NAME, CLIENT_COL_NAME, CONSIGNEE_COL_NAME, PRODUCT_TYPE_COL_NAME, PROFILE_COL_NAME,
-            GRADE_COL_NAME, RAL_COL_NAME, ISSUED_COL_NAME, CONTRACT_COL_NAME, SPEC_COL_NAME, POSITION_COL_NAME,
-            ACCEPT_MONTH_COL_NAME, YEAR_COL_NAME, ACCEPTED_COL_NAME, PRICE_COL_NAME, ACCEPTED_COST_COL_NAME,
-            SHIPPED_COL_NAME, SHIPPED_COST_COL_NAME, SHIPPED_DATE_COL_NAME, VEHICLE_NUMBER_COL_NAME,
-            INVOICE_NUMBER_COL_NAME, INVOICE_DATE_COL_NAME, FINAL_PRICE_COL_NAME, FINAL_COST_COL_NAME};
+            GRADE_COL_NAME, RAL_COL_NAME, ISSUED_COL_NAME, CONTRACT_COL_NAME, SPEC_COL_NAME,
+            POSITION_COL_NAME, ACCEPT_MONTH_COL_NAME, YEAR_COL_NAME, ACCEPTED_COL_NAME, PRICE_COL_NAME,
+            ACCEPTED_COST_COL_NAME, SHIPPED_COL_NAME, SHIPPED_COST_COL_NAME, SHIPPED_DATE_COL_NAME,
+            VEHICLE_NUMBER_COL_NAME, INVOICE_NUMBER_COL_NAME, INVOICE_DATE_COL_NAME, FINAL_PRICE_COL_NAME,
+            FINAL_COST_COL_NAME, ADDITIONAL_REQ_COL_NAME};
     private final static String[] clippedFileColumnsNames = {SUPPLIER_COL_NAME, MILL_COL_NAME, SELL_TYPE_COL_NAME,
-            CONSIGNEE_COL_NAME, PRODUCT_TYPE_COL_NAME, PROFILE_COL_NAME, GRADE_COL_NAME, RAL_COL_NAME, SPEC_COL_NAME,
-            POSITION_COL_NAME, ACCEPT_MONTH_COL_NAME, ACCEPTED_COL_NAME, SHIPPED_COL_NAME, SHIPPED_DATE_COL_NAME,
-            VEHICLE_NUMBER_COL_NAME};
+            CONSIGNEE_COL_NAME, PRODUCT_TYPE_COL_NAME, PROFILE_COL_NAME, GRADE_COL_NAME, RAL_COL_NAME,
+            ADDITIONAL_REQ_COL_NAME, SPEC_COL_NAME, POSITION_COL_NAME, ACCEPT_MONTH_COL_NAME, ACCEPTED_COL_NAME,
+            SHIPPED_COL_NAME, SHIPPED_DATE_COL_NAME, VEHICLE_NUMBER_COL_NAME};
 
     private final static String[] monthSheetNames = {
             "Январь", "Февраль", "Март", "Апрель", "Май", "Июнь", "Июль", "Август", "Сентябрь", "Октябрь", "Ноябрь",
