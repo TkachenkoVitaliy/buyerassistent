@@ -48,3 +48,15 @@
     width: 400px;
     height: 100px;
 }
+
+.reports_container{
+    margin: 20px;
+    vertical-align: top;
+    display: inline-block;
+}
+
+.total_btn{
+    font-size: 36px;
+    width: 400px;
+    height: 100px;
+}

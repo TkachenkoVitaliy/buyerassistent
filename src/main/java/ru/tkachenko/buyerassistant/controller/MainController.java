@@ -1,6 +1,7 @@
 package ru.tkachenko.buyerassistant.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.Banner;
 import org.springframework.core.io.Resource;
 import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
@@ -21,6 +22,9 @@ import ru.tkachenko.buyerassistant.mmk_accept.service.MmkAcceptService;
 import ru.tkachenko.buyerassistant.settings.entity.BranchStartMonthEntity;
 import ru.tkachenko.buyerassistant.settings.service.BranchStartMonthService;
 import ru.tkachenko.buyerassistant.summary.service.SummaryService;
+import ru.tkachenko.buyerassistant.total.entity.TotalUserSettingsEntity;
+import ru.tkachenko.buyerassistant.total.service.TotalUserSettingsService;
+import ru.tkachenko.buyerassistant.utils.CurrentDate;
 import ru.tkachenko.buyerassistant.utils.TimerUtil;
 
 import javax.mail.MessagingException;
@@ -28,7 +32,9 @@ import javax.servlet.http.HttpServletRequest;
 import java.io.FileNotFoundException;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 @RestController
@@ -40,13 +46,18 @@ public class MainController {
     private final EmailSenderService emailSenderService;
     private final MailService mailService;
     private final BranchStartMonthService branchStartMonthService;
+    private final TotalUserSettingsService totalUserSettingsService;
+
+    private final List<String> months = List.of("Январь", "Февраль", "Март", "Апрель", "Май", "Июнь",
+            "Июль", "Август", "Сентябрь", "Октябрь", "Ноябрь", "Декабрь");
 
 
     @Autowired
     public MainController(FileStorageService fileStorageService, FileDownloadService fileDownloadService,
                           MmkAcceptService mmkAcceptService, SummaryService summaryService,
                           EmailSenderService emailSenderService, MailService mailService,
-                          BranchStartMonthService branchStartMonthService) {
+                          BranchStartMonthService branchStartMonthService,
+                          TotalUserSettingsService totalUserSettingsService) {
         this.fileStorageService = fileStorageService;
         this.fileDownloadService = fileDownloadService;
         this.mmkAcceptService = mmkAcceptService;
@@ -54,8 +65,7 @@ public class MainController {
         this.emailSenderService = emailSenderService;
         this.mailService = mailService;
         this.branchStartMonthService = branchStartMonthService;
-
-
+        this.totalUserSettingsService = totalUserSettingsService;
     }
 
 
@@ -138,9 +148,11 @@ public class MainController {
 
     @GetMapping("/settings")
     public ModelAndView settingsPage(Model model) {
-        List<String> months = List.of("Январь", "Февраль", "Март", "Апрель", "Май", "Июнь", "Июль", "Август",
-                "Сентябрь", "Октябрь", "Ноябрь", "Декабрь");
-        List<Integer> years = List.of(2021, 2022, 2023, 2024, 2025, 2026);
+        CurrentDate currentDate = new CurrentDate();
+        int currentYear = currentDate.getYearInt();
+        List<Integer> years = List.of(currentYear - 1, currentYear, currentYear + 1, currentYear + 2,
+                currentYear + 3, currentYear + 4);
+
         List<BranchStartMonthEntity> allBranches = branchStartMonthService.getAllBranchStartMonthEntitiesOrdered();
         model.addAttribute("years", years);
         model.addAttribute("branchEntities", allBranches);
@@ -159,8 +171,37 @@ public class MainController {
         return modelAndView;
     }
 
+    @GetMapping("/total")
+    public ModelAndView totalPage(Model model) {
+        CurrentDate currentDate = new CurrentDate();
+        int currentYear = currentDate.getYearInt();
+        List<Integer> years = List.of(currentYear - 1, currentYear, currentYear + 1, currentYear + 2,
+                currentYear + 3, currentYear + 4);
+
+        TotalUserSettingsEntity currentUserSettings = totalUserSettingsService.getCurrentUserSettings();
+        System.out.println(currentUserSettings);
+
+        model.addAttribute("years", years);
+        model.addAttribute("months", months);
+        model.addAttribute("userSettings", currentUserSettings);
+
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("total");
+        return modelAndView;
+    }
+
+    @PostMapping("/total")
+    public ModelAndView totalPageUpdate(@RequestParam("monthValue") int month,
+                                        @RequestParam("yearValue") int year, Model model) {
+        totalUserSettingsService.updateCurrentUserSettings(month, year);
+        //TODO add logics to save settings in DB
+        return totalPage(model);
+    }
+
     private ModelAndView createUserResponse(Model model, String message) {
         model.addAttribute("userResponse", message);
         return new ModelAndView("response");
     }
+
+
 }

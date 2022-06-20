@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta content="https://github.com/fluidicon.png" itemprop="image">
+    <title>BuyerAssistantSettings</title>
+    <link rel="shortcut icon" href="/static/steeleks_logo.png" type="image/x-icon">
+    <link rel="icon" href="/static/steeleks_logo.png" type="image/x-icon">
+    <link rel="stylesheet" href="/static/settings_page.css">
+</head>
+
+<body>
+    <div>
+        <select form="total_settings" name="monthValue">
+            <option th:each="i : ${#numbers.sequence(1, 12)}"
+                    th:value="${i}"
+                    th:with="index=(${i}-1)"
+                    th:text="${months.get(index)}"
+                    th:selected="${i==userSettings.month}">
+            </option>
+        </select>
+        <select form="total_settings" name="yearValue">
+            <option th:each="yearvalue : ${years}"
+                    th:text="${yearvalue}"
+                    th:value="${yearvalue}"
+                    th:selected="${yearvalue==userSettings.year}">
+            </option>
+        </select>
+        <form id="total_settings">
+            <span class="table_data">
+                <input type="submit" value="СОХРАНИТЬ" formaction="/total" formmethod="post">
+            </span>
+            <span class="table_data">
+                <input type="submit" value="ВЫЙТИ" formaction="/" formmethod="get">
+            </span>
+        </form>
+    </div>
+
+</body>
+
+</html>

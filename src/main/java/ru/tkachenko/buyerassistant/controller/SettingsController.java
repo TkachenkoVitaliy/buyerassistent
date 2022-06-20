@@ -8,6 +8,7 @@ import ru.tkachenko.buyerassistant.email.entity.MailEntity;
 import ru.tkachenko.buyerassistant.email.service.MailService;
 import ru.tkachenko.buyerassistant.settings.entity.BranchStartMonthEntity;
 import ru.tkachenko.buyerassistant.settings.service.BranchStartMonthService;
+import ru.tkachenko.buyerassistant.utils.CurrentDate;
 
 import java.util.List;
 
@@ -17,7 +18,6 @@ public class SettingsController {
     private final MailService mailService;
     private final List<String> months = List.of("Январь", "Февраль", "Март", "Апрель", "Май", "Июнь",
             "Июль", "Август", "Сентябрь", "Октябрь", "Ноябрь", "Декабрь");
-    private final List<Integer> years = List.of(2021, 2022, 2023, 2024, 2025, 2026);
 
     @Autowired
     public SettingsController(BranchStartMonthService branchStartMonthService, MailService mailService) {
@@ -28,6 +28,11 @@ public class SettingsController {
     @PostMapping("/settings/save_month_settings")
     public ModelAndView saveMonthSettingsAndStay(@RequestParam("values[]") List<Integer> values,
                                                  @RequestParam("yearValues[]") List<Integer> yearValues, Model model) {
+        CurrentDate currentDate = new CurrentDate();
+        int currentYear = currentDate.getYearInt();
+        List<Integer> years = List.of(currentYear - 1, currentYear, currentYear + 1, currentYear + 2,
+                currentYear + 3, currentYear + 4);
+
         branchStartMonthService.saveMonthSettings(values, yearValues);
         List<BranchStartMonthEntity> allBranches = branchStartMonthService.getAllBranchStartMonthEntitiesOrdered();
         model.addAttribute("years", years);
@@ -47,6 +52,11 @@ public class SettingsController {
     @PostMapping("/settings/mail")
     public ModelAndView addMail(@RequestParam("selectedBranch") String branchName,
                                 @RequestParam("addedEmail") String email, Model model) {
+        CurrentDate currentDate = new CurrentDate();
+        int currentYear = currentDate.getYearInt();
+        List<Integer> years = List.of(currentYear - 1, currentYear, currentYear + 1, currentYear + 2,
+                currentYear + 3, currentYear + 4);
+
         MailEntity mailEntity = new MailEntity();
         mailEntity.setBranchName(branchName);
         mailEntity.setEmailAddress(email);
@@ -63,6 +73,10 @@ public class SettingsController {
 
     @DeleteMapping("/settings/mail")
     public ModelAndView removeMail(@RequestParam("removeId") Long id, Model model) {
+        CurrentDate currentDate = new CurrentDate();
+        int currentYear = currentDate.getYearInt();
+        List<Integer> years = List.of(currentYear - 1, currentYear, currentYear + 1, currentYear + 2,
+                currentYear + 3, currentYear + 4);
 
         mailService.deleteById(id);
 
