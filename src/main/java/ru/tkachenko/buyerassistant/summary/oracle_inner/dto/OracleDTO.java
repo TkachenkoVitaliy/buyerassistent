@@ -164,7 +164,12 @@ public class OracleDTO {
     }
 
     public void setShippedDate(Date shippedDate) {
-        this.shippedDate = shippedDate;
+        if(shippedDate != null) {
+            if(shippedDate.getYear() < 0) {
+                shippedDate.setYear(shippedDate.getYear() + 2000);
+            }
+                this.shippedDate = shippedDate;
+        }
     }
 
     public String getVehicleNumber() {
@@ -188,7 +193,12 @@ public class OracleDTO {
     }
 
     public void setInvoiceDate(Date invoiceDate) {
-        this.invoiceDate = invoiceDate;
+        if(invoiceDate != null) {
+            if(invoiceDate.getYear() < 0) {
+                invoiceDate.setYear(invoiceDate.getYear() + 2000);
+            }
+                this.invoiceDate = invoiceDate;
+        }
     }
 
     public double getPriceWithoutNDS() {
