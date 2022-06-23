@@ -1,8 +1,8 @@
-package ru.tkachenko.buyerassistant.product.type.repository;
+package ru.tkachenko.buyerassistant.total.product.type.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
-import ru.tkachenko.buyerassistant.product.type.entity.ProductTypeEntity;
+import ru.tkachenko.buyerassistant.total.product.type.entity.ProductTypeEntity;
 
 import java.util.List;
 

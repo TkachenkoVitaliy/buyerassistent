@@ -1,12 +1,12 @@
-package ru.tkachenko.buyerassistant.total.service;
+package ru.tkachenko.buyerassistant.total.settings.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
-import ru.tkachenko.buyerassistant.total.entity.TotalUserSettingsEntity;
-import ru.tkachenko.buyerassistant.total.repository.TotalUserSettingsRepository;
+import ru.tkachenko.buyerassistant.total.settings.entity.TotalUserSettingsEntity;
+import ru.tkachenko.buyerassistant.total.settings.repository.TotalUserSettingsRepository;
 
 @Service
 public class TotalUserSettingsService {

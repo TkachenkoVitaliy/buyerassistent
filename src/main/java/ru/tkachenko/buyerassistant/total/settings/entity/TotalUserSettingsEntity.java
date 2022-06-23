@@ -1,4 +1,4 @@
-package ru.tkachenko.buyerassistant.total.entity;
+package ru.tkachenko.buyerassistant.total.settings.entity;
 
 import javax.persistence.*;
 

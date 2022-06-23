@@ -21,8 +21,8 @@ import ru.tkachenko.buyerassistant.mmk_accept.service.MmkAcceptService;
 import ru.tkachenko.buyerassistant.settings.entity.BranchStartMonthEntity;
 import ru.tkachenko.buyerassistant.settings.service.BranchStartMonthService;
 import ru.tkachenko.buyerassistant.summary.service.SummaryService;
-import ru.tkachenko.buyerassistant.total.entity.TotalUserSettingsEntity;
-import ru.tkachenko.buyerassistant.total.service.TotalUserSettingsService;
+import ru.tkachenko.buyerassistant.total.settings.entity.TotalUserSettingsEntity;
+import ru.tkachenko.buyerassistant.total.settings.service.TotalUserSettingsService;
 import ru.tkachenko.buyerassistant.utils.CurrentDate;
 import ru.tkachenko.buyerassistant.utils.TimerUtil;
 
@@ -31,9 +31,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.io.FileNotFoundException;
 import java.nio.file.Path;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
-import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 @RestController

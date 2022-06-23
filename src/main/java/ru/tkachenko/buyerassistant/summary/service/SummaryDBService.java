@@ -26,21 +26,32 @@ public class SummaryDBService {
         summaryRowRepository.truncateTable();
     }
 
-    List<SummaryRowEntity> findAll() {
+    public List<SummaryRowEntity> findAll() {
         return summaryRowRepository.findAll();
     }
 
-
-    List<SummaryRowEntity> findByBranchAndAcceptMonthSorted (String branchName, int acceptMonth, int year) {
+    public List<SummaryRowEntity> findByBranchAndAcceptMonthSorted (String branchName, int acceptMonth, int year) {
         return summaryRowRepository.findByBranchAndAcceptMonthAndYearOrderBySupplierProductTypeSpecPositionProfileAccept(branchName,
                 acceptMonth, year);
     }
 
-    List<SummaryRowEntity> findZeroAcceptMonth() {
+    public List<SummaryRowEntity> findZeroAcceptMonth() {
         return summaryRowRepository.findByAcceptMonth(0);
     }
 
-    SummaryRowEntity findSameSpecWithNotZeroAcceptMonth(SummaryRowEntity summaryRowEntity) {
+    public SummaryRowEntity findSameSpecWithNotZeroAcceptMonth(SummaryRowEntity summaryRowEntity) {
         return summaryRowRepository.findFirstBySpecAndAcceptMonthGreaterThan(summaryRowEntity.getSpec(), 0);
+    }
+
+    public List<String> findUniqueSuppliersByMonthAndYear(int month, int year) {
+        return summaryRowRepository.findUniqueSuppliersByMonthAndYearOrdered(month, year);
+    }
+
+    public List<String> findUniqueBranchesByMonthAndYearAndSellType(int month, int year, String sellType) {
+        return summaryRowRepository.findUniqueBranchesByMonthAndYearAndSellTypeOrdered(month, year, sellType);
+    }
+
+    public List<SummaryRowEntity> findAllRowsByMonthAndYear(int month, int year) {
+        return summaryRowRepository.findAllByAcceptMonthAndYear(month, year);
     }
 }

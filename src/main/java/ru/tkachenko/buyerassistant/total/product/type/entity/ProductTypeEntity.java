@@ -1,6 +1,6 @@
-package ru.tkachenko.buyerassistant.product.type.entity;
+package ru.tkachenko.buyerassistant.total.product.type.entity;
 
-import ru.tkachenko.buyerassistant.product.group.entity.ProductGroupEntity;
+import ru.tkachenko.buyerassistant.total.product.group.entity.ProductGroupEntity;
 
 import javax.persistence.*;
 

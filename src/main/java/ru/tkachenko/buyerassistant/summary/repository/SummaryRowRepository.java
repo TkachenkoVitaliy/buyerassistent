@@ -31,4 +31,14 @@ public interface SummaryRowRepository extends JpaRepository<SummaryRowEntity, Lo
     List<SummaryRowEntity> findBySpec(String spec);
 
     SummaryRowEntity findFirstBySpecAndAcceptMonthGreaterThan(String spec, int acceptMonth);
+
+    @Query(value = "SELECT DISTINCT supplier FROM summary_table WHERE accept_month = :month AND year = :year " +
+            "ORDER BY supplier", nativeQuery = true)
+    List<String> findUniqueSuppliersByMonthAndYearOrdered(int month, int year);
+
+    @Query(value = "SELECT DISTINCT branch FROM summary_table WHERE accept_month = :month AND year = :year " +
+            "AND sell_type = :sellType ORDER BY branch", nativeQuery = true)
+    List<String> findUniqueBranchesByMonthAndYearAndSellTypeOrdered(int month, int year, String sellType);
+
+    List<SummaryRowEntity> findAllByAcceptMonthAndYear(int acceptMonth, int year);
 }

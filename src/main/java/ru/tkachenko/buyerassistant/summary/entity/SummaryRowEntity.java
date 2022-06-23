@@ -362,4 +362,39 @@ public class SummaryRowEntity {
     public void setAdditionalReq(String additionalReq) {
         this.additionalReq = additionalReq;
     }
+
+    @Override
+    public String toString() {
+        return "SummaryRowEntity{" +
+                "id=" + id +
+                ", supplier='" + supplier + '\'' +
+                ", mill=" + mill +
+                ", branch='" + branch + '\'' +
+                ", sellType='" + sellType + '\'' +
+                ", client='" + client + '\'' +
+                ", consignee='" + consignee + '\'' +
+                ", productType='" + productType + '\'' +
+                ", profile='" + profile + '\'' +
+                ", grade='" + grade + '\'' +
+                ", ral='" + ral + '\'' +
+                ", issued=" + issued +
+                ", contract='" + contract + '\'' +
+                ", spec='" + spec + '\'' +
+                ", position=" + position +
+                ", acceptMonth=" + acceptMonth +
+                ", year=" + year +
+                ", accepted=" + accepted +
+                ", price=" + price +
+                ", acceptedCost=" + acceptedCost +
+                ", shipped=" + shipped +
+                ", shippedCost=" + shippedCost +
+                ", shippedDate=" + shippedDate +
+                ", vehicleNumber='" + vehicleNumber + '\'' +
+                ", invoiceNumber=" + invoiceNumber +
+                ", invoiceDate=" + invoiceDate +
+                ", finalPrice=" + finalPrice +
+                ", finalCost=" + finalCost +
+                ", additionalReq='" + additionalReq + '\'' +
+                '}';
+    }
 }

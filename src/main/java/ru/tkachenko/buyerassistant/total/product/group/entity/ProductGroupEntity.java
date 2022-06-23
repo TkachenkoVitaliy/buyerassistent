@@ -1,6 +1,9 @@
-package ru.tkachenko.buyerassistant.product.group.entity;
+package ru.tkachenko.buyerassistant.total.product.group.entity;
+
+import ru.tkachenko.buyerassistant.total.product.type.entity.ProductTypeEntity;
 
 import javax.persistence.*;
+import java.util.List;
 import java.util.Objects;
 
 @Entity
@@ -13,6 +16,10 @@ public class ProductGroupEntity {
     private Long id;
 
     private String name;
+
+    @OneToMany(mappedBy = "productGroup")
+
+    private List<ProductTypeEntity> productTypes;
 
     public ProductGroupEntity(String productGroup) {
         this.name = productGroup;
@@ -27,6 +34,10 @@ public class ProductGroupEntity {
 
     public String getName() {
         return name;
+    }
+
+    public List<ProductTypeEntity> getProductTypes() {
+        return productTypes;
     }
 
     public void setName(String productGroup) {
