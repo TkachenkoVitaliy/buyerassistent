@@ -69,6 +69,7 @@ public class TotalService {
                 .distinct()
                 .sorted()
                 .collect(Collectors.toList());
+        branchesStock.add("БАЗА");
 
         List<String> branchesTransit = allFactoryRows.stream()
                 .filter(e -> e.getSellType() != null && e.getSellType().equals(TRANSIT))
@@ -76,14 +77,22 @@ public class TotalService {
                 .distinct()
                 .sorted()
                 .collect(Collectors.toList());
+        branchesTransit.add("ТРАНЗИТ");
 
         int[][] stockData = new int[branchesStock.size()][productGroups.size()];
+        int[] stockTotalArray = new int[productGroups.size()];
         for (int i = 0; i < branchesStock.size(); i++) {
             String currentBranch = branchesStock.get(i);
             int totalSum = 0;
+            if(i == branchesStock.size() - 1) {
+                stockData[i] = stockTotalArray;
+                continue;
+            }
+
             for (int j = 0; j < productGroups.size(); j++) {
                 if(j == productGroups.size()-1) {
                     stockData[i][j] = totalSum;
+                    stockTotalArray[j] += totalSum;
                 } else {
                     ProductGroupEntity currentProductGroup = productGroups.get(j);
                     List<String> currentProductTypeNames = currentProductGroup.getProductTypes().stream()
@@ -100,18 +109,25 @@ public class TotalService {
 
                     stockData[i][j] = roundSum;
                     totalSum += roundSum;
+                    stockTotalArray[j] += roundSum;
                 }
             }
         }
 
         int[][] transitData = new int[branchesTransit.size()][productGroupNames.size()];
-
+        int[] transitTotalArray = new int[productGroups.size()];
         for (int i = 0; i < branchesTransit.size(); i++) {
             String currentBranch = branchesTransit.get(i);
             int totalSum = 0;
+            if(i == branchesTransit.size() - 1) {
+                transitData[i] = transitTotalArray;
+                continue;
+            }
+
             for (int j = 0; j < productGroups.size(); j++) {
                 if(j == productGroups.size()-1) {
                     transitData[i][j] = totalSum;
+                    transitTotalArray[j] += totalSum;
                 } else {
                     ProductGroupEntity currentProductGroup = productGroups.get(j);
                     List<String> currentProductTypeNames = currentProductGroup.getProductTypes().stream()
@@ -128,8 +144,14 @@ public class TotalService {
 
                     transitData[i][j] = roundSum;
                     totalSum += roundSum;
+                    transitTotalArray[j] += roundSum;
                 }
             }
+        }
+
+        int[] finalTotal = new int[productGroups.size()];
+        for(int i = 0; i < finalTotal.length; i ++) {
+            finalTotal[i] = stockTotalArray[i] + transitTotalArray[i];
         }
 
         FactoryTotalTable factoryTable = new FactoryTotalTable.Builder()
@@ -139,6 +161,7 @@ public class TotalService {
                 .withBranchesTransit(branchesTransit)
                 .withStockData(stockData)
                 .withTransitData(transitData)
+                .withTotalData(finalTotal)
                 .build();
 
         return factoryTable;

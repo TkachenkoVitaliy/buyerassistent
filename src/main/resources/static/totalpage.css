@@ -39,3 +39,12 @@
 .table_row {
     border: 2px solid darkblue;
 }
+
+.table_row_bold {
+    border: 2px solid darkblue;
+    font-weight: bold;
+}
+
+.table_row:last-child {
+    font-weight: bold;
+}

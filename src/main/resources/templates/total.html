@@ -12,81 +12,107 @@
 
 <body>
 
-    <div class="settings_container">
-        <div class="settings_container_inner">
-            <select form="total_settings" name="monthValue">
-                <option th:each="i : ${#numbers.sequence(1, 12)}"
-                        th:value="${i}"
-                        th:with="index=(${i}-1)"
-                        th:text="${months.get(index)}"
-                        th:selected="${i==userSettings.month}">
-                </option>
-            </select>
-            <select form="total_settings" name="yearValue">
-                <option th:each="yearvalue : ${years}"
-                        th:text="${yearvalue}"
-                        th:value="${yearvalue}"
-                        th:selected="${yearvalue==userSettings.year}">
-                </option>
-            </select>
-        </div>
+<div class="settings_container">
+    <div class="settings_container_inner">
+        <select form="total_settings" name="monthValue">
+            <option th:each="i : ${#numbers.sequence(1, 12)}"
+                    th:value="${i}"
+                    th:with="index=(${i}-1)"
+                    th:text="${months.get(index)}"
+                    th:selected="${i==userSettings.month}">
+            </option>
+        </select>
+        <select form="total_settings" name="yearValue">
+            <option th:each="yearvalue : ${years}"
+                    th:text="${yearvalue}"
+                    th:value="${yearvalue}"
+                    th:selected="${yearvalue==userSettings.year}">
+            </option>
+        </select>
+    </div>
 
-        <div th:if="${!undefinedProductTypes.isEmpty()}" class="settings_container_inner">
-            <table>
-                <tr th:each="undefinedType : ${undefinedProductTypes}">
-                    <td th:text="${undefinedType.name}"></td>
-                    <td>
-                        <select form="total_settings" name="types[]">
-                            <option th:each="productGroup : ${allProductGroups}"
-                                    th:text="${productGroup.name}"
-                                    th:value="${productGroup.name}"
-                                    th:selected="${productGroup.name.equals(undefinedType.productGroup.name)}">
-                            </option>
-                        </select>
-                    </td>
-                </tr>
-            </table>
-        </div>
+    <div th:if="${!undefinedProductTypes.isEmpty()}" class="settings_container_inner">
+        <table>
+            <tr th:each="undefinedType : ${undefinedProductTypes}">
+                <td th:text="${undefinedType.name}"></td>
+                <td>
+                    <select form="total_settings" name="types[]">
+                        <option th:each="productGroup : ${allProductGroups}"
+                                th:text="${productGroup.name}"
+                                th:value="${productGroup.name}"
+                                th:selected="${productGroup.name.equals(undefinedType.productGroup.name)}">
+                        </option>
+                    </select>
+                </td>
+            </tr>
+        </table>
+    </div>
 
-        <div class="settings_container_inner">
-            <form id="total_settings">
+    <div class="settings_container_inner">
+        <form id="total_settings">
             <span>
                 <input type="submit" value="СОХРАНИТЬ" formaction="/total" formmethod="post">
             </span>
-                <span> _ИЛИ_ </span>
-                <span>
+            <span> _ИЛИ_ </span>
+            <span>
                 <input type="submit" value="ВЫЙТИ" formaction="/" formmethod="get">
             </span>
-            </form>
-        </div>
+        </form>
     </div>
+</div>
 
 
-
-    <div class="factory_container">
-        <th:block th:each="factoryTable : ${factoryTables}">
+<div class="factory_container">
+    <th:block th:each="factoryTable : ${factoryTables}">
         <table class="factory_table">
             <tr class="table_row">
                 <th th:text="${factoryTable.name}" class="factory_name"></th>
                 <th:block th:each="productGroup : ${factoryTable.productGroups}">
-                <th th:text="${productGroup}" class="col_header"></th>
+                    <th th:text="${productGroup}" class="col_header"></th>
+                </th:block>
             </tr>
+
             <div>
-            <th:block th:each="stockBranch, state : ${factoryTable.branchesStock}">
+                <th:block th:each="stockBranch, state : ${factoryTable.branchesStock}">
+                    <tr th:class="${stockBranch=='БАЗА'}? 'table_row_bold' : 'table_row'">
+                        <td th:text="${stockBranch}" class="row_name">
+                        </td>
+                        <td th:each="cell : ${factoryTable.stockData[state.index]}" th:text="${cell}"
+                            class="cell_data">
+                        </td>
+                    </tr>
+                </th:block>
+            </div>
+
+            <div th:if="${factoryTable.branchesTransit.size() > 1}">
+                <th:block th:each="transitBranch, state : ${factoryTable.branchesTransit}">
+                    <tr th:class="${transitBranch=='ТРАНЗИТ'}? 'table_row_bold' : 'table_row'">
+                        <td th:text="${transitBranch.equals('ТРАНЗИТ')} ? ${transitBranch} : ${transitBranch} + ' транзит'"
+                            class="row_name">
+                        </td>
+                        <td th:each="cell : ${factoryTable.transitData[state.index]}" th:text="${cell}"
+                            class="cell_data">
+                        </td>
+                    </tr>
+                </th:block>
+            </div>
+
+            <div>
                 <tr class="table_row">
-                    <td th:text="${stockBranch}" class="row_name"></td>
-                    <td th:each="cell : ${factoryTable.stockData[state.index]}" th:text="${cell}" class="cell_data"></td>
+                    <td class="row_name">
+                        ИТОГО
+                    </td>
+                    <td th:each="totalSum : ${factoryTable.getTotalData()}" th:text="${totalSum}" class="cell_data">
+                    </td>
+<!--                    <th:block th:each="sumValue : ${factoryTable.totalData}">-->
+<!--                        <td th:text=${summaryValue}">-->
+<!--                        </td>-->
                 </tr>
             </div>
-            <div th:if="${!factoryTable.branchesTransit.isEmpty()}">
-            <th:block th:each="transitBranch, state : ${factoryTable.branchesTransit}">
-                <tr class="table_row">
-                <td th:text="${transitBranch} + ' транзит'" class="row_name"></td>
-                <td th:each="cell : ${factoryTable.transitData[state.index]}" th:text="${cell}" class="cell_data"></td>
-                </tr>
-            </div>
+
         </table>
-    </div>
+    </th:block>
+</div>
 
 </body>
 

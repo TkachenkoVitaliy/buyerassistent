@@ -10,6 +10,7 @@ public class FactoryTotalTable {
     private List<String> branchesTransit;
     private int[][] stockData;
     private int[][] transitData;
+    private int[] totalData;
 
     public String getName() {
         return name;
@@ -35,6 +36,10 @@ public class FactoryTotalTable {
         return transitData;
     }
 
+    public int[] getTotalData() {
+        return totalData;
+    }
+
     private FactoryTotalTable() {
     }
 
@@ -47,6 +52,7 @@ public class FactoryTotalTable {
                 ", branchesTransit=" + branchesTransit +
                 ", stockData=" + Arrays.toString(stockData) +
                 ", transitData=" + Arrays.toString(transitData) +
+                ", totalData=" + Arrays.toString(totalData) +
                 '}';
     }
 
@@ -84,6 +90,11 @@ public class FactoryTotalTable {
 
         public Builder withTransitData(int[][] transitData) {
             newFactoryTotalTable.transitData = transitData;
+            return this;
+        }
+
+        public Builder withTotalData(int[] totalData) {
+            newFactoryTotalTable.totalData = totalData;
             return this;
         }
 
