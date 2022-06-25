@@ -60,6 +60,8 @@ public class TotalService {
         List<String> productGroupNames = productGroups.stream()
                 .map(e -> e.getName())
                 .collect(Collectors.toList());
+        productGroupNames.remove("Не определена");
+        productGroupNames.add("ИТОГО");
 
         List<String> branchesStock = allFactoryRows.stream()
                 .filter(e -> e.getSellType() != null && e.getSellType().equals(STOCK))
@@ -78,21 +80,27 @@ public class TotalService {
         int[][] stockData = new int[branchesStock.size()][productGroups.size()];
         for (int i = 0; i < branchesStock.size(); i++) {
             String currentBranch = branchesStock.get(i);
+            int totalSum = 0;
             for (int j = 0; j < productGroups.size(); j++) {
-                ProductGroupEntity currentProductGroup = productGroups.get(j);
-                List<String> currentProductTypeNames = currentProductGroup.getProductTypes().stream()
-                        .map(e -> e.getName())
-                        .collect(Collectors.toList());
-                Double sum = allFactoryRows.stream()
-                        .filter(e -> Objects.nonNull(e))
-                        .filter(e -> Objects.nonNull(e.getBranch()) && e.getBranch().equals(currentBranch))
-                        .filter(e -> Objects.nonNull(e.getSellType()) && e.getSellType().equals(STOCK))
-                        .filter(e -> Objects.nonNull(e.getProductType()) && currentProductTypeNames.contains(e.getProductType()))
-                        .map(e -> e.getAccepted())
-                        .reduce((double) 0, (x, y) -> x + y);
-                int roundSum = (int) Math.round(sum);
+                if(j == productGroups.size()-1) {
+                    stockData[i][j] = totalSum;
+                } else {
+                    ProductGroupEntity currentProductGroup = productGroups.get(j);
+                    List<String> currentProductTypeNames = currentProductGroup.getProductTypes().stream()
+                            .map(e -> e.getName())
+                            .collect(Collectors.toList());
+                    Double sum = allFactoryRows.stream()
+                            .filter(e -> Objects.nonNull(e))
+                            .filter(e -> Objects.nonNull(e.getBranch()) && e.getBranch().equals(currentBranch))
+                            .filter(e -> Objects.nonNull(e.getSellType()) && e.getSellType().equals(STOCK))
+                            .filter(e -> Objects.nonNull(e.getProductType()) && currentProductTypeNames.contains(e.getProductType()))
+                            .map(e -> e.getAccepted())
+                            .reduce((double) 0, (x, y) -> x + y);
+                    int roundSum = (int) Math.round(sum);
 
-                stockData[i][j] = roundSum;
+                    stockData[i][j] = roundSum;
+                    totalSum += roundSum;
+                }
             }
         }
 
@@ -100,21 +108,27 @@ public class TotalService {
 
         for (int i = 0; i < branchesTransit.size(); i++) {
             String currentBranch = branchesTransit.get(i);
+            int totalSum = 0;
             for (int j = 0; j < productGroups.size(); j++) {
-                ProductGroupEntity currentProductGroup = productGroups.get(j);
-                List<String> currentProductTypeNames = currentProductGroup.getProductTypes().stream()
-                        .map(e -> e.getName())
-                        .collect(Collectors.toList());
-                Double sum = allFactoryRows.stream()
-                        .filter(e -> Objects.nonNull(e))
-                        .filter(e -> Objects.nonNull(e.getBranch()) && e.getBranch().equals(currentBranch))
-                        .filter(e -> Objects.nonNull(e.getSellType()) && e.getSellType().equals(TRANSIT))
-                        .filter(e -> Objects.nonNull(e.getProductType()) && currentProductTypeNames.contains(e.getProductType()))
-                        .map(e -> e.getAccepted())
-                        .reduce((double) 0, (x, y) -> x + y);
-                int roundSum = (int) Math.round(sum);
+                if(j == productGroups.size()-1) {
+                    transitData[i][j] = totalSum;
+                } else {
+                    ProductGroupEntity currentProductGroup = productGroups.get(j);
+                    List<String> currentProductTypeNames = currentProductGroup.getProductTypes().stream()
+                            .map(e -> e.getName())
+                            .collect(Collectors.toList());
+                    Double sum = allFactoryRows.stream()
+                            .filter(e -> Objects.nonNull(e))
+                            .filter(e -> Objects.nonNull(e.getBranch()) && e.getBranch().equals(currentBranch))
+                            .filter(e -> Objects.nonNull(e.getSellType()) && e.getSellType().equals(TRANSIT))
+                            .filter(e -> Objects.nonNull(e.getProductType()) && currentProductTypeNames.contains(e.getProductType()))
+                            .map(e -> e.getAccepted())
+                            .reduce((double) 0, (x, y) -> x + y);
+                    int roundSum = (int) Math.round(sum);
 
-                transitData[i][j] = roundSum;
+                    transitData[i][j] = roundSum;
+                    totalSum += roundSum;
+                }
             }
         }
 
