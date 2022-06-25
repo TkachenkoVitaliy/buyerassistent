@@ -25,6 +25,11 @@ public class ProductTypeEntity {
         this.productGroup = productGroup;
     }
 
+    public ProductTypeEntity(String name, ProductGroupEntity productGroup) {
+        this.name = name;
+        this.productGroup = productGroup;
+    }
+
     public ProductTypeEntity() {
     }
 

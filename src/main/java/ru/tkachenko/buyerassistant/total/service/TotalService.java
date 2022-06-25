@@ -11,6 +11,7 @@ import ru.tkachenko.buyerassistant.total.settings.entity.TotalUserSettingsEntity
 import ru.tkachenko.buyerassistant.total.settings.service.TotalUserSettingsService;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
@@ -42,9 +43,6 @@ public class TotalService {
                 .distinct()
                 .sorted()
                 .collect(Collectors.toList());
-
-//        List<String> factoryNames = summaryDBService.findUniqueSuppliersByMonthAndYear(userSettings.getMonth(),
-//                userSettings.getYear());
 
         List<FactoryTotalTable> factoryTables = factoryNames.stream()
                 .map(e -> createFactoryTotalTable(e, productGroups, userSettings, allSummaryRows))
@@ -87,9 +85,10 @@ public class TotalService {
                         .map(e -> e.getName())
                         .collect(Collectors.toList());
                 Double sum = factorySummaryRows.stream()
-                        .filter(e -> currentProductTypeNames.contains(e.getProductType()))
-                        .filter(e -> e.getBranch().equals(currentBranch))
-                        .filter(e -> e.getSellType().equals(STOCK))
+                        .filter(e -> Objects.nonNull(e))
+                        .filter(e -> Objects.nonNull(e.getBranch()) && e.getBranch().equals(currentBranch))
+                        .filter(e -> Objects.nonNull(e.getSellType()) && e.getSellType().equals(STOCK))
+                        .filter(e -> Objects.nonNull(e.getProductType()) && currentProductTypeNames.contains(e.getProductType()))
                         .map(e -> e.getAccepted())
                         .reduce((double) 0, (x, y) -> x + y);
                 int roundSum = (int) Math.round(sum);
@@ -98,33 +97,35 @@ public class TotalService {
             }
         }
 
-        System.out.println(factoryName);
-        for (int a = 0; a < branchesStock.size(); a++) {
-            for(int b = 0; b < productGroups.size(); b++) {
-                System.out.print(stockData[a][b]);
-                System.out.print("  ");
-            }
-            System.out.println();
-        }
-
-        System.out.println("\n\n");
-
-
         int[][] transitData = new int[branchesTransit.size()][productGroupNames.size()];
 
+        for (int i = 0; i < branchesTransit.size(); i++) {
+            String currentBranch = branchesTransit.get(i);
+            for (int j = 0; j < productGroups.size(); j++) {
+                ProductGroupEntity currentProductGroup = productGroups.get(j);
+                List<String> currentProductTypeNames = currentProductGroup.getProductTypes().stream()
+                        .map(e -> e.getName())
+                        .collect(Collectors.toList());
+                Double sum = factorySummaryRows.stream()
+                        .filter(e -> Objects.nonNull(e))
+                        .filter(e -> Objects.nonNull(e.getBranch()) && e.getBranch().equals(currentBranch))
+                        .filter(e -> Objects.nonNull(e.getSellType()) && e.getSellType().equals(TRANSIT))
+                        .filter(e -> Objects.nonNull(e.getProductType()) && currentProductTypeNames.contains(e.getProductType()))
+                        .map(e -> e.getAccepted())
+                        .reduce((double) 0, (x, y) -> x + y);
+                int roundSum = (int) Math.round(sum);
 
-//        List<String> branchesStock = summaryDBService
-//                .findUniqueBranchesByMonthAndYearAndSellType(userSettings.getMonth(), userSettings.getYear(), STOCK);
-//        List<String> branchesTransit = summaryDBService
-//                .findUniqueBranchesByMonthAndYearAndSellType(userSettings.getMonth(), userSettings.getYear(), TRANSIT);
+                transitData[i][j] = roundSum;
+            }
+        }
 
         FactoryTotalTable factoryTable = new FactoryTotalTable.Builder()
                 .withName(factoryName)
                 .withProductGroups(productGroupNames)
                 .withBranchesStock(branchesStock)
                 .withBranchesTransit(branchesTransit)
-                .withStockData(null)
-                .withTransitData(null)
+                .withStockData(stockData)
+                .withTransitData(transitData)
                 .build();
 
         return factoryTable;

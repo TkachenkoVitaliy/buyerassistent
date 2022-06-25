@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import ru.tkachenko.buyerassistant.summary.entity.SummaryRowEntity;
+import ru.tkachenko.buyerassistant.total.product.type.entity.ProductTypeEntity;
 
 import java.util.List;
 
@@ -41,4 +42,10 @@ public interface SummaryRowRepository extends JpaRepository<SummaryRowEntity, Lo
     List<String> findUniqueBranchesByMonthAndYearAndSellTypeOrdered(int month, int year, String sellType);
 
     List<SummaryRowEntity> findAllByAcceptMonthAndYear(int acceptMonth, int year);
+
+    @Query(value = "SELECT DISTINCT product_type FROM summary_table", nativeQuery = true)
+    List<String> findAllProductTypeNames();
+
+    @Query(value = "SELECT DISTINCT * FROM summary_table", nativeQuery = true)
+    List<ProductTypeEntity> findAllProductTypes();
 }

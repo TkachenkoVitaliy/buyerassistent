@@ -7,6 +7,7 @@ import ru.tkachenko.buyerassistant.total.product.group.repository.ProductGroupRe
 import ru.tkachenko.buyerassistant.total.product.type.entity.ProductTypeEntity;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class ProductGroupService {
@@ -23,6 +24,10 @@ public class ProductGroupService {
 
     public List<ProductGroupEntity> findAll(){
         return productGroupRepository.findAll();
+    }
+
+    public List<ProductGroupEntity> findAllOrdered() {
+        return productGroupRepository.findAllOrdered();
     }
 
     public List<ProductTypeEntity> productTypesByProductGroupName(String name) {

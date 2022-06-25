@@ -54,4 +54,8 @@ public class SummaryDBService {
     public List<SummaryRowEntity> findAllRowsByMonthAndYear(int month, int year) {
         return summaryRowRepository.findAllByAcceptMonthAndYear(month, year);
     }
+
+    public List<String> findAllProductTypeNames() {
+        return summaryRowRepository.findAllProductTypeNames();
+    }
 }

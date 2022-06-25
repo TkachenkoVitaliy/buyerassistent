@@ -11,6 +11,7 @@
 </head>
 
 <body>
+
     <div>
         <select form="total_settings" name="monthValue">
             <option th:each="i : ${#numbers.sequence(1, 12)}"
@@ -35,6 +36,49 @@
                 <input type="submit" value="ВЫЙТИ" formaction="/" formmethod="get">
             </span>
         </form>
+    </div>
+
+    <div th:if="${!undefinedProductTypes.isEmpty()}">
+        <table>
+            <tr th:each="undefinedType : ${undefinedProductTypes}">
+                <td th:text="${undefinedType.name}"></td>
+                <td>
+                    <select form="total_settings" name="types[]">
+                        <option th:each="productGroup : ${allProductGroups}"
+                                th:text="${productGroup.name}"
+                                th:value="${productGroup.name}"
+                                th:selected="${productGroup.name.equals(undefinedType.productGroup.name)}">
+                        </option>
+                    </select>
+                </td>
+            </tr>
+        </table>
+
+    </div>
+
+    <div>
+        <th:block th:each="factoryTable : ${factoryTables}">
+        <table>
+            <tr>
+                <th th:text="${factoryTable.name}"></th>
+                <th:block th:each="productGroup : ${factoryTable.productGroups}">
+                <th th:text="${productGroup}"></th>
+            </tr>
+            <div>
+            <th:block th:each="stockBranch, state : ${factoryTable.branchesStock}">
+                <tr>
+                    <td th:text="${stockBranch}"></td>
+                    <td th:each="cell : ${factoryTable.stockData[state.index]}" th:text="${cell}"></td>
+                </tr>
+            </div>
+            <div th:if="${!factoryTable.branchesTransit.isEmpty()}">
+            <th:block th:each="transitBranch, state : ${factoryTable.branchesTransit}">
+                <tr>
+                <td th:text="${transitBranch} + ' транзит'"></td>
+                <td th:each="cell : ${factoryTable.transitData[state.index]}" th:text="${cell}"></td>
+                </tr>
+            </div>
+        </table>
     </div>
 
 </body>

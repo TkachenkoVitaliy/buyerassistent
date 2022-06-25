@@ -3,6 +3,7 @@ package ru.tkachenko.buyerassistant.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -21,6 +22,12 @@ import ru.tkachenko.buyerassistant.mmk_accept.service.MmkAcceptService;
 import ru.tkachenko.buyerassistant.settings.entity.BranchStartMonthEntity;
 import ru.tkachenko.buyerassistant.settings.service.BranchStartMonthService;
 import ru.tkachenko.buyerassistant.summary.service.SummaryService;
+import ru.tkachenko.buyerassistant.total.product.group.entity.ProductGroupEntity;
+import ru.tkachenko.buyerassistant.total.product.group.service.ProductGroupService;
+import ru.tkachenko.buyerassistant.total.product.type.entity.ProductTypeEntity;
+import ru.tkachenko.buyerassistant.total.product.type.service.ProductTypeService;
+import ru.tkachenko.buyerassistant.total.service.FactoryTotalTable;
+import ru.tkachenko.buyerassistant.total.service.TotalService;
 import ru.tkachenko.buyerassistant.total.settings.entity.TotalUserSettingsEntity;
 import ru.tkachenko.buyerassistant.total.settings.service.TotalUserSettingsService;
 import ru.tkachenko.buyerassistant.utils.CurrentDate;
@@ -33,6 +40,7 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
 @RestController
 public class MainController {
@@ -44,6 +52,9 @@ public class MainController {
     private final MailService mailService;
     private final BranchStartMonthService branchStartMonthService;
     private final TotalUserSettingsService totalUserSettingsService;
+    private final TotalService totalService;
+    private final ProductTypeService productTypeService;
+    private final ProductGroupService productGroupService;
 
     private final List<String> months = List.of("Январь", "Февраль", "Март", "Апрель", "Май", "Июнь",
             "Июль", "Август", "Сентябрь", "Октябрь", "Ноябрь", "Декабрь");
@@ -54,7 +65,7 @@ public class MainController {
                           MmkAcceptService mmkAcceptService, SummaryService summaryService,
                           EmailSenderService emailSenderService, MailService mailService,
                           BranchStartMonthService branchStartMonthService,
-                          TotalUserSettingsService totalUserSettingsService) {
+                          TotalUserSettingsService totalUserSettingsService, TotalService totalService, ProductTypeService productTypeService, ProductGroupService productGroupService) {
         this.fileStorageService = fileStorageService;
         this.fileDownloadService = fileDownloadService;
         this.mmkAcceptService = mmkAcceptService;
@@ -63,6 +74,9 @@ public class MainController {
         this.mailService = mailService;
         this.branchStartMonthService = branchStartMonthService;
         this.totalUserSettingsService = totalUserSettingsService;
+        this.totalService = totalService;
+        this.productTypeService = productTypeService;
+        this.productGroupService = productGroupService;
     }
 
 
@@ -174,13 +188,20 @@ public class MainController {
         int currentYear = currentDate.getYearInt();
         List<Integer> years = List.of(currentYear - 1, currentYear, currentYear + 1, currentYear + 2,
                 currentYear + 3, currentYear + 4);
-
-        TotalUserSettingsEntity currentUserSettings = totalUserSettingsService.getCurrentUserSettings();
-        System.out.println(currentUserSettings);
-
         model.addAttribute("years", years);
         model.addAttribute("months", months);
+
+        TotalUserSettingsEntity currentUserSettings = totalUserSettingsService.getCurrentUserSettings();
         model.addAttribute("userSettings", currentUserSettings);
+
+        List<ProductTypeEntity> undefinedProductTypes = productTypeService.findUndefinedProductTypes();
+        model.addAttribute("undefinedProductTypes", undefinedProductTypes);
+
+        List<ProductGroupEntity> allProductGroups = productGroupService.findAllOrdered();
+        model.addAttribute("allProductGroups", allProductGroups);
+
+        List<FactoryTotalTable> factoryTables = totalService.createFactoryTables();
+        model.addAttribute("factoryTables", factoryTables);
 
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("total");
@@ -189,9 +210,13 @@ public class MainController {
 
     @PostMapping("/total")
     public ModelAndView totalPageUpdate(@RequestParam("monthValue") int month,
-                                        @RequestParam("yearValue") int year, Model model) {
+                                        @RequestParam("yearValue") int year,
+                                        @RequestParam("types[]") List<String> types,
+                                        Model model) {
         totalUserSettingsService.updateCurrentUserSettings(month, year);
-        //TODO add logics to save settings in DB
+        System.out.println("ТИПЫ ДЛЯ ОБНОВЛЕНИЯ");
+        System.out.println(types);
+        productTypeService.updateUndefinedProductTypes(types);
         return totalPage(model);
     }
 
@@ -199,6 +224,5 @@ public class MainController {
         model.addAttribute("userResponse", message);
         return new ModelAndView("response");
     }
-
 
 }
