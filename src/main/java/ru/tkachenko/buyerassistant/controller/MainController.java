@@ -211,12 +211,12 @@ public class MainController {
     @PostMapping("/total")
     public ModelAndView totalPageUpdate(@RequestParam("monthValue") int month,
                                         @RequestParam("yearValue") int year,
-                                        @RequestParam("types[]") List<String> types,
+                                        @RequestParam(required = false ,name = "types[]") List<String> types,
                                         Model model) {
         totalUserSettingsService.updateCurrentUserSettings(month, year);
-        System.out.println("ТИПЫ ДЛЯ ОБНОВЛЕНИЯ");
-        System.out.println(types);
-        productTypeService.updateUndefinedProductTypes(types);
+        if(types != null && !types.isEmpty()) {
+            productTypeService.updateUndefinedProductTypes(types);
+        }
         return totalPage(model);
     }
 

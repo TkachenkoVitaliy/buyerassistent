@@ -6,7 +6,6 @@ import ru.tkachenko.buyerassistant.summary.entity.SummaryRowEntity;
 import ru.tkachenko.buyerassistant.summary.service.SummaryDBService;
 import ru.tkachenko.buyerassistant.total.product.group.entity.ProductGroupEntity;
 import ru.tkachenko.buyerassistant.total.product.group.service.ProductGroupService;
-import ru.tkachenko.buyerassistant.total.product.type.entity.ProductTypeEntity;
 import ru.tkachenko.buyerassistant.total.settings.entity.TotalUserSettingsEntity;
 import ru.tkachenko.buyerassistant.total.settings.service.TotalUserSettingsService;
 
@@ -54,7 +53,7 @@ public class TotalService {
     private FactoryTotalTable createFactoryTotalTable(String factoryName, List<ProductGroupEntity> productGroups,
                                                       TotalUserSettingsEntity userSettings,
                                                       List<SummaryRowEntity> allSummaryRows) {
-        List<SummaryRowEntity> factorySummaryRows = allSummaryRows.stream()
+        List<SummaryRowEntity> allFactoryRows = allSummaryRows.stream()
                 .filter(e -> e.getSupplier().equals(factoryName) && e.getAccepted() > 0)
                 .collect(Collectors.toList());
 
@@ -62,14 +61,14 @@ public class TotalService {
                 .map(e -> e.getName())
                 .collect(Collectors.toList());
 
-        List<String> branchesStock = factorySummaryRows.stream()
+        List<String> branchesStock = allFactoryRows.stream()
                 .filter(e -> e.getSellType() != null && e.getSellType().equals(STOCK))
                 .map(e -> e.getBranch())
                 .distinct()
                 .sorted()
                 .collect(Collectors.toList());
 
-        List<String> branchesTransit = factorySummaryRows.stream()
+        List<String> branchesTransit = allFactoryRows.stream()
                 .filter(e -> e.getSellType() != null && e.getSellType().equals(TRANSIT))
                 .map(e -> e.getBranch())
                 .distinct()
@@ -84,7 +83,7 @@ public class TotalService {
                 List<String> currentProductTypeNames = currentProductGroup.getProductTypes().stream()
                         .map(e -> e.getName())
                         .collect(Collectors.toList());
-                Double sum = factorySummaryRows.stream()
+                Double sum = allFactoryRows.stream()
                         .filter(e -> Objects.nonNull(e))
                         .filter(e -> Objects.nonNull(e.getBranch()) && e.getBranch().equals(currentBranch))
                         .filter(e -> Objects.nonNull(e.getSellType()) && e.getSellType().equals(STOCK))
@@ -106,7 +105,7 @@ public class TotalService {
                 List<String> currentProductTypeNames = currentProductGroup.getProductTypes().stream()
                         .map(e -> e.getName())
                         .collect(Collectors.toList());
-                Double sum = factorySummaryRows.stream()
+                Double sum = allFactoryRows.stream()
                         .filter(e -> Objects.nonNull(e))
                         .filter(e -> Objects.nonNull(e.getBranch()) && e.getBranch().equals(currentBranch))
                         .filter(e -> Objects.nonNull(e.getSellType()) && e.getSellType().equals(TRANSIT))
