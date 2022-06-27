@@ -184,6 +184,7 @@ public class MainController {
 
     @GetMapping("/total")
     public ModelAndView totalPage(Model model) {
+        summaryService.updateProductTypeTable();
         CurrentDate currentDate = new CurrentDate();
         int currentYear = currentDate.getYearInt();
         List<Integer> years = List.of(currentYear - 1, currentYear, currentYear + 1, currentYear + 2,

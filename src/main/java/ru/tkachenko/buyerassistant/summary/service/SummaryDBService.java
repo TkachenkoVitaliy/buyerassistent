@@ -4,6 +4,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.tkachenko.buyerassistant.summary.entity.SummaryRowEntity;
 import ru.tkachenko.buyerassistant.summary.repository.SummaryRowRepository;
+import ru.tkachenko.buyerassistant.total.product.group.service.ProductGroupService;
+import ru.tkachenko.buyerassistant.total.product.type.entity.ProductTypeEntity;
+import ru.tkachenko.buyerassistant.total.product.type.service.ProductTypeService;
 
 import javax.transaction.Transactional;
 import java.util.List;
@@ -11,10 +14,14 @@ import java.util.List;
 @Service
 public class SummaryDBService {
     private final SummaryRowRepository summaryRowRepository;
+    private final ProductTypeService productTypeService;
+    private final ProductGroupService productGroupService;
 
     @Autowired
-    public SummaryDBService(SummaryRowRepository summaryRowRepository) {
+    public SummaryDBService(SummaryRowRepository summaryRowRepository, ProductTypeService productTypeService, ProductGroupService productGroupService) {
         this.summaryRowRepository = summaryRowRepository;
+        this.productTypeService = productTypeService;
+        this.productGroupService = productGroupService;
     }
 
     public void save(SummaryRowEntity summaryRowEntity) {
@@ -57,5 +64,18 @@ public class SummaryDBService {
 
     public List<String> findAllProductTypeNames() {
         return summaryRowRepository.findAllProductTypeNames();
+    }
+
+    public void updateProductTypeTable() {
+        List<String> allProductTypeNames = findAllProductTypeNames();
+        for(String productType : allProductTypeNames) {
+            ProductTypeEntity productTypeEntity = productTypeService.findByName(productType);
+            if(productTypeEntity == null) {
+                productTypeEntity = new ProductTypeEntity();
+                productTypeEntity.setName(productType);
+                productTypeEntity.setProductGroup(productGroupService.findFirstByProductGroup("Не определена"));
+                productTypeService.save(productTypeEntity);
+            }
+        }
     }
 }

@@ -194,4 +194,8 @@ public class SummaryService {
 
         return filePath;
     }
+
+    public void updateProductTypeTable() {
+        summaryDBService.updateProductTypeTable();
+    }
 }
