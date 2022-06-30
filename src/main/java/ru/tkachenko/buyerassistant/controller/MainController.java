@@ -40,7 +40,6 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
-import java.util.stream.Collectors;
 
 @RestController
 public class MainController {
@@ -175,10 +174,18 @@ public class MainController {
         return modelAndView;
     }
 
-    @GetMapping("/main")
-    public ModelAndView getMainPage() {
+//    @GetMapping("/main")
+//    public ModelAndView getMainPage() {
+//        ModelAndView modelAndView = new ModelAndView();
+//        modelAndView.setViewName("index");
+//        return modelAndView;
+//    }
+
+    @GetMapping("/")
+    public ModelAndView getMainPage(Model model) {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("index");
+        model.addAttribute("undefinedBranchRows", summaryService.findAllUndefinedBranchRows());
         return modelAndView;
     }
 
@@ -223,6 +230,7 @@ public class MainController {
 
     private ModelAndView createUserResponse(Model model, String message) {
         model.addAttribute("userResponse", message);
+        model.addAttribute("undefinedBranchRows", summaryService.findAllUndefinedBranchRows());
         return new ModelAndView("response");
     }
 

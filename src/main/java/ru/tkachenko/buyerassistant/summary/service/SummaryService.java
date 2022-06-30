@@ -198,4 +198,8 @@ public class SummaryService {
     public void updateProductTypeTable() {
         summaryDBService.updateProductTypeTable();
     }
+
+    public List<SummaryRowEntity> findAllUndefinedBranchRows() {
+        return summaryDBService.getAllUndefinedBranchRows();
+    }
 }
