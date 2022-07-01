@@ -1,4 +1,4 @@
-package ru.tkachenko.buyerassistant.total.service;
+package ru.tkachenko.buyerassistant.total.tables;
 
 import java.util.Arrays;
 import java.util.List;

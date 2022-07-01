@@ -3,7 +3,6 @@ package ru.tkachenko.buyerassistant.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -26,7 +25,8 @@ import ru.tkachenko.buyerassistant.total.product.group.entity.ProductGroupEntity
 import ru.tkachenko.buyerassistant.total.product.group.service.ProductGroupService;
 import ru.tkachenko.buyerassistant.total.product.type.entity.ProductTypeEntity;
 import ru.tkachenko.buyerassistant.total.product.type.service.ProductTypeService;
-import ru.tkachenko.buyerassistant.total.service.FactoryTotalTable;
+import ru.tkachenko.buyerassistant.total.tables.AllBranchesTotalTable;
+import ru.tkachenko.buyerassistant.total.tables.FactoryTotalTable;
 import ru.tkachenko.buyerassistant.total.service.TotalService;
 import ru.tkachenko.buyerassistant.total.settings.entity.TotalUserSettingsEntity;
 import ru.tkachenko.buyerassistant.total.settings.service.TotalUserSettingsService;
@@ -40,7 +40,6 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
-import java.util.stream.Collectors;
 
 @RestController
 public class MainController {
@@ -201,8 +200,12 @@ public class MainController {
         List<ProductGroupEntity> allProductGroups = productGroupService.findAllOrdered();
         model.addAttribute("allProductGroups", allProductGroups);
 
+        AllBranchesTotalTable branchTable = totalService.createAllBranchesTotalTable();
+        model.addAttribute("allBranchTable", branchTable);
+
         List<FactoryTotalTable> factoryTables = totalService.createFactoryTables();
         model.addAttribute("factoryTables", factoryTables);
+
 
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("total");
