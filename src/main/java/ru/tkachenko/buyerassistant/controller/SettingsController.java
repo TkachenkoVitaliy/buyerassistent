@@ -8,6 +8,7 @@ import ru.tkachenko.buyerassistant.email.entity.MailEntity;
 import ru.tkachenko.buyerassistant.email.service.MailService;
 import ru.tkachenko.buyerassistant.settings.entity.BranchStartMonthEntity;
 import ru.tkachenko.buyerassistant.settings.service.BranchStartMonthService;
+import ru.tkachenko.buyerassistant.summary.service.SummaryService;
 import ru.tkachenko.buyerassistant.utils.CurrentDate;
 
 import java.util.List;
@@ -15,13 +16,16 @@ import java.util.List;
 @RestController
 public class SettingsController {
     private final BranchStartMonthService branchStartMonthService;
+
+    private final SummaryService summaryService;
     private final MailService mailService;
     private final List<String> months = List.of("Январь", "Февраль", "Март", "Апрель", "Май", "Июнь",
             "Июль", "Август", "Сентябрь", "Октябрь", "Ноябрь", "Декабрь");
 
     @Autowired
-    public SettingsController(BranchStartMonthService branchStartMonthService, MailService mailService) {
+    public SettingsController(BranchStartMonthService branchStartMonthService, SummaryService summaryService, MailService mailService) {
         this.branchStartMonthService = branchStartMonthService;
+        this.summaryService = summaryService;
         this.mailService = mailService;
     }
 
@@ -45,9 +49,13 @@ public class SettingsController {
 
     @PostMapping("/settings/save_month_settings/to_main_page")
     public ModelAndView saveMonthSettingsAndGoToMainPage(@RequestParam("values[]") List<Integer> values,
-                                                         @RequestParam("yearValues[]") List<Integer> yearValues) {
+                                                         @RequestParam("yearValues[]") List<Integer> yearValues,
+                                                         Model model) {
         branchStartMonthService.saveMonthSettings(values, yearValues);
-        return new ModelAndView("index");
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("index");
+        model.addAttribute("undefinedBranchRows", summaryService.findAllUndefinedBranchRows());
+        return modelAndView;
     }
     @PostMapping("/settings/mail")
     public ModelAndView addMail(@RequestParam("selectedBranch") String branchName,
