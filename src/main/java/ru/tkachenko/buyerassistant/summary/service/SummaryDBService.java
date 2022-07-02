@@ -7,6 +7,7 @@ import ru.tkachenko.buyerassistant.summary.repository.SummaryRowRepository;
 import ru.tkachenko.buyerassistant.total.product.group.service.ProductGroupService;
 import ru.tkachenko.buyerassistant.total.product.type.entity.ProductTypeEntity;
 import ru.tkachenko.buyerassistant.total.product.type.service.ProductTypeService;
+import ru.tkachenko.buyerassistant.utils.CurrentDate;
 
 import javax.transaction.Transactional;
 import java.util.List;
@@ -77,5 +78,10 @@ public class SummaryDBService {
                 productTypeService.save(productTypeEntity);
             }
         }
+    }
+
+    public List<SummaryRowEntity> getAllUndefinedBranchRows() {
+        CurrentDate currentDate = new CurrentDate();
+        return summaryRowRepository.findDistinctSummaryRowEntitiesByBranchIsNull(currentDate.getYearInt());
     }
 }

@@ -75,6 +75,22 @@
             <form action="/total" method="get">
                 <button class="total_btn">ШАХМАТКА</button>
             </form>
+
+            <br>
+            <table th:if="${!undefinedBranchRows.isEmpty()}">
+                <tr>
+                    <th>ПОСТАВЩИК</th>
+                    <th>НОМЕР ЗАКАЗА</th>
+                    <th>МЕСЯЦ</th>
+                    <th>ГОД</th>
+                </tr>
+                <tr th:each="undefinedBranchRow : ${undefinedBranchRows}">
+                    <td th:text="${undefinedBranchRow.supplier}"></td>
+                    <td th:text="${undefinedBranchRow.spec}"></td>
+                    <td th:text="${undefinedBranchRow.acceptMonth}"></td>
+                    <td th:text="${undefinedBranchRow.year}"></td>
+                </tr>
+            </table>
         </div>
 
         <div class="settings_container">
