@@ -4,23 +4,21 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.tkachenko.buyerassistant.summary.entity.SummaryRowEntity;
 import ru.tkachenko.buyerassistant.summary.service.SummaryDBService;
-import ru.tkachenko.buyerassistant.summary.service.SummaryInfoUtil;
 import ru.tkachenko.buyerassistant.total.product.group.entity.ProductGroupEntity;
 import ru.tkachenko.buyerassistant.total.product.group.service.ProductGroupService;
 import ru.tkachenko.buyerassistant.total.settings.entity.TotalUserSettingsEntity;
 import ru.tkachenko.buyerassistant.total.settings.service.TotalUserSettingsService;
-import ru.tkachenko.buyerassistant.total.tables.AllBranchesTotalTable;
 import ru.tkachenko.buyerassistant.total.tables.FactoryTotalTable;
 
 import java.util.*;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @Service
 public class TotalService {
 
     private static final String STOCK = "база";
     private static final String TRANSIT = "транзит";
+    private static final String SUMMARY = "СВОДНАЯ";
     private final SummaryDBService summaryDBService;
     private final ProductGroupService productGroupService;
     private final TotalUserSettingsService totalUserSettingsService;
@@ -36,7 +34,6 @@ public class TotalService {
     public List<FactoryTotalTable> createFactoryTables() {
         TotalUserSettingsEntity userSettings = totalUserSettingsService.getCurrentUserSettings();
         List<ProductGroupEntity> productGroups = productGroupService.findAll();
-
         List<SummaryRowEntity> allSummaryRows = summaryDBService.findAllRowsByMonthAndYear(userSettings.getMonth(),
                 userSettings.getYear());
 
@@ -45,20 +42,18 @@ public class TotalService {
                 .distinct()
                 .sorted()
                 .collect(Collectors.toList());
+        factoryNames.add(0, SUMMARY);
 
         List<FactoryTotalTable> factoryTables = factoryNames.stream()
-                .map(e -> createFactoryTotalTable(e, productGroups, userSettings, allSummaryRows))
+                .map(e -> createFactoryTotalTable(e, productGroups, allSummaryRows))
                 .collect(Collectors.toList());
 
         return factoryTables;
     }
 
     private FactoryTotalTable createFactoryTotalTable(String factoryName, List<ProductGroupEntity> productGroups,
-                                                      TotalUserSettingsEntity userSettings,
                                                       List<SummaryRowEntity> allSummaryRows) {
-        List<SummaryRowEntity> allFactoryRows = allSummaryRows.stream()
-                .filter(e -> e.getSupplier().equals(factoryName) && e.getAccepted() > 0)
-                .collect(Collectors.toList());
+        List<SummaryRowEntity> allFactoryRows = getSummaryRowEntitiesByFactory(factoryName, allSummaryRows);
 
         List<String> productGroupNames = productGroups.stream()
                 .map(e -> e.getName())
@@ -74,6 +69,10 @@ public class TotalService {
                 .collect(Collectors.toList());
         branchesStock.add("БАЗА");
 
+        int[][] stockData = new int[branchesStock.size()][productGroups.size()];
+        int[] stockTotalArray = new int[productGroups.size()];
+        fillDataArrays(productGroups, allFactoryRows, branchesStock, stockData, stockTotalArray, STOCK);
+
         List<String> branchesTransit = allFactoryRows.stream()
                 .filter(e -> e.getSellType() != null && e.getSellType().equals(TRANSIT))
                 .map(e -> e.getBranch())
@@ -82,61 +81,9 @@ public class TotalService {
                 .collect(Collectors.toList());
         branchesTransit.add("ТРАНЗИТ");
 
-        int[][] stockData = new int[branchesStock.size()][productGroups.size()];
-        int[] stockTotalArray = new int[productGroups.size()];
-        for (int i = 0; i < branchesStock.size(); i++) {
-            String currentBranch = branchesStock.get(i);
-            int totalSum = 0;
-            if (i == branchesStock.size() - 1) {
-                stockData[i] = stockTotalArray;
-                continue;
-            }
-
-            for (int j = 0; j < productGroups.size(); j++) {
-                if (j == productGroups.size() - 1) {
-                    stockData[i][j] = totalSum;
-                    stockTotalArray[j] += totalSum;
-                } else {
-                    ProductGroupEntity currentProductGroup = productGroups.get(j);
-                    List<String> currentProductTypeNames = currentProductGroup.getProductTypes().stream()
-                            .map(e -> e.getName())
-                            .collect(Collectors.toList());
-                    int sum = roundSumOfProductType(allFactoryRows, currentProductTypeNames, currentBranch, STOCK);
-
-                    stockData[i][j] = sum;
-                    totalSum += sum;
-                    stockTotalArray[j] += sum;
-                }
-            }
-        }
-        //возможно ошибка, смотри выше
         int[][] transitData = new int[branchesTransit.size()][productGroupNames.size()];
         int[] transitTotalArray = new int[productGroups.size()];
-        for (int i = 0; i < branchesTransit.size(); i++) {
-            String currentBranch = branchesTransit.get(i);
-            int totalSum = 0;
-            if (i == branchesTransit.size() - 1) {
-                transitData[i] = transitTotalArray;
-                continue;
-            }
-
-            for (int j = 0; j < productGroups.size(); j++) {
-                if (j == productGroups.size() - 1) {
-                    transitData[i][j] = totalSum;
-                    transitTotalArray[j] += totalSum;
-                } else {
-                    ProductGroupEntity currentProductGroup = productGroups.get(j);
-                    List<String> currentProductTypeNames = currentProductGroup.getProductTypes().stream()
-                            .map(e -> e.getName())
-                            .collect(Collectors.toList());
-                    int sum = roundSumOfProductType(allFactoryRows, currentProductTypeNames, currentBranch, TRANSIT);
-
-                    transitData[i][j] = sum;
-                    totalSum += sum;
-                    transitTotalArray[j] += sum;
-                }
-            }
-        }
+        fillDataArrays(productGroups, allFactoryRows, branchesTransit, transitData, transitTotalArray, TRANSIT);
 
         int[] finalTotal = new int[productGroups.size()];
         for (int i = 0; i < finalTotal.length; i++) {
@@ -155,60 +102,44 @@ public class TotalService {
         return factoryTable;
     }
 
-    public AllBranchesTotalTable createAllBranchesTotalTable() {
-        List<ProductGroupEntity> productGroups = productGroupService.findAll();
-        TotalUserSettingsEntity userSettings = totalUserSettingsService.getCurrentUserSettings();
-        List<SummaryRowEntity> allSummaryRows = summaryDBService.findAllRowsByMonthAndYear(userSettings.getMonth(),
-                userSettings.getYear());
-        List<String> productGroupNames = productGroups.stream()
-                .map(e -> e.getName())
-                .collect(Collectors.toList());
-        productGroupNames.add(0, "");
-        productGroupNames.remove("Не определена");
-        productGroupNames.add("ИТОГО");
+    private List<SummaryRowEntity> getSummaryRowEntitiesByFactory(String factoryName, List<SummaryRowEntity> allSummaryRows) {
+        if(!factoryName.equals(SUMMARY)) {
+            return allSummaryRows.stream()
+                    .filter(e -> e.getSupplier().equals(factoryName) && e.getAccepted() > 0)
+                    .collect(Collectors.toList());
+        }
+        return allSummaryRows;
+    }
 
-        String[] allBranchesNames = SummaryInfoUtil.getAllBranchesNames();
-        int countForCurrentBranch = 0;
-        int[] totalSellTypeData = new int[productGroups.size()];
-        int[][] data = new int[(allBranchesNames.length * 2) + 1][productGroups.size()];
-        for (int i = 0; i < data.length - 1; i++) {
-            int sumCountProductGroupForBranch = 0;
-            if (i != 0 && i % 2 == 0) {
-                countForCurrentBranch++;
+
+    private void fillDataArrays(List<ProductGroupEntity> productGroups, List<SummaryRowEntity> allFactoryRows,
+                                List<String> branchesList, int[][] sellTypeData, int[] sellTypeSumArray,
+                                String sellType) {
+        for (int i = 0; i < branchesList.size(); i++) {
+            String currentBranch = branchesList.get(i);
+            int totalSum = 0;
+            if (i == branchesList.size() - 1) {
+                sellTypeData[i] = sellTypeSumArray;
+                continue;
             }
-            String currentBranch = allBranchesNames[countForCurrentBranch];
+
             for (int j = 0; j < productGroups.size(); j++) {
-                List<String> currentProductTypeNames = productGroups.get(j).getProductTypes().stream()
-                        .map(e -> e.getName())
-                        .collect(Collectors.toList());
-                int sum;
-                if (i % 2 == 0) {
-                    sum = roundSumOfProductType(allSummaryRows, currentProductTypeNames, currentBranch, STOCK);
-                    data[i][j] = sum;
-                    sumCountProductGroupForBranch += sum;
-                    totalSellTypeData[j] += sum;
-                } else {
-                    sum = roundSumOfProductType(allSummaryRows, currentProductTypeNames, currentBranch, TRANSIT);
-                    data[i][j] = sum;
-                    totalSellTypeData[j] += sum;
-                    sumCountProductGroupForBranch += sum;
-                }
                 if (j == productGroups.size() - 1) {
-                    data[i][j] = sumCountProductGroupForBranch;
-                    totalSellTypeData[j] += sumCountProductGroupForBranch;
+                    sellTypeData[i][j] = totalSum;
+                    sellTypeSumArray[j] += totalSum;
+                } else {
+                    ProductGroupEntity currentProductGroup = productGroups.get(j);
+                    List<String> currentProductTypeNames = currentProductGroup.getProductTypes().stream()
+                            .map(e -> e.getName())
+                            .collect(Collectors.toList());
+                    int sum = roundSumOfProductType(allFactoryRows, currentProductTypeNames, currentBranch, sellType);
+
+                    sellTypeData[i][j] = sum;
+                    totalSum += sum;
+                    sellTypeSumArray[j] += sum;
                 }
             }
         }
-        List<String> branchesNamesWithSellType = new ArrayList<>();
-        for (int i = 0; i < allBranchesNames.length; i++) {
-            branchesNamesWithSellType.add(allBranchesNames[i] + " База");
-            branchesNamesWithSellType.add(allBranchesNames[i] + " Транзит");
-        }
-        //заглушки
-        branchesNamesWithSellType.add("ИТОГО");
-        data[data.length - 1] = totalSellTypeData;
-        ////
-        return new AllBranchesTotalTable(branchesNamesWithSellType, productGroupNames, data, totalSellTypeData);
     }
 
     private int roundSumOfProductType(List<SummaryRowEntity> allSummaryRows,
@@ -221,7 +152,6 @@ public class TotalService {
                 .filter(e -> Objects.nonNull(e.getSellType()) && e.getSellType().equals(sellType))
                 .filter(e -> Objects.nonNull(e.getProductType()) &&
                         currentProductTypeNames.contains(e.getProductType()))
-                .distinct()//не уверен что это необходимо
                 .map(SummaryRowEntity::getAccepted)
                 .reduce((double) 0, (x, y) -> x + y));
     }

@@ -25,7 +25,6 @@ import ru.tkachenko.buyerassistant.total.product.group.entity.ProductGroupEntity
 import ru.tkachenko.buyerassistant.total.product.group.service.ProductGroupService;
 import ru.tkachenko.buyerassistant.total.product.type.entity.ProductTypeEntity;
 import ru.tkachenko.buyerassistant.total.product.type.service.ProductTypeService;
-import ru.tkachenko.buyerassistant.total.tables.AllBranchesTotalTable;
 import ru.tkachenko.buyerassistant.total.tables.FactoryTotalTable;
 import ru.tkachenko.buyerassistant.total.service.TotalService;
 import ru.tkachenko.buyerassistant.total.settings.entity.TotalUserSettingsEntity;
@@ -208,12 +207,12 @@ public class MainController {
         List<ProductGroupEntity> allProductGroups = productGroupService.findAllOrdered();
         model.addAttribute("allProductGroups", allProductGroups);
 
-        AllBranchesTotalTable branchTable = totalService.createAllBranchesTotalTable();
-        model.addAttribute("allBranchTable", branchTable);
+//        TODO remove
+//        AllBranchesTotalTable branchTable = totalService.createAllBranchesTotalTable();
+//        model.addAttribute("allBranchTable", branchTable);
 
         List<FactoryTotalTable> factoryTables = totalService.createFactoryTables();
         model.addAttribute("factoryTables", factoryTables);
-
 
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("total");
@@ -223,10 +222,10 @@ public class MainController {
     @PostMapping("/total")
     public ModelAndView totalPageUpdate(@RequestParam("monthValue") int month,
                                         @RequestParam("yearValue") int year,
-                                        @RequestParam(required = false ,name = "types[]") List<String> types,
+                                        @RequestParam(required = false, name = "types[]") List<String> types,
                                         Model model) {
         totalUserSettingsService.updateCurrentUserSettings(month, year);
-        if(types != null && !types.isEmpty()) {
+        if (types != null && !types.isEmpty()) {
             productTypeService.updateUndefinedProductTypes(types);
         }
         return totalPage(model);

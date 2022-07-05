@@ -1,51 +1,23 @@
-.settings_container {
+.settings_container{
     margin-bottom: 10px;
 }
 
-.settings_container_inner {
+.settings_container_inner{
     margin-top: 8px;
     margin-bottom: 8px;
 }
 
-.all_branch_container {
-}
-
-.all_branch_table {
+.factory_table{
     border-collapse: collapse;
     margin-top: 30px;
     margin-bottom: 30px;
 }
 
-.branch_col_header {
-    border: 2px solid darkblue;
-    width: 110px;
-    text-align: center;
-}
-
-
-.branch_row_bold {
-    border: 2px solid darkblue;
-    font-weight: bold;
-}
-
-.branch_row:last-child {
-    font-weight: bold;
-}
-
-.factory_container {
-}
-
-.factory_table {
-    border-collapse: collapse;
-    margin-top: 30px;
-    margin-bottom: 30px;
-}
-
-.factory_name {
+.factory_name{
     width: 160px;
 }
 
-.row_name {
+.row_name{
     width: 160px;
 }
 

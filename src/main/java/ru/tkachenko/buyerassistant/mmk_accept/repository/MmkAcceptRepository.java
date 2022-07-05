@@ -10,5 +10,4 @@ import java.util.List;
 public interface MmkAcceptRepository extends JpaRepository<MmkAcceptRowEntity, Long> {
 
     MmkAcceptRowEntity findFirstBySpecAndPosition(String spec, int position);
-    List<MmkAcceptRowEntity> findBySpecAndPosition(String spec, int position);//TODO maybe don't need
 }
