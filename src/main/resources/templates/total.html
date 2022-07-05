@@ -61,6 +61,41 @@
     </div>
 </div>
 
+<div class="all_branch_container">
+    <table class="all_branch_table">
+        <caption> Сводная таблица по филиалам</caption>
+        <tr class="branch_table_row">
+            <th:block th:each="productGroup : ${allBranchTable.productGroups}">
+                <th th:text="${productGroup}" class="branch_col_header"></th>
+            </th:block>
+        </tr>
+        <div>
+            <th:block th:each="stockBranch, state : ${allBranchTable.branchesNames}">
+                <tr th:class="table_row">
+                    <td th:text="${stockBranch}" class="row_name">
+                    </td>
+                    <td th:each="cell : ${allBranchTable.totalData[state.index]}" th:text="${cell}"
+                        class="cell_data">
+                    </td>
+                </tr>
+            </th:block>
+        </div>
+
+<!--        <div>-->
+<!--            <tr class="table_row">-->
+<!--                <td class="row_name"> ИТОГО</td>-->
+<!--                <th:block th:each="sum : ${allBranchTable.totalSellTypeData}">-->
+<!--                    <td th:text="sum">-->
+
+<!--                    </td>-->
+<!--                </th:block>-->
+<!--            </tr>-->
+<!--        </div>-->
+
+
+
+    </table>
+</div>
 
 <div class="factory_container">
     <th:block th:each="factoryTable : ${factoryTables}">
@@ -75,7 +110,7 @@
             <div>
                 <th:block th:each="stockBranch, state : ${factoryTable.branchesStock}">
                     <tr th:class="${stockBranch=='БАЗА'}? 'table_row_bold' : 'table_row'">
-                        <td th:text="${stockBranch}" class="row_name">
+                        <td th:text="${stockBranch}" class="branch_table_row">
                         </td>
                         <td th:each="cell : ${factoryTable.stockData[state.index]}" th:text="${cell}"
                             class="cell_data">
@@ -102,7 +137,8 @@
                     <td class="row_name">
                         ИТОГО
                     </td>
-                    <td th:each="totalSum : ${factoryTable.getTotalData()}" th:text="${totalSum}" class="cell_data">
+                    <td th:each="totalSum : ${factoryTable.getTotalData()}"
+                        th:text="${totalSum}" class="cell_data">
                     </td>
 <!--                    <th:block th:each="sumValue : ${factoryTable.totalData}">-->
 <!--                        <td th:text=${summaryValue}">-->
@@ -113,6 +149,7 @@
         </table>
     </th:block>
 </div>
+
 
 </body>
 
