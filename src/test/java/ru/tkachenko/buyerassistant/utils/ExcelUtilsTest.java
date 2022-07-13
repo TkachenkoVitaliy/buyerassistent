@@ -13,7 +13,7 @@ import java.text.SimpleDateFormat;
 class ExcelUtilsTest {
 
     private static Workbook workbook = new XSSFWorkbook();
-
+    CellStyleContainer cellStyleContainer = new CellStyleContainer(workbook);
     private static Sheet sheet = workbook.createSheet();
 
     private static Row row0;
@@ -72,7 +72,6 @@ class ExcelUtilsTest {
     }
 
     @Test
-    @Disabled
     void getEntityColumnsIndexes() {
         String[] inputArrayValues = {"Поставщик", "База", "Вид поставки"};
 
@@ -84,8 +83,7 @@ class ExcelUtilsTest {
     }
 
     @Test
-    @Disabled
-    void testGetEntityColumnsIndexes() {
+    void getEntityColumnsIndexesArrayRowTest() {
         String[] inputArrayValues = {"Поставщик", "База", "Вид поставки"};
 
         int[] expectedArray = {2, 0, 3};
@@ -96,7 +94,6 @@ class ExcelUtilsTest {
     }
 
     @Test
-    @Disabled
     void findColIndexByValue() {
         String inputValue = "Поставщик";
         Row inputRow = sheet.createRow(3);
@@ -113,7 +110,6 @@ class ExcelUtilsTest {
     }
 
     @Test
-    @Disabled
     void findFirstNotBlankRow() {
         int actualResult = ExcelUtils.findFirstNotBlankRow(sheet);
         int expectedResult = 2;
@@ -121,7 +117,6 @@ class ExcelUtilsTest {
     }
 
     @Test
-    @Disabled
     void cellIsNullOrBlank() {
         boolean actualResult1 = ExcelUtils.cellIsNullOrBlank(cell20);
         boolean actualResult2 = ExcelUtils.cellIsNullOrBlank(cell10);
@@ -133,7 +128,6 @@ class ExcelUtilsTest {
     }
 
     @Test
-    @Disabled
     void getStringValueWithoutQuote() {
         String expectedResult = "Текст с названием ООО CТАЛЬЭКС";
         String expectedResult1 = "Текстовое";
@@ -148,7 +142,6 @@ class ExcelUtilsTest {
     }
 
     @Test
-    @Disabled
     void getStringValue() {
         int inputColIndex1 = 0;
         int inputColIndex2 = 1;
@@ -171,7 +164,6 @@ class ExcelUtilsTest {
     }
 
     @Test
-    @Disabled
     void getAnyValueAsString() {
         String expectedResult1 = "Текстовое";
         String expectedResult2 = "1,453";
@@ -188,7 +180,6 @@ class ExcelUtilsTest {
     }
 
     @Test
-    @Disabled
     void getDoubleValue() {
         int inputColIndex1 = 1;
         int inputColIndex2 = 2;
@@ -207,7 +198,6 @@ class ExcelUtilsTest {
     }
 
     @Test
-    @Disabled
     void getIntValue() {
         int inputColIndex1 = 9;
         int inputColIndex2 = 2;
@@ -226,7 +216,6 @@ class ExcelUtilsTest {
     }
 
     @Test
-    @Disabled
     void getDateValue() {
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy");
 
@@ -242,13 +231,12 @@ class ExcelUtilsTest {
     }
 
     @Test
-    @Disabled
     void writeCellNotNullValueString() {
         //TODO возможно стоить переделать метод чтобы не записывал пустые строки - "", а может и нет; нужно обдумать
-        /*int inputColIndex = 7;
+        int inputColIndex = 7;
         String inputValue = "ММК";
 
-        ExcelUtils.writeCellNotNullValue(row3, 7, inputValue);
+        ExcelUtils.writeCellNotNullValue(row3, 7, inputValue, cellStyleContainer);
 
         String expectedResult = "ММК";
 
@@ -256,21 +244,22 @@ class ExcelUtilsTest {
         String actualResult = actualCell.getStringCellValue();
 
         Assertions.assertEquals(expectedResult, actualResult);
+        Assertions.assertEquals(cellStyleContainer.getStringAndIntCellStyle(), actualCell.getCellStyle());
 
         int inputColIndexNull = 6;
         String inputValueNull = null;
-        ExcelUtils.writeCellNotNullValue(row3, inputColIndexNull, inputValueNull);
-        Assertions.assertNull(row3.getCell(6));*/
+        ExcelUtils.writeCellNotNullValue(row3, inputColIndexNull, inputValueNull, cellStyleContainer);
+        Assertions.assertEquals("", row3.getCell(6).getStringCellValue());
+        Assertions.assertEquals(cellStyleContainer.getStringAndIntCellStyle(), row3.getCell(6).getCellStyle());
 
     }
 
     @Test
-    @Disabled
     void writeCellNotNullValueInt() {
-        /*int inputColIndex = 5;
+        int inputColIndex = 5;
         int inputValue = 10;
 
-        ExcelUtils.writeCellNotNullValue(row3, inputColIndex, inputValue);
+        ExcelUtils.writeCellNotNullValue(row3, inputColIndex, inputValue, cellStyleContainer);
 
         int expectedResult = 10;
 
@@ -279,20 +268,21 @@ class ExcelUtilsTest {
 
         //TODO как можно проверить что записалось именно int значение, возможно взять значение как строку и проверить его
         Assertions.assertEquals(expectedResult, actualResult);
+        Assertions.assertEquals(cellStyleContainer.getStringAndIntCellStyle(), actualCell.getCellStyle());
 
         int inputColIndexNull = 4;
         int inputValueNull = 0;
-        ExcelUtils.writeCellNotNullValue(row3, inputColIndexNull, inputValueNull);
-        Assertions.assertNull(row3.getCell(4));*/
+        ExcelUtils.writeCellNotNullValue(row3, inputColIndexNull, inputValueNull, cellStyleContainer);
+        Assertions.assertEquals("", row3.getCell(4).getStringCellValue());
+        Assertions.assertEquals(cellStyleContainer.getStringAndIntCellStyle(), row3.getCell(4).getCellStyle());
     }
 
     @Test
-    @Disabled
     void writeCellNotNullValueDouble() {
-        /*int inputColIndex = 3;
+        int inputColIndex = 3;
         double inputValue = 145.584;
 
-        ExcelUtils.writeCellNotNullValue(row3, inputColIndex, inputValue);
+        ExcelUtils.writeCellNotNullValue(row3, inputColIndex, inputValue, cellStyleContainer);
 
         double expectedResult = 145.584;
 
@@ -300,19 +290,20 @@ class ExcelUtilsTest {
         double actualResult = actualCell.getNumericCellValue();
 
         Assertions.assertEquals(expectedResult, actualResult);
+        Assertions.assertEquals(cellStyleContainer.getDoubleCellStyle(), actualCell.getCellStyle());
 
         int inputColIndexNull = 2;
         double inputValueNull = 0.0;
-        ExcelUtils.writeCellNotNullValue(row3, inputColIndexNull, inputValueNull);
-        Assertions.assertNull(row3.getCell(2));*/
+        ExcelUtils.writeCellNotNullValue(row3, inputColIndexNull, inputValueNull, cellStyleContainer);
+        Assertions.assertEquals("", row3.getCell(2).getStringCellValue());
+        Assertions.assertEquals(cellStyleContainer.getDoubleCellStyle(), row3.getCell(2).getCellStyle());
     }
 
     @Test
-    @Disabled
     void writeCellNotNullDateValue() {
-        /*int inputColIndex = 1;
+        int inputColIndex = 1;
         java.sql.Date inputDate = new java.sql.Date(2022, 4, 29);
-        ExcelUtils.writeCellNotNullDateValue(row3, inputColIndex, inputDate, dateStyle);
+        ExcelUtils.writeCellNotNullDateValue(row3, inputColIndex, inputDate, cellStyleContainer);
 
         java.util.Date exceptedDate = new java.util.Date(2022, 4, 29);
 
@@ -320,23 +311,24 @@ class ExcelUtilsTest {
         java.util.Date actualResult = actualCell.getDateCellValue();
 
         Assertions.assertEquals(exceptedDate, actualResult);
+        Assertions.assertEquals(cellStyleContainer.getDateCellStyle(), actualCell.getCellStyle());
 
         int inputColIndexNull = 0;
 
-        ExcelUtils.writeCellNotNullDateValue(row3, inputColIndexNull, null, dateStyle);
+        ExcelUtils.writeCellNotNullDateValue(row3, inputColIndexNull, null, cellStyleContainer);
 
-        Assertions.assertNull(row3.getCell(inputColIndexNull));*/
+        Assertions.assertEquals("", row3.getCell(inputColIndexNull).getStringCellValue());
+        Assertions.assertEquals(cellStyleContainer.getDateCellStyle(), row3.getCell(inputColIndexNull).getCellStyle());
     }
 
     @Test
-    @Disabled
     void setColumnWidthBranchFile() {
-        int[] expectedResults = {24*256, 7*256, 13*256, 26*256, 29*256, 20*256, 13*256, 10*256, 13*256, 9*256, 9*256,
-                11*256, 15*256, 14*256, 18*256};
+        int[] expectedResults = {24*256, 7*256, 9*256, 26*256, 19*256, 19*256, 11*256, 10*256, 17*256, 13*256, 9*256,
+                9*256, 11*256, 15*256, 14*256, 15*256};
 
         ExcelUtils.setColumnWidthBranchFile(sheet);
-        int[] actualResults = new int[15];
-        for (int i = 0; i <= 14; i++) {
+        int[] actualResults = new int[16];
+        for (int i = 0; i <= 15; i++) {
             int width = sheet.getColumnWidth(i);
             actualResults[i] = width;
         }
