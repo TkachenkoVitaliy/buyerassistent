@@ -173,13 +173,6 @@ public class MainController {
         return modelAndView;
     }
 
-//    @GetMapping("/main")
-//    public ModelAndView getMainPage() {
-//        ModelAndView modelAndView = new ModelAndView();
-//        modelAndView.setViewName("index");
-//        return modelAndView;
-//    }
-
     @GetMapping("/")
     public ModelAndView getMainPage(Model model) {
         ModelAndView modelAndView = new ModelAndView();
@@ -206,10 +199,6 @@ public class MainController {
 
         List<ProductGroupEntity> allProductGroups = productGroupService.findAllOrdered();
         model.addAttribute("allProductGroups", allProductGroups);
-
-//        TODO remove
-//        AllBranchesTotalTable branchTable = totalService.createAllBranchesTotalTable();
-//        model.addAttribute("allBranchTable", branchTable);
 
         List<FactoryTotalTable> factoryTables = totalService.createFactoryTables();
         model.addAttribute("factoryTables", factoryTables);
