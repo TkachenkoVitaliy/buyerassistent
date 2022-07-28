@@ -38,6 +38,7 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 @RestController
+@CrossOrigin(origins = "http://localhost:8080")//TODO for frontend app
 public class MainController {
     private final FileStorageService fileStorageService;
     private final FileDownloadService fileDownloadService;
@@ -76,7 +77,6 @@ public class MainController {
 
 
     @PostMapping("/uploadAccept")
-//    @CrossOrigin(origins = "http://localhost:8081") TODO for frontend app
     public ModelAndView uploadAccept(@RequestParam("mmkAccept") MultipartFile mmkAccept, Model model) {
         //TODO remove timer
         TimerUtil timerUtil = new TimerUtil();
