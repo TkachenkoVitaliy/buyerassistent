@@ -139,6 +139,7 @@ public class SummaryService {
     public List<Path> createAllBranchesFiles() {
         FileUtils.cleanDirectory(ZIP_DIRECTORY);
 
+        //TODO-refactor изменить способ с хардкод списка на получение из бд
         String[] allBranchesNames = SummaryInfoUtil.getAllBranchesNames();
         List<Path> branchFilesPaths = null;
         try {
