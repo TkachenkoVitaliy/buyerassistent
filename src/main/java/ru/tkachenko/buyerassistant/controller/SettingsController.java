@@ -14,6 +14,7 @@ import ru.tkachenko.buyerassistant.utils.CurrentDate;
 import java.util.List;
 
 @RestController
+@CrossOrigin(origins = "http://localhost:8080")//TODO for frontend app
 public class SettingsController {
     private final BranchStartMonthService branchStartMonthService;
 
@@ -27,6 +28,11 @@ public class SettingsController {
         this.branchStartMonthService = branchStartMonthService;
         this.summaryService = summaryService;
         this.mailService = mailService;
+    }
+
+    @GetMapping("/recipients")
+    public List<MailEntity> getRecipients() {
+        return mailService.getAllMails();
     }
 
     @PostMapping("/settings/save_month_settings")
