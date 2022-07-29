@@ -16,8 +16,9 @@ public class SummaryInfoUtil {
     private final static String OMSK = "Омск";
     private final static String NOVOSIBIRSK = "Новосибирск";
     private final static String NOVOKUZNETSK = "Новокузнецк";
+    private final static String YOSHKAR_OLA = "Йошкар-Ола";
     private final static String[] allBranchesNames = {KRASNODAR, ROSTOV, MOSCOW, NOVGOROD, KAZAN, NAB_CHELNY, IZHEVSK,
-            PERM, UFA, CHELYABINSK, YEKATERINBURG, TUMEN, OMSK, NOVOSIBIRSK, NOVOKUZNETSK};
+            PERM, UFA, CHELYABINSK, YEKATERINBURG, TUMEN, OMSK, NOVOSIBIRSK, NOVOKUZNETSK, YOSHKAR_OLA};
 
     private final static String SUPPLIER_COL_NAME = "Поставщик";
     private final static String MILL_COL_NAME = "Стан";
