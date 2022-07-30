@@ -33,12 +33,12 @@ public class SettingsController {
         this.mailService = mailService;
     }
 
-    @GetMapping("/recipients")
+    @GetMapping("/recipients") //REST-API
     public List<MailEntity> getRecipients() {
         return mailService.getAllMails();
     }
 
-    @PutMapping("/recipients")
+    @PutMapping("/recipients") //REST-API
     public ResponseEntity addRecipient(@RequestBody RecipientRequest recipientRequest) {
         MailEntity mailEntity = new MailEntity();
         mailEntity.setBranchName(recipientRequest.getBranchName());
@@ -46,6 +46,16 @@ public class SettingsController {
         mailService.save(mailEntity);
 
         return ResponseEntity.ok(HttpStatus.OK);
+    }
+    @DeleteMapping("/recipients/{id}") //REST-API
+    public ResponseEntity removeRecipient(@PathVariable Long id) {
+        mailService.deleteById(id);
+        return ResponseEntity.ok(HttpStatus.OK);
+    }
+
+    @GetMapping("/branches") //REST-API
+    public List<BranchStartMonthEntity> getAllBranches() {
+        return branchStartMonthService.getAllBranchStartMonthEntitiesOrdered();
     }
 
     @PostMapping("/settings/save_month_settings")

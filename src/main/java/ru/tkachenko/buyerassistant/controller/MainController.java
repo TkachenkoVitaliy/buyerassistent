@@ -2,6 +2,7 @@ package ru.tkachenko.buyerassistant.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -76,7 +77,21 @@ public class MainController {
         this.productGroupService = productGroupService;
     }
 
-    @GetMapping("/undefinedRows")
+        @PostMapping("/uploadMultipleFiles") //REST-API
+    public ResponseEntity uploadMultipleFiles(@RequestParam("otherFactories") MultipartFile otherFactories,
+                                            @RequestParam("oracleMmk") MultipartFile oracleMmk,
+                                            @RequestParam("dependenciesMmk") MultipartFile dependenciesMmk, Model model) {
+        try {
+            List<Path> savedFilesPaths = fileStorageService.storeFiles(otherFactories, oracleMmk, dependenciesMmk);
+            summaryService.parseFilesToSummary(savedFilesPaths);
+            return ResponseEntity.ok(HttpStatus.OK);
+        } catch (IllegalFileExtensionException e) {
+            e.printStackTrace();
+            return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @GetMapping("/undefinedRows") //REST-API
     public List<SummaryRowEntity> getUndefinedRows() {
         return summaryService.findAllUndefinedBranchRows();
     }
@@ -98,24 +113,24 @@ public class MainController {
         } //TODO remove timer
     }
 
-    @PostMapping("/uploadMultipleFiles")
-    public ModelAndView uploadMultipleFiles(@RequestParam("otherFactories") MultipartFile otherFactories,
-                                            @RequestParam("oracleMmk") MultipartFile oracleMmk,
-                                            @RequestParam("dependenciesMmk") MultipartFile dependenciesMmk, Model model) {
-        //TODO remove timer
-        TimerUtil timerUtil = new TimerUtil();
-        //TODO remove timer
-        try {
-            List<Path> savedFilesPaths = fileStorageService.storeFiles(otherFactories, oracleMmk, dependenciesMmk);
-            summaryService.parseFilesToSummary(savedFilesPaths);
-            return createUserResponse(model, "Files Uploaded");
-        } catch (IllegalFileExtensionException e) {
-            e.printStackTrace();
-            return createUserResponse(model, e.getMessage());
-        } finally { //TODO remove timer
-            timerUtil.consoleLogTime("upload and write to DB MultipleFiles");
-        } //TODO remove timer
-    }
+//    @PostMapping("/uploadMultipleFiles")
+//    public ModelAndView uploadMultipleFiles(@RequestParam("otherFactories") MultipartFile otherFactories,
+//                                            @RequestParam("oracleMmk") MultipartFile oracleMmk,
+//                                            @RequestParam("dependenciesMmk") MultipartFile dependenciesMmk, Model model) {
+//        //TODO remove timer
+//        TimerUtil timerUtil = new TimerUtil();
+//        //TODO remove timer
+//        try {
+//            List<Path> savedFilesPaths = fileStorageService.storeFiles(otherFactories, oracleMmk, dependenciesMmk);
+//            summaryService.parseFilesToSummary(savedFilesPaths);
+//            return createUserResponse(model, "Files Uploaded");
+//        } catch (IllegalFileExtensionException e) {
+//            e.printStackTrace();
+//            return createUserResponse(model, e.getMessage());
+//        } finally { //TODO remove timer
+//            timerUtil.consoleLogTime("upload and write to DB MultipleFiles");
+//        } //TODO remove timer
+//    }
 
     @GetMapping("/downloadAllFiles")
     public ResponseEntity<Resource> downloadAllFiles(HttpServletRequest request) {
@@ -139,7 +154,7 @@ public class MainController {
         for (Path filePath : createdBranchesFiles) {
             try {
                 String branchName = filePath.getFileName().toString().replace(".xlsx", "");
-                List<MailEntity> mailEntities = mailService.getMailsByName(branchName);
+                List<MailEntity> mailEntities = mailService.getMailsByBranchName(branchName);
                 for (MailEntity mailEntity : mailEntities) {
                     String emailAddress = mailEntity.getEmailAddress();
                     String subject = "Акцепт-отгрузка " + branchName;

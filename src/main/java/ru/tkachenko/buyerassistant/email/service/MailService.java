@@ -21,7 +21,7 @@ public class MailService {
         return mailRepository.findAllOrderByBranchNameId();
     }
 
-    public List<MailEntity> getMailsByName(String branchName) {
+    public List<MailEntity> getMailsByBranchName(String branchName) {
         return mailRepository.findAllByBranchNameOrderById(branchName);
     }
 
