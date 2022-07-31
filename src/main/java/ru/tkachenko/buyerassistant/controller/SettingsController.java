@@ -15,6 +15,7 @@ import ru.tkachenko.buyerassistant.summary.service.SummaryService;
 import ru.tkachenko.buyerassistant.utils.CurrentDate;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:8080")//TODO for frontend app
@@ -54,8 +55,10 @@ public class SettingsController {
     }
 
     @GetMapping("/branches") //REST-API
-    public List<BranchStartMonthEntity> getAllBranches() {
-        return branchStartMonthService.getAllBranchStartMonthEntitiesOrdered();
+    public List<String> getAllBranches() {
+        return branchStartMonthService.getAllBranchStartMonthEntitiesOrdered().stream()
+                .map(e -> e.getName())
+                .collect(Collectors.toList());
     }
 
     @PostMapping("/settings/save_month_settings")

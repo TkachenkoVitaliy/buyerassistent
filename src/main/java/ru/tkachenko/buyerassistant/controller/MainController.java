@@ -36,8 +36,10 @@ import javax.servlet.http.HttpServletRequest;
 import java.io.FileNotFoundException;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:8080")//TODO for frontend app
@@ -80,7 +82,7 @@ public class MainController {
         @PostMapping("/uploadMultipleFiles") //REST-API
     public ResponseEntity uploadMultipleFiles(@RequestParam("otherFactories") MultipartFile otherFactories,
                                             @RequestParam("oracleMmk") MultipartFile oracleMmk,
-                                            @RequestParam("dependenciesMmk") MultipartFile dependenciesMmk, Model model) {
+                                            @RequestParam("dependenciesMmk") MultipartFile dependenciesMmk) {
         try {
             List<Path> savedFilesPaths = fileStorageService.storeFiles(otherFactories, oracleMmk, dependenciesMmk);
             summaryService.parseFilesToSummary(savedFilesPaths);
@@ -96,22 +98,83 @@ public class MainController {
         return summaryService.findAllUndefinedBranchRows();
     }
 
-    @PostMapping("/uploadAccept")
-    public ModelAndView uploadAccept(@RequestParam("mmkAccept") MultipartFile mmkAccept, Model model) {
-        //TODO remove timer
-        TimerUtil timerUtil = new TimerUtil();
-        //TODO remove timer
+    @PostMapping("/uploadAccept") //REST-API
+    public ResponseEntity uploadAccept(@RequestParam("mmkAccept") MultipartFile mmkAccept) {
         try {
             Path mmkAcceptPath = fileStorageService.storeFile(mmkAccept);
             mmkAcceptService.parseFileToDatabase(mmkAcceptPath);
-            return createUserResponse(model, "Accept Uploaded");
+            return ResponseEntity.ok(HttpStatus.OK);
         } catch (IllegalFileExtensionException | AcceptParseException e) {
             e.printStackTrace();
-            return createUserResponse(model, e.getMessage());
-        } finally { //TODO remove timer
-            timerUtil.consoleLogTime("uploadAccept");
-        } //TODO remove timer
+            return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
+
+    @GetMapping("/sendFiles") //REST-API
+    public List<String> sendAllFiles() {
+        List<String> resultForUser = new ArrayList<>();
+        String message = "Это автоматическая рассылка, не нужно отвечать на это письмо";
+        List<Path> createdBranchesFiles = summaryService.createAllBranchesFiles();
+        for (Path filePath : createdBranchesFiles) {
+            try {
+                String branchName = filePath.getFileName().toString().replace(".xlsx", "");
+                List<MailEntity> mailEntities = mailService.getMailsByBranchName(branchName);
+                for (MailEntity mailEntity : mailEntities) {
+                    String emailAddress = mailEntity.getEmailAddress();
+                    String subject = "Акцепт-отгрузка " + branchName;
+                    emailSenderService.sendMailWithAttachment(emailAddress, subject, message, filePath.toString());
+                    resultForUser.add(branchName + " - " + emailAddress);
+                    TimeUnit.SECONDS.sleep(4L);
+                }
+            } catch (MessagingException | FileNotFoundException | InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+        return resultForUser;
+    }
+
+    @PostMapping("/sendFiles") //REST-API
+    public List<String> sendFiles(@RequestBody String[] selectedBranches) {
+        List<String> branchNames = Arrays.stream(selectedBranches).collect(Collectors.toList());
+        List<String> resultForUser = new ArrayList<>();
+        String message = "Это автоматическая рассылка, не нужно отвечать на это письмо";
+        List<Path> createdBranchesFiles = summaryService.createAllBranchesFiles();
+        for (Path filePath : createdBranchesFiles) {
+            try {
+                String branchName = filePath.getFileName().toString().replace(".xlsx", "");
+                if(branchNames.contains(branchName)) {
+                    List<MailEntity> mailEntities = mailService.getMailsByBranchName(branchName);
+                    for (MailEntity mailEntity : mailEntities) {
+                        String emailAddress = mailEntity.getEmailAddress();
+                        String subject = "Акцепт-отгрузка " + branchName;
+                        emailSenderService.sendMailWithAttachment(emailAddress, subject, message, filePath.toString());
+                        resultForUser.add(branchName + " - " + emailAddress);
+                        TimeUnit.SECONDS.sleep(4L);
+                    }
+                }
+            } catch (MessagingException | FileNotFoundException | InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+        return resultForUser;
+    }
+
+//    @PostMapping("/uploadAccept")
+//    public ModelAndView uploadAccept(@RequestParam("mmkAccept") MultipartFile mmkAccept, Model model) {
+//        //TODO remove timer
+//        TimerUtil timerUtil = new TimerUtil();
+//        //TODO remove timer
+//        try {
+//            Path mmkAcceptPath = fileStorageService.storeFile(mmkAccept);
+//            mmkAcceptService.parseFileToDatabase(mmkAcceptPath);
+//            return createUserResponse(model, "Accept Uploaded");
+//        } catch (IllegalFileExtensionException | AcceptParseException e) {
+//            e.printStackTrace();
+//            return createUserResponse(model, e.getMessage());
+//        } finally { //TODO remove timer
+//            timerUtil.consoleLogTime("uploadAccept");
+//        } //TODO remove timer
+//    }
 
 //    @PostMapping("/uploadMultipleFiles")
 //    public ModelAndView uploadMultipleFiles(@RequestParam("otherFactories") MultipartFile otherFactories,
@@ -145,32 +208,32 @@ public class MainController {
         }
     }
 
-    @GetMapping("/sendAllFiles")
-    public ModelAndView sendAllFiles(Model model) {
-        System.out.println("Start method sendAllFiles");
-        List<String> resultForUser = new ArrayList<>();
-        String message = "Это автоматическая рассылка, не нужно отвечать на это письмо";
-        List<Path> createdBranchesFiles = summaryService.createAllBranchesFiles();
-        for (Path filePath : createdBranchesFiles) {
-            try {
-                String branchName = filePath.getFileName().toString().replace(".xlsx", "");
-                List<MailEntity> mailEntities = mailService.getMailsByBranchName(branchName);
-                for (MailEntity mailEntity : mailEntities) {
-                    String emailAddress = mailEntity.getEmailAddress();
-                    String subject = "Акцепт-отгрузка " + branchName;
-                    emailSenderService.sendMailWithAttachment(emailAddress, subject, message, filePath.toString());
-                    resultForUser.add(branchName + " - " + emailAddress + "   ");
-                    TimeUnit.SECONDS.sleep(4L);
-                }
-            } catch (MessagingException | FileNotFoundException | InterruptedException e) {
-                e.printStackTrace();
-                return createUserResponse(model, e.getMessage());
-            }
-
-        }
-        model.addAttribute("sendEmails", resultForUser);
-        return createUserResponse(model, "Email send complete");
-    }
+//    @GetMapping("/sendAllFiles")
+//    public ModelAndView sendAllFiles(Model model) {
+//        System.out.println("Start method sendAllFiles");
+//        List<String> resultForUser = new ArrayList<>();
+//        String message = "Это автоматическая рассылка, не нужно отвечать на это письмо";
+//        List<Path> createdBranchesFiles = summaryService.createAllBranchesFiles();
+//        for (Path filePath : createdBranchesFiles) {
+//            try {
+//                String branchName = filePath.getFileName().toString().replace(".xlsx", "");
+//                List<MailEntity> mailEntities = mailService.getMailsByBranchName(branchName);
+//                for (MailEntity mailEntity : mailEntities) {
+//                    String emailAddress = mailEntity.getEmailAddress();
+//                    String subject = "Акцепт-отгрузка " + branchName;
+//                    emailSenderService.sendMailWithAttachment(emailAddress, subject, message, filePath.toString());
+//                    resultForUser.add(branchName + " - " + emailAddress + "   ");
+//                    TimeUnit.SECONDS.sleep(4L);
+//                }
+//            } catch (MessagingException | FileNotFoundException | InterruptedException e) {
+//                e.printStackTrace();
+//                return createUserResponse(model, e.getMessage());
+//            }
+//
+//        }
+//        model.addAttribute("sendEmails", resultForUser);
+//        return createUserResponse(model, "Email send complete");
+//    }
 
 
     @GetMapping("/settings")
