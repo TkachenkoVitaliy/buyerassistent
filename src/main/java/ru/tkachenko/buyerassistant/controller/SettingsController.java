@@ -61,6 +61,11 @@ public class SettingsController {
                 .collect(Collectors.toList());
     }
 
+    @GetMapping("/branches_settings") //REST-API
+    public List<BranchStartMonthEntity> getAllBranchesSettings() {
+        return branchStartMonthService.getAllBranchStartMonthEntitiesOrdered();
+    }
+
     @PostMapping("/settings/save_month_settings")
     public ModelAndView saveMonthSettingsAndStay(@RequestParam("values[]") List<Integer> values,
                                                  @RequestParam("yearValues[]") List<Integer> yearValues, Model model) {
@@ -120,7 +125,7 @@ public class SettingsController {
 
         mailService.deleteById(id);
 
-        List<BranchStartMonthEntity> allBranches = branchStartMonthService.getAllBranchStartMonthEntitiesOrdered();
+        List<BranchStartMonthEntity> allBranches = branchStartMonthService.getAllBranchStartMonthEntitiesOrdered(); //TODO branchesSettings
         model.addAttribute("years", years);
         model.addAttribute("branchEntities", allBranches);
         model.addAttribute("months", months);
