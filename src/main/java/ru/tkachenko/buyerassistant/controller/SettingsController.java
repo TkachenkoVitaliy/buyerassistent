@@ -66,6 +66,14 @@ public class SettingsController {
         return branchStartMonthService.getAllBranchStartMonthEntitiesOrdered();
     }
 
+    @PostMapping("/branches_settings") //REST-API
+    public ResponseEntity saveAllBranchesSettings(@RequestBody List<BranchStartMonthEntity> allBranchesSettings) {
+        for (BranchStartMonthEntity branchSettings : allBranchesSettings) {
+            branchStartMonthService.updateBranchStartMonthEntity(branchSettings);
+        }
+        return ResponseEntity.ok(HttpStatus.OK);
+    }
+
     @PostMapping("/settings/save_month_settings")
     public ModelAndView saveMonthSettingsAndStay(@RequestParam("values[]") List<Integer> values,
                                                  @RequestParam("yearValues[]") List<Integer> yearValues, Model model) {

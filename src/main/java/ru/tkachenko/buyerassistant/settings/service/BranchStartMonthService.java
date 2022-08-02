@@ -31,7 +31,7 @@ public class BranchStartMonthService {
         return branchStartMonthRepository.findBranchStartMonthEntitiesByNameIsNotNullOrderById();
     }
 
-    private void updateBranchStartMonthEntity(BranchStartMonthEntity branchStartMonthEntity) {
+    public void updateBranchStartMonthEntity(BranchStartMonthEntity branchStartMonthEntity) {
         branchStartMonthRepository.save(branchStartMonthEntity);
     }
 
