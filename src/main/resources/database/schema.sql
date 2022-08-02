@@ -12,22 +12,24 @@ CREATE TABLE IF NOT EXISTS saved_files_table
 );
 CREATE SEQUENCE IF NOT EXISTS hibernate_sequence START WITH 1 INCREMENT BY 1;
 
+DROP TABLE IF EXISTS summary_table;
+
 CREATE TABLE IF NOT EXISTS summary_table
 (
     id    BIGINT PRIMARY KEY ,
-    supplier VARCHAR(50) NOT NULL,
+    supplier VARCHAR(100) NOT NULL,
     mill INTEGER,
-    branch VARCHAR(50),
+    branch VARCHAR(100),
     sell_type VARCHAR(10),
     client VARCHAR(100),
     consignee VARCHAR,
     product_type VARCHAR(30),
     profile VARCHAR(100),
-    grade VARCHAR(50),
-    ral VARCHAR(50),
+    grade VARCHAR(100),
+    ral VARCHAR(100),
     issued NUMERIC,
-    contract VARCHAR(50),
-    spec VARCHAR(50),
+    contract VARCHAR(100),
+    spec VARCHAR(100),
     position INTEGER,
     accept_month INTEGER,
     year INTEGER,
@@ -37,7 +39,7 @@ CREATE TABLE IF NOT EXISTS summary_table
     shipped NUMERIC,
     shipped_cost NUMERIC,
     shipped_date date,
-    vehicle_number VARCHAR(50),
+    vehicle_number VARCHAR(100),
     invoice_number INTEGER,
     invoice_date date,
     final_price NUMERIC,
@@ -46,7 +48,6 @@ CREATE TABLE IF NOT EXISTS summary_table
 );
 CREATE SEQUENCE IF NOT EXISTS hibernate_sequence START WITH 1 INCREMENT BY 1;
 
--- DROP TABLE IF EXISTS accept_table;
 CREATE TABLE IF NOT EXISTS accept_table
 (
     id    BIGINT PRIMARY KEY,
