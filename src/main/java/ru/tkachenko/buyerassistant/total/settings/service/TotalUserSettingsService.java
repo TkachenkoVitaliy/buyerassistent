@@ -25,12 +25,13 @@ public class TotalUserSettingsService {
     }
 
     public TotalUserSettingsEntity getCurrentUserSettings() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if(!(authentication instanceof AnonymousAuthenticationToken)) {
-            String currentUserName = authentication.getName();
-            return getUserSettingsByName(currentUserName);
-        }
-        return null;
+//        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+//        if(!(authentication instanceof AnonymousAuthenticationToken)) {
+//            String currentUserName = authentication.getName();
+//            return getUserSettingsByName(currentUserName);
+//        }
+//        return null;
+        return getUserSettingsByName("admin"); //TODO for TEST REST
     }
 
     private TotalUserSettingsEntity getUserSettingsByName(String username) {

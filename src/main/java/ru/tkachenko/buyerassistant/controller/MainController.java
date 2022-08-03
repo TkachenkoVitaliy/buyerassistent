@@ -159,6 +159,11 @@ public class MainController {
         return resultForUser;
     }
 
+    @GetMapping("/loadTables") //REST-API
+    public List<FactoryTotalTable> getLoadTables() {
+        return totalService.createFactoryTables();
+    }
+
 //    @PostMapping("/uploadAccept")
 //    public ModelAndView uploadAccept(@RequestParam("mmkAccept") MultipartFile mmkAccept, Model model) {
 //        //TODO remove timer
