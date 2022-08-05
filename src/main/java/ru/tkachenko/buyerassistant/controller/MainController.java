@@ -164,6 +164,35 @@ public class MainController {
         return totalService.createFactoryTables();
     }
 
+    @GetMapping("/loadTables/settings") //REST-API
+    public TotalUserSettingsEntity getLoadTablesUserSettings() {
+        return totalUserSettingsService.getCurrentUserSettings();
+    }
+
+    @PostMapping("/loadTables/settings") //REST-API
+    public TotalUserSettingsEntity updateLoadTablesUserSettings(@RequestBody TotalUserSettingsEntity userSettings) {
+        totalUserSettingsService.updateCurrentUserSettings(userSettings.getMonth(), userSettings.getYear());
+        return totalUserSettingsService.getCurrentUserSettings();
+    }
+
+    @GetMapping("/productTypes/undefined") //REST-API
+    public List<ProductTypeEntity> getUndefinedProductTypes() {
+        return productTypeService.findUndefinedProductTypes();
+    }
+
+    @GetMapping("/productGroups") //REST-API
+    public List<ProductGroupEntity> getAllProductGroups() {
+        return productGroupService.findAllOrdered();
+    }
+
+    @PostMapping("/productTypes/undefined")
+    public ResponseEntity updateProductTypes(@RequestBody List<ProductTypeEntity> productTypes) {
+        productTypes.stream()
+                .forEach(e -> productTypeService.save(e));
+        return ResponseEntity.ok(HttpStatus.OK);
+    }
+
+
 //    @PostMapping("/uploadAccept")
 //    public ModelAndView uploadAccept(@RequestParam("mmkAccept") MultipartFile mmkAccept, Model model) {
 //        //TODO remove timer

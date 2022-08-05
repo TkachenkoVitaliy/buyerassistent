@@ -1,5 +1,6 @@
 package ru.tkachenko.buyerassistant.total.product.group.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import ru.tkachenko.buyerassistant.total.product.type.entity.ProductTypeEntity;
 
 import javax.persistence.*;
@@ -18,7 +19,7 @@ public class ProductGroupEntity {
     private String name;
 
     @OneToMany(mappedBy = "productGroup")
-
+    @JsonIgnore
     private List<ProductTypeEntity> productTypes;
 
     public ProductGroupEntity(String productGroup) {

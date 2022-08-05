@@ -1,5 +1,6 @@
 package ru.tkachenko.buyerassistant.total.product.type.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import ru.tkachenko.buyerassistant.total.product.group.entity.ProductGroupEntity;
 
 import javax.persistence.*;
