@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -42,6 +43,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 @RestController
+@RequestMapping("/api")
 @CrossOrigin(origins = "http://localhost:8080")//TODO for frontend app
 public class MainController {
     private final FileStorageService fileStorageService;
@@ -80,6 +82,7 @@ public class MainController {
     }
 
         @PostMapping("/uploadMultipleFiles") //REST-API
+        @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
     public ResponseEntity uploadMultipleFiles(@RequestParam("otherFactories") MultipartFile otherFactories,
                                             @RequestParam("oracleMmk") MultipartFile oracleMmk,
                                             @RequestParam("dependenciesMmk") MultipartFile dependenciesMmk) {
@@ -94,11 +97,13 @@ public class MainController {
     }
 
     @GetMapping("/undefinedRows") //REST-API
+    @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
     public List<SummaryRowEntity> getUndefinedRows() {
         return summaryService.findAllUndefinedBranchRows();
     }
 
     @PostMapping("/uploadAccept") //REST-API
+    @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
     public ResponseEntity uploadAccept(@RequestParam("mmkAccept") MultipartFile mmkAccept) {
         try {
             Path mmkAcceptPath = fileStorageService.storeFile(mmkAccept);
@@ -111,6 +116,7 @@ public class MainController {
     }
 
     @GetMapping("/sendFiles") //REST-API
+    @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
     public List<String> sendAllFiles() {
         List<String> resultForUser = new ArrayList<>();
         String message = "Это автоматическая рассылка, не нужно отвечать на это письмо";
@@ -134,6 +140,7 @@ public class MainController {
     }
 
     @PostMapping("/sendFiles") //REST-API
+    @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
     public List<String> sendFiles(@RequestBody String[] selectedBranches) {
         List<String> branchNames = Arrays.stream(selectedBranches).collect(Collectors.toList());
         List<String> resultForUser = new ArrayList<>();
@@ -160,32 +167,38 @@ public class MainController {
     }
 
     @GetMapping("/loadTables") //REST-API
+    @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
     public List<FactoryTotalTable> getLoadTables() {
         return totalService.createFactoryTables();
     }
 
     @GetMapping("/loadTables/settings") //REST-API
+    @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
     public TotalUserSettingsEntity getLoadTablesUserSettings() {
         return totalUserSettingsService.getCurrentUserSettings();
     }
 
     @PostMapping("/loadTables/settings") //REST-API
+    @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
     public TotalUserSettingsEntity updateLoadTablesUserSettings(@RequestBody TotalUserSettingsEntity userSettings) {
         totalUserSettingsService.updateCurrentUserSettings(userSettings.getMonth(), userSettings.getYear());
         return totalUserSettingsService.getCurrentUserSettings();
     }
 
     @GetMapping("/productTypes/undefined") //REST-API
+    @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
     public List<ProductTypeEntity> getUndefinedProductTypes() {
         return productTypeService.findUndefinedProductTypes();
     }
 
     @GetMapping("/productGroups") //REST-API
+    @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
     public List<ProductGroupEntity> getAllProductGroups() {
         return productGroupService.findAllOrdered();
     }
 
-    @PostMapping("/productTypes/undefined")
+    @PostMapping("/productTypes/undefined") //REST-API
+    @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
     public ResponseEntity updateProductTypes(@RequestBody List<ProductTypeEntity> productTypes) {
         productTypes.stream()
                 .forEach(e -> productTypeService.save(e));

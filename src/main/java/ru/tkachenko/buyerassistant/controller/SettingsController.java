@@ -3,6 +3,7 @@ package ru.tkachenko.buyerassistant.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
@@ -18,6 +19,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
+@RequestMapping("/api")
 @CrossOrigin(origins = "http://localhost:8080")//TODO for frontend app
 public class SettingsController {
     private final BranchStartMonthService branchStartMonthService;
@@ -35,11 +37,13 @@ public class SettingsController {
     }
 
     @GetMapping("/recipients") //REST-API
+    @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
     public List<MailEntity> getRecipients() {
         return mailService.getAllMails();
     }
 
     @PutMapping("/recipients") //REST-API
+    @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
     public ResponseEntity addRecipient(@RequestBody RecipientRequest recipientRequest) {
         MailEntity mailEntity = new MailEntity();
         mailEntity.setBranchName(recipientRequest.getBranchName());
@@ -49,12 +53,14 @@ public class SettingsController {
         return ResponseEntity.ok(HttpStatus.OK);
     }
     @DeleteMapping("/recipients/{id}") //REST-API
+    @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
     public ResponseEntity removeRecipient(@PathVariable Long id) {
         mailService.deleteById(id);
         return ResponseEntity.ok(HttpStatus.OK);
     }
 
     @GetMapping("/branches") //REST-API
+    @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
     public List<String> getAllBranches() {
         return branchStartMonthService.getAllBranchStartMonthEntitiesOrdered().stream()
                 .map(e -> e.getName())
@@ -62,11 +68,13 @@ public class SettingsController {
     }
 
     @GetMapping("/branches_settings") //REST-API
+    @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
     public List<BranchStartMonthEntity> getAllBranchesSettings() {
         return branchStartMonthService.getAllBranchStartMonthEntitiesOrdered();
     }
 
     @PostMapping("/branches_settings") //REST-API
+    @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
     public ResponseEntity saveAllBranchesSettings(@RequestBody List<BranchStartMonthEntity> allBranchesSettings) {
         for (BranchStartMonthEntity branchSettings : allBranchesSettings) {
             branchStartMonthService.updateBranchStartMonthEntity(branchSettings);

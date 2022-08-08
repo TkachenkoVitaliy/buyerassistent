@@ -1,11 +1,14 @@
 package ru.tkachenko.buyerassistant.security.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Repository;
-import ru.tkachenko.buyerassistant.security.entity.UserEntity;
+import ru.tkachenko.buyerassistant.security.entity.User;
 
-@Repository
-public interface UserRepository extends JpaRepository<UserEntity, Long> {
+import java.util.Optional;
 
-    public UserEntity getUserEntityByUsername(String username);
+public interface UserRepository extends JpaRepository<User, Long> {
+    Optional<User> findByUsername(String username);
+
+    Boolean existsByUsername(String username);
+
+    Boolean existsByEmail(String email);
 }

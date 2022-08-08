@@ -24,40 +24,40 @@ END
 ' LANGUAGE plpgsql;
 
 
-do '
-DECLARE
-    valueCounts INTEGER;
-BEGIN
-    SELECT COUNT(*) INTO valueCounts FROM role;
-    IF valueCounts = 0 THEN
-        INSERT INTO role (name) values (''USER'');
-        INSERT INTO role (name) values (''ADMIN'');
-    END IF;
-END
-' LANGUAGE plpgsql;
+-- do '
+-- DECLARE
+--     valueCounts INTEGER;
+-- BEGIN
+--     SELECT COUNT(*) INTO valueCounts FROM role;
+--     IF valueCounts = 0 THEN
+--         INSERT INTO role (name) values (''USER'');
+--         INSERT INTO role (name) values (''ADMIN'');
+--     END IF;
+-- END
+-- ' LANGUAGE plpgsql;
 
-do '
-DECLARE
-    valueCounts INTEGER;
-BEGIN
-    SELECT COUNT(*) INTO valueCounts FROM usr;
-    IF valueCounts = 0 THEN
-        INSERT INTO usr (username, password) values (''admin'',''$2a$10$JWkkH/Vi16wcdDOnHJ5rAuZ4kHJ1HSSDkhlbCVND.iysFsF/ae1/y'');
-    END IF;
-END
-' LANGUAGE plpgsql;
+-- do '
+-- DECLARE
+--     valueCounts INTEGER;
+-- BEGIN
+--     SELECT COUNT(*) INTO valueCounts FROM usr;
+--     IF valueCounts = 0 THEN
+--         INSERT INTO usr (username, password) values (''admin'',''$2a$10$JWkkH/Vi16wcdDOnHJ5rAuZ4kHJ1HSSDkhlbCVND.iysFsF/ae1/y'');
+--     END IF;
+-- END
+-- ' LANGUAGE plpgsql;
 
 
-do '
-DECLARE
-    valueCounts INTEGER;
-BEGIN
-    SELECT COUNT(*) INTO valueCounts FROM usr_role;
-    IF valueCounts = 0 THEN
-        INSERT INTO usr_role (usr_id, role_id) values (1,2);
-    END IF;
-END
-' LANGUAGE plpgsql;
+-- do '
+-- DECLARE
+--     valueCounts INTEGER;
+-- BEGIN
+--     SELECT COUNT(*) INTO valueCounts FROM usr_role;
+--     IF valueCounts = 0 THEN
+--         INSERT INTO usr_role (usr_id, role_id) values (1,2);
+--     END IF;
+-- END
+-- ' LANGUAGE plpgsql;
 
 
 do '

@@ -4,20 +4,23 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import ru.tkachenko.buyerassistant.security.entity.UserEntity;
+import org.springframework.stereotype.Service;
+import ru.tkachenko.buyerassistant.security.entity.User;
 import ru.tkachenko.buyerassistant.security.repository.UserRepository;
 
-public class UserDetailsServiceImpl implements UserDetailsService {
+import javax.transaction.Transactional;
 
+@Service
+public class UserDetailsServiceImpl implements UserDetailsService {
     @Autowired
-    private UserRepository userRepository;
+    UserRepository userRepository;
 
     @Override
+    @Transactional
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        UserEntity user = userRepository.getUserEntityByUsername(username);
-        if(user == null) {
-            throw new UsernameNotFoundException("Could not find user");
-        }
-        return new UserDetailsImpl(user);
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new UsernameNotFoundException("User Not Found with username: " + username));
+
+        return UserDetailsImpl.build(user);
     }
 }
