@@ -9,15 +9,21 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import ru.tkachenko.buyerassistant.security.entity.ERole;
+import ru.tkachenko.buyerassistant.security.entity.RefreshToken;
 import ru.tkachenko.buyerassistant.security.entity.Role;
 import ru.tkachenko.buyerassistant.security.entity.User;
+import ru.tkachenko.buyerassistant.security.exception.TokenRefreshException;
 import ru.tkachenko.buyerassistant.security.jwt.JwtUtils;
+import ru.tkachenko.buyerassistant.security.payload.request.LogOutRequest;
 import ru.tkachenko.buyerassistant.security.payload.request.LoginRequest;
 import ru.tkachenko.buyerassistant.security.payload.request.SignupRequest;
+import ru.tkachenko.buyerassistant.security.payload.request.TokenRefreshRequest;
 import ru.tkachenko.buyerassistant.security.payload.response.JwtResponse;
 import ru.tkachenko.buyerassistant.security.payload.response.MessageResponse;
+import ru.tkachenko.buyerassistant.security.payload.response.TokenRefreshResponse;
 import ru.tkachenko.buyerassistant.security.repository.RoleRepository;
 import ru.tkachenko.buyerassistant.security.repository.UserRepository;
+import ru.tkachenko.buyerassistant.security.service.RefreshTokenService;
 import ru.tkachenko.buyerassistant.security.service.UserDetailsImpl;
 
 import javax.validation.Valid;
@@ -45,6 +51,9 @@ public class AuthController {
     @Autowired
     JwtUtils jwtUtils;
 
+    @Autowired
+    RefreshTokenService refreshTokenService;
+
     @PostMapping("/signin")
     public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
 
@@ -52,18 +61,19 @@ public class AuthController {
                 new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
-        String jwt = jwtUtils.generateJwtToken(authentication);
 
         UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
+
+        String jwt = jwtUtils.generateJwtToken(userDetails);
+
         List<String> roles = userDetails.getAuthorities().stream()
                 .map(item -> item.getAuthority())
                 .collect(Collectors.toList());
 
-        return ResponseEntity.ok(new JwtResponse(jwt,
-                userDetails.getId(),
-                userDetails.getUsername(),
-                userDetails.getEmail(),
-                roles));
+        RefreshToken refreshToken = refreshTokenService.createRefreshToken(userDetails.getId());
+
+        return ResponseEntity.ok(new JwtResponse(jwt, refreshToken.getToken(), userDetails.getId(),
+                userDetails.getUsername(), userDetails.getEmail(), roles));
     }
 
     @PostMapping("/signup")
@@ -119,5 +129,26 @@ public class AuthController {
         userRepository.save(user);
 
         return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
+    }
+
+    @PostMapping("/refreshtoken")
+    public ResponseEntity<?> refreshtoken(@Valid @RequestBody TokenRefreshRequest request) {
+        String requestRefreshToken = request.getRefreshToken();
+
+        return refreshTokenService.findByToken(requestRefreshToken)
+                .map(refreshTokenService::verifyExpiration)
+                .map(RefreshToken::getUser)
+                .map(user -> {
+                    String token = jwtUtils.generateTokenFromUsername(user.getUsername());
+                    return ResponseEntity.ok(new TokenRefreshResponse(token, requestRefreshToken));
+                })
+                .orElseThrow(() -> new TokenRefreshException(requestRefreshToken,
+                        "Refresh token is not in database!"));
+    }
+
+    @PostMapping("/logout")
+    public ResponseEntity<?> logoutUser(@Valid @RequestBody LogOutRequest logOutRequest) {
+        refreshTokenService.deleteByUserId(logOutRequest.getUserId());
+        return ResponseEntity.ok(new MessageResponse("Log out successful!"));
     }
 }
