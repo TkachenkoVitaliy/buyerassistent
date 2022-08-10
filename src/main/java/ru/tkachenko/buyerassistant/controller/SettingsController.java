@@ -20,7 +20,7 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api")
-@CrossOrigin(origins = "http://localhost:8080")//TODO for frontend app
+@CrossOrigin(origins = "*")//TODO for frontend app
 public class SettingsController {
     private final BranchStartMonthService branchStartMonthService;
 

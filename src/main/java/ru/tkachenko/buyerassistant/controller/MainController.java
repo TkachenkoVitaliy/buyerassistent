@@ -44,7 +44,7 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api")
-@CrossOrigin(origins = "http://localhost:8080")//TODO for frontend app
+@CrossOrigin(origins = "*")//TODO for frontend app
 public class MainController {
     private final FileStorageService fileStorageService;
     private final FileDownloadService fileDownloadService;
@@ -89,6 +89,7 @@ public class MainController {
         try {
             List<Path> savedFilesPaths = fileStorageService.storeFiles(otherFactories, oracleMmk, dependenciesMmk);
             summaryService.parseFilesToSummary(savedFilesPaths);
+            summaryService.updateProductTypeTable();
             return ResponseEntity.ok(HttpStatus.OK);
         } catch (IllegalFileExtensionException e) {
             e.printStackTrace();

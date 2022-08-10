@@ -130,3 +130,39 @@ BEGIN
     END IF;
 END
 ' LANGUAGE plpgsql;
+
+do '
+DECLARE
+    valueCounts INTEGER;
+BEGIN
+    SELECT COUNT(*) INTO valueCounts FROM roles;
+    IF valueCounts = 0 THEN
+        INSERT INTO roles (name) values (''ROLE_ADMIN'');
+        INSERT INTO roles (name) values (''ROLE_MODERATOR'');
+        INSERT INTO roles (name) values (''ROLE_USER'');
+        INSERT INTO roles (name) values (''ROLE_GUEST'');
+    END IF;
+END
+' LANGUAGE plpgsql;
+
+do '
+DECLARE
+    valueCounts INTEGER;
+BEGIN
+    SELECT COUNT(*) INTO valueCounts FROM users;
+    IF valueCounts = 0 THEN
+        INSERT INTO users (email, password, username) values (''v.tkachenko@steeleks.ru'', ''$2a$10$ASD8lbcHBw1u4ZgQ49pSCu2oUwXrUHjfN8q8QBlLxcUG8lneETTie'', ''admin'');
+    END IF;
+END
+' LANGUAGE plpgsql;
+
+do '
+DECLARE
+    valueCounts INTEGER;
+BEGIN
+    SELECT COUNT(*) INTO valueCounts FROM user_roles;
+    IF valueCounts = 0 THEN
+        INSERT INTO user_roles ( user_id, role_id) values (1, 1);
+    END IF;
+END
+' LANGUAGE plpgsql;
