@@ -167,23 +167,35 @@ public class MainController {
         return resultForUser;
     }
 
-    @GetMapping("/loadTables") //REST-API
+//    @GetMapping("/loadTables") //REST-API
+//    @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
+//    public List<FactoryTotalTable> getLoadTables() {
+//        return totalService.createFactoryTables();
+//    }
+
+    @GetMapping("/loadTables/{username}") //REST-API
     @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
-    public List<FactoryTotalTable> getLoadTables() {
-        return totalService.createFactoryTables();
+    public List<FactoryTotalTable> getLoadTables(@PathVariable String username) {
+        return totalService.createFactoryTables(username);
     }
 
-    @GetMapping("/loadTables/settings") //REST-API
+//    @GetMapping("/loadTables/settings") //REST-API
+//    @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
+//    public TotalUserSettingsEntity getLoadTablesSettings() {
+//        return totalUserSettingsService.getCurrentUserSettings();
+//    }
+
+    @GetMapping("/loadTables/settings/{username}") //REST-API
     @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
-    public TotalUserSettingsEntity getLoadTablesUserSettings() {
-        return totalUserSettingsService.getCurrentUserSettings();
+    public TotalUserSettingsEntity getLoadTablesUserSettings(@PathVariable String username) {
+        return totalUserSettingsService.getCurrentUserSettings(username);
     }
 
     @PostMapping("/loadTables/settings") //REST-API
     @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
     public TotalUserSettingsEntity updateLoadTablesUserSettings(@RequestBody TotalUserSettingsEntity userSettings) {
-        totalUserSettingsService.updateCurrentUserSettings(userSettings.getMonth(), userSettings.getYear());
-        return totalUserSettingsService.getCurrentUserSettings();
+        totalUserSettingsService.updateCurrentUserSettings(userSettings);
+        return totalUserSettingsService.getCurrentUserSettings(userSettings.getUsername());
     }
 
     @GetMapping("/productTypes/undefined") //REST-API
@@ -310,44 +322,44 @@ public class MainController {
         return modelAndView;
     }
 
-    @GetMapping("/total")
-    public ModelAndView totalPage(Model model) {
-        summaryService.updateProductTypeTable();
-        CurrentDate currentDate = new CurrentDate();
-        int currentYear = currentDate.getYearInt();
-        List<Integer> years = List.of(currentYear - 1, currentYear, currentYear + 1, currentYear + 2,
-                currentYear + 3, currentYear + 4);
-        model.addAttribute("years", years);
-        model.addAttribute("months", months);
+//    @GetMapping("/total")
+//    public ModelAndView totalPage(Model model) {
+//        summaryService.updateProductTypeTable();
+//        CurrentDate currentDate = new CurrentDate();
+//        int currentYear = currentDate.getYearInt();
+//        List<Integer> years = List.of(currentYear - 1, currentYear, currentYear + 1, currentYear + 2,
+//                currentYear + 3, currentYear + 4);
+//        model.addAttribute("years", years);
+//        model.addAttribute("months", months);
+//
+//        TotalUserSettingsEntity currentUserSettings = totalUserSettingsService.getCurrentUserSettings();
+//        model.addAttribute("userSettings", currentUserSettings);
+//
+//        List<ProductTypeEntity> undefinedProductTypes = productTypeService.findUndefinedProductTypes();
+//        model.addAttribute("undefinedProductTypes", undefinedProductTypes);
+//
+//        List<ProductGroupEntity> allProductGroups = productGroupService.findAllOrdered();
+//        model.addAttribute("allProductGroups", allProductGroups);
+//
+//        List<FactoryTotalTable> factoryTables = totalService.createFactoryTables();
+//        model.addAttribute("factoryTables", factoryTables);
+//
+//        ModelAndView modelAndView = new ModelAndView();
+//        modelAndView.setViewName("total");
+//        return modelAndView;
+//    }
 
-        TotalUserSettingsEntity currentUserSettings = totalUserSettingsService.getCurrentUserSettings();
-        model.addAttribute("userSettings", currentUserSettings);
-
-        List<ProductTypeEntity> undefinedProductTypes = productTypeService.findUndefinedProductTypes();
-        model.addAttribute("undefinedProductTypes", undefinedProductTypes);
-
-        List<ProductGroupEntity> allProductGroups = productGroupService.findAllOrdered();
-        model.addAttribute("allProductGroups", allProductGroups);
-
-        List<FactoryTotalTable> factoryTables = totalService.createFactoryTables();
-        model.addAttribute("factoryTables", factoryTables);
-
-        ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("total");
-        return modelAndView;
-    }
-
-    @PostMapping("/total")
-    public ModelAndView totalPageUpdate(@RequestParam("monthValue") int month,
-                                        @RequestParam("yearValue") int year,
-                                        @RequestParam(required = false, name = "types[]") List<String> types,
-                                        Model model) {
-        totalUserSettingsService.updateCurrentUserSettings(month, year);
-        if (types != null && !types.isEmpty()) {
-            productTypeService.updateUndefinedProductTypes(types);
-        }
-        return totalPage(model);
-    }
+//    @PostMapping("/total")
+//    public ModelAndView totalPageUpdate(@RequestParam("monthValue") int month,
+//                                        @RequestParam("yearValue") int year,
+//                                        @RequestParam(required = false, name = "types[]") List<String> types,
+//                                        Model model) {
+//        totalUserSettingsService.updateCurrentUserSettings(month, year);
+//        if (types != null && !types.isEmpty()) {
+//            productTypeService.updateUndefinedProductTypes(types);
+//        }
+//        return totalPage(model);
+//    }
 
     private ModelAndView createUserResponse(Model model, String message) {
         model.addAttribute("userResponse", message);

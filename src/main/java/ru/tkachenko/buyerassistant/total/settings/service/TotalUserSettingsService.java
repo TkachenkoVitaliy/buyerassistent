@@ -7,6 +7,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import ru.tkachenko.buyerassistant.total.settings.entity.TotalUserSettingsEntity;
 import ru.tkachenko.buyerassistant.total.settings.repository.TotalUserSettingsRepository;
+import ru.tkachenko.buyerassistant.utils.CurrentDate;
 
 @Service
 public class TotalUserSettingsService {
@@ -17,24 +18,24 @@ public class TotalUserSettingsService {
         this.settingsRepository = settingsRepository;
     }
 
-    public void updateCurrentUserSettings(int month, int year) {
-        TotalUserSettingsEntity currentUserSettingsEntity = getCurrentUserSettings();
-        currentUserSettingsEntity.setMonth(month);
-        currentUserSettingsEntity.setYear(year);
+    public void updateCurrentUserSettings(TotalUserSettingsEntity currentUserSettingsEntity) {
         settingsRepository.save(currentUserSettingsEntity);
     }
 
-    public TotalUserSettingsEntity getCurrentUserSettings() {
-//        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-//        if(!(authentication instanceof AnonymousAuthenticationToken)) {
-//            String currentUserName = authentication.getName();
-//            return getUserSettingsByName(currentUserName);
-//        }
-//        return null;
-        return getUserSettingsByName("admin"); //TODO for TEST REST
+    public TotalUserSettingsEntity getCurrentUserSettings(String username) {
+        return getUserSettingsByName(username);
     }
 
+
     private TotalUserSettingsEntity getUserSettingsByName(String username) {
-        return settingsRepository.getTotalUserSettingsEntityByUsername(username);
+        if(username != null) {
+            return settingsRepository.getTotalUserSettingsEntityByUsername(username);
+        } else {
+            TotalUserSettingsEntity defaultUserSetting = new TotalUserSettingsEntity();
+            CurrentDate currentDate = new CurrentDate();
+            defaultUserSetting.setMonth(currentDate.getMonthInt());
+            defaultUserSetting.setYear(currentDate.getYearInt());
+            return defaultUserSetting;
+        }
     }
 }

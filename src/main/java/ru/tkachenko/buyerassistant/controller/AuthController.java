@@ -25,6 +25,9 @@ import ru.tkachenko.buyerassistant.security.repository.RoleRepository;
 import ru.tkachenko.buyerassistant.security.repository.UserRepository;
 import ru.tkachenko.buyerassistant.security.service.RefreshTokenService;
 import ru.tkachenko.buyerassistant.security.service.UserDetailsImpl;
+import ru.tkachenko.buyerassistant.total.settings.entity.TotalUserSettingsEntity;
+import ru.tkachenko.buyerassistant.total.settings.repository.TotalUserSettingsRepository;
+import ru.tkachenko.buyerassistant.utils.CurrentDate;
 
 import javax.validation.Valid;
 import java.util.HashSet;
@@ -44,6 +47,9 @@ public class AuthController {
 
     @Autowired
     RoleRepository roleRepository;
+
+    @Autowired
+    TotalUserSettingsRepository totalUserSettingsRepository;
 
     @Autowired
     PasswordEncoder encoder;
@@ -127,6 +133,13 @@ public class AuthController {
 
         user.setRoles(roles);
         userRepository.save(user);
+
+        CurrentDate currentDate = new CurrentDate();
+        TotalUserSettingsEntity newUserSettings = new TotalUserSettingsEntity();
+        newUserSettings.setUsername(user.getUsername());
+        newUserSettings.setMonth(currentDate.getMonthInt() == 1 ? 12 : currentDate.getMonthInt() - 1);
+        newUserSettings.setYear(currentDate.getMonthInt() == 1 ? currentDate.getYearInt() -1 : currentDate.getYearInt());
+        totalUserSettingsRepository.save(newUserSettings);
 
         return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
     }

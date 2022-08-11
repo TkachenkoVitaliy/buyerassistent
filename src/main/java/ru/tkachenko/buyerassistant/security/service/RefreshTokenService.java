@@ -39,12 +39,15 @@ public class RefreshTokenService {
         return refreshToken;
     }
 
+    @Transactional
     public RefreshToken verifyExpiration(RefreshToken token) {
         if (token.getExpiryDate().compareTo(Instant.now()) < 0) {
-            refreshTokenRepository.delete(token);
-            throw new TokenRefreshException(token.getToken(), "Refresh token was expired. Please make a new signin request");
+            if(refreshTokenRepository.existsById(token.getId())) {
+                System.out.println(refreshTokenRepository.existsById(token.getId()));
+                refreshTokenRepository.delete(token);
+                throw new TokenRefreshException(token.getToken(), "Refresh token was expired. Please make a new signin request");
+            }
         }
-
         return token;
     }
 

@@ -31,9 +31,11 @@ public class TotalService {
         this.totalUserSettingsService = totalUserSettingsService;
     }
 
-    public List<FactoryTotalTable> createFactoryTables() {
-        TotalUserSettingsEntity userSettings = totalUserSettingsService.getCurrentUserSettings();
+    public List<FactoryTotalTable> createFactoryTables(String username) {
+        System.out.println(username);
+        TotalUserSettingsEntity userSettings = totalUserSettingsService.getCurrentUserSettings(username);
         List<ProductGroupEntity> productGroups = productGroupService.findAll();
+        System.out.println(userSettings);
         List<SummaryRowEntity> allSummaryRows = summaryDBService.findAllRowsByMonthAndYear(userSettings.getMonth(),
                 userSettings.getYear());
 
