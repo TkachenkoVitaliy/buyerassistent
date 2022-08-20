@@ -9,6 +9,7 @@ import ru.tkachenko.buyerassistant.file_storage.service.FileDBService;
 import ru.tkachenko.buyerassistant.property.FileStorageProperties;
 import ru.tkachenko.buyerassistant.settings.service.BranchStartMonthService;
 import ru.tkachenko.buyerassistant.summary.entity.SummaryRowEntity;
+import ru.tkachenko.buyerassistant.summary.entity.SummaryRowMinEntity;
 import ru.tkachenko.buyerassistant.summary.oracle_inner.service.OracleParser;
 import ru.tkachenko.buyerassistant.summary.other_factory_inner.service.OtherFactoriesParser;
 import ru.tkachenko.buyerassistant.summary.dependency_inner.service.DependencyParser;
@@ -202,5 +203,9 @@ public class SummaryService {
 
     public List<SummaryRowEntity> findAllUndefinedBranchRows() {
         return summaryDBService.getAllUndefinedBranchRows();
+    }
+
+    public List<SummaryRowMinEntity> getAllSpecsMinified() {
+        return summaryDBService.getAllSpecsMinified();
     }
 }

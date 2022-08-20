@@ -3,6 +3,8 @@ package ru.tkachenko.buyerassistant.summary.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.tkachenko.buyerassistant.summary.entity.SummaryRowEntity;
+import ru.tkachenko.buyerassistant.summary.entity.SummaryRowMinEntity;
+import ru.tkachenko.buyerassistant.summary.repository.SummaryRowMinRepository;
 import ru.tkachenko.buyerassistant.summary.repository.SummaryRowRepository;
 import ru.tkachenko.buyerassistant.total.product.group.service.ProductGroupService;
 import ru.tkachenko.buyerassistant.total.product.type.entity.ProductTypeEntity;
@@ -17,12 +19,14 @@ public class SummaryDBService {
     private final SummaryRowRepository summaryRowRepository;
     private final ProductTypeService productTypeService;
     private final ProductGroupService productGroupService;
+    private final SummaryRowMinRepository summaryRowMinRepository;
 
     @Autowired
-    public SummaryDBService(SummaryRowRepository summaryRowRepository, ProductTypeService productTypeService, ProductGroupService productGroupService) {
+    public SummaryDBService(SummaryRowRepository summaryRowRepository, ProductTypeService productTypeService, ProductGroupService productGroupService, SummaryRowMinRepository summaryRowMinRepository) {
         this.summaryRowRepository = summaryRowRepository;
         this.productTypeService = productTypeService;
         this.productGroupService = productGroupService;
+        this.summaryRowMinRepository = summaryRowMinRepository;
     }
 
     public void save(SummaryRowEntity summaryRowEntity) {
@@ -83,5 +87,9 @@ public class SummaryDBService {
     public List<SummaryRowEntity> getAllUndefinedBranchRows() {
         CurrentDate currentDate = new CurrentDate();
         return summaryRowRepository.findDistinctSummaryRowEntitiesByBranchIsNull(currentDate.getYearInt());
+    }
+
+    public List<SummaryRowMinEntity> getAllSpecsMinified() {
+        return summaryRowMinRepository.findAll();
     }
 }

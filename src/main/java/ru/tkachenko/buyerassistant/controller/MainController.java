@@ -20,6 +20,7 @@ import ru.tkachenko.buyerassistant.mmk_accept.service.MmkAcceptService;
 import ru.tkachenko.buyerassistant.settings.entity.BranchStartMonthEntity;
 import ru.tkachenko.buyerassistant.settings.service.BranchStartMonthService;
 import ru.tkachenko.buyerassistant.summary.entity.SummaryRowEntity;
+import ru.tkachenko.buyerassistant.summary.entity.SummaryRowMinEntity;
 import ru.tkachenko.buyerassistant.summary.service.SummaryService;
 import ru.tkachenko.buyerassistant.total.product.group.entity.ProductGroupEntity;
 import ru.tkachenko.buyerassistant.total.product.group.service.ProductGroupService;
@@ -216,6 +217,12 @@ public class MainController {
         productTypes.stream()
                 .forEach(e -> productTypeService.save(e));
         return ResponseEntity.ok(HttpStatus.OK);
+    }
+
+    @GetMapping("/specs") //REST-API
+    @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
+    public List<SummaryRowMinEntity> getAllSpecs() {
+        return summaryService.getAllSpecsMinified();
     }
 
 
