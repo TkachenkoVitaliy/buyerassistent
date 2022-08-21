@@ -21,7 +21,7 @@ public class SupplierService {
         return supplierRepository.findAll();
     }
 
-    public void saveSupplier(Supplier supplier) {
-        supplierRepository.save(supplier);
+    public Supplier saveSupplier(Supplier supplier) {
+        return supplierRepository.save(supplier);
     }
 }

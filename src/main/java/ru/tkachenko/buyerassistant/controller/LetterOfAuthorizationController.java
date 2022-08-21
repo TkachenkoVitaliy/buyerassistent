@@ -1,13 +1,8 @@
 package ru.tkachenko.buyerassistant.controller;
 
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-import ru.tkachenko.buyerassistant.letter_of_authorization.entity.LetterOfAuthorization;
-import ru.tkachenko.buyerassistant.letter_of_authorization.entity.Principal;
-import ru.tkachenko.buyerassistant.letter_of_authorization.entity.Supplier;
+import org.springframework.web.bind.annotation.*;
+import ru.tkachenko.buyerassistant.letter_of_authorization.entity.*;
 import ru.tkachenko.buyerassistant.letter_of_authorization.service.*;
 
 import java.util.List;
@@ -49,5 +44,35 @@ public class LetterOfAuthorizationController {
     @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
     public List<Supplier> getAllSuppliers() {
         return supplierService.getAllSuppliers();
+    }
+
+    @PostMapping("/suppliers")
+    @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
+    public Supplier addSupplier(@RequestBody Supplier supplier) {
+        return supplierService.saveSupplier(supplier);
+    }
+
+    @GetMapping("/drivers")
+    @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
+    public List<Driver> getAllDrivers() {
+        return driverService.getAllDrivers();
+    }
+
+    @PostMapping("/drivers")
+    @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
+    public Driver addDriver(@RequestBody Driver driver) {
+        return driverService.saveDriver(driver);
+    }
+
+    @GetMapping("/nomenclatures")
+    @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
+    public List<Nomenclature> getAllNomenclatures() {
+        return nomenclatureService.getAllNomenclatures();
+    }
+
+    @PostMapping("/nomenclatures")
+    @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
+    public Nomenclature addNomenclature(@RequestBody Nomenclature nomenclature) {
+        return nomenclatureService.saveNomenclature(nomenclature);
     }
 }

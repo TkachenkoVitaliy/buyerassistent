@@ -21,7 +21,7 @@ public class DriverService {
         return driverRepository.findAll();
     }
 
-    public void createDriver(Driver driver) {
-        driverRepository.save(driver);
+    public Driver saveDriver(Driver driver) {
+        return driverRepository.save(driver);
     }
 }

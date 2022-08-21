@@ -21,7 +21,7 @@ public class NomenclatureService {
         return nomenclatureRepository.findAll();
     }
 
-    public void saveNomenclature(Nomenclature nomenclature) {
-        nomenclatureRepository.save(nomenclature);
+    public Nomenclature saveNomenclature(Nomenclature nomenclature) {
+        return nomenclatureRepository.save(nomenclature);
     }
 }
