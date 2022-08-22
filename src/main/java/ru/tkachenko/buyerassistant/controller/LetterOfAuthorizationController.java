@@ -40,6 +40,12 @@ public class LetterOfAuthorizationController {
         return principalService.getAllPrincipals();
     }
 
+    @PostMapping("/principals")
+    @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
+    public Principal addPrincipal(@RequestBody Principal principal) {
+        return principalService.savePrincipal(principal);
+    }
+
     @GetMapping("/suppliers")
     @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
     public List<Supplier> getAllSuppliers() {

@@ -21,7 +21,7 @@ public class PrincipalService {
         return principalRepository.findAll();
     }
 
-    public void savePrincipal(Principal principal) {
-        principalRepository.save(principal);
+    public Principal savePrincipal(Principal principal) {
+        return principalRepository.save(principal);
     }
 }
