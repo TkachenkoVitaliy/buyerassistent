@@ -1,5 +1,7 @@
 package ru.tkachenko.buyerassistant.letter_of_authorization.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import javax.persistence.*;
 import java.math.BigDecimal;
 
@@ -15,18 +17,21 @@ public class LetterRow {
     @JoinColumn(name = "nomenclature_id")
     private Nomenclature nomenclature;
 
+    private Integer number;
 
     private BigDecimal tonnage;
 
     @ManyToOne
     @JoinColumn(name = "letterOfAuthorization_id")
+    @JsonBackReference
     private LetterOfAuthorization letterOfAuthorization;
 
     public LetterRow() {
     }
 
-    public LetterRow(Nomenclature nomenclature, BigDecimal tonnage, LetterOfAuthorization letterOfAuthorization) {
+    public LetterRow(Nomenclature nomenclature, Integer number, BigDecimal tonnage, LetterOfAuthorization letterOfAuthorization) {
         this.nomenclature = nomenclature;
+        this.number = number;
         this.tonnage = tonnage;
         this.letterOfAuthorization = letterOfAuthorization;
     }
@@ -45,6 +50,14 @@ public class LetterRow {
 
     public void setNomenclature(Nomenclature nomenclature) {
         this.nomenclature = nomenclature;
+    }
+
+    public Integer getNumber() {
+        return number;
+    }
+
+    public void setNumber(Integer number) {
+        this.number = number;
     }
 
     public BigDecimal getTonnage() {

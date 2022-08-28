@@ -14,6 +14,14 @@
         <version>2.6.6</version>
     </parent>
 
+    <repositories>
+        <repository>
+            <id>AsposeJavaAPI</id>
+            <name>Aspose Java API</name>
+            <url>https://repository.aspose.com/repo/</url>
+        </repository>
+    </repositories>
+
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -107,6 +115,60 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-mail</artifactId>
+        </dependency>
+
+        <dependency>
+
+            <groupId>com.aspose</groupId>
+
+            <artifactId>aspose-cells</artifactId>
+
+            <version>22.8</version>
+
+        </dependency>
+
+        <dependency>
+
+            <groupId>com.aspose</groupId>
+
+            <artifactId>aspose-cells</artifactId>
+
+            <version>22.8</version>
+
+            <classifier>javadoc</classifier>
+
+        </dependency>
+
+        <dependency>
+
+            <groupId>org.bouncycastle</groupId>
+
+            <artifactId>bcprov-jdk15on</artifactId>
+
+            <version>1.60</version>
+
+        </dependency>
+
+        <dependency>
+
+            <groupId>org.bouncycastle</groupId>
+
+            <artifactId>bcpkix-jdk15on</artifactId>
+
+            <version>1.60</version>
+
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.pdfbox</groupId>
+            <artifactId>pdfbox</artifactId>
+            <version>2.0.26</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.pdfbox</groupId>
+            <artifactId>fontbox</artifactId>
+            <version>2.0.26</version>
         </dependency>
 
     </dependencies>

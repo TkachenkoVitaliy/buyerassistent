@@ -24,4 +24,8 @@ public class DriverService {
     public Driver saveDriver(Driver driver) {
         return driverRepository.save(driver);
     }
+
+    public void deleteDriver(Long id) {
+        driverRepository.deleteById(id);
+    }
 }

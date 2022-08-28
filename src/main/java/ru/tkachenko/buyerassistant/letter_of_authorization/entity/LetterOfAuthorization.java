@@ -1,5 +1,7 @@
 package ru.tkachenko.buyerassistant.letter_of_authorization.entity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import javax.persistence.*;
 import java.sql.Date;
 import java.util.List;
@@ -14,7 +16,7 @@ public class LetterOfAuthorization {
 
     @ManyToOne
     @JoinColumn(name = "principal_id", nullable=false)
-    private Principal principalEntity;
+    private Principal principal;
 
     private Integer number;
 
@@ -31,6 +33,7 @@ public class LetterOfAuthorization {
     private Driver driver;
 
     @OneToMany(mappedBy = "letterOfAuthorization")
+    @JsonManagedReference
     private List<LetterRow> letterRows;
 
     private String sellType;
@@ -38,13 +41,13 @@ public class LetterOfAuthorization {
     public LetterOfAuthorization() {
     }
 
-    public LetterOfAuthorization(Principal principalEntity, Integer number, Date issuedDate, Date validUntil, Supplier supplier, Driver driver, List<LetterRow> letterRows, String sellType) {
-        this.principalEntity = principalEntity;
-        this.number = number;
-        this.issuedDate = issuedDate;
+    public LetterOfAuthorization(Principal principal, Integer number, Date issuedDate, Date validUntil, Supplier supplier, Driver driver, List<LetterRow> letterRows, String sellType) {
+        this.principal = principal;//
+        this.number = number;//
+        this.issuedDate = issuedDate;//
         this.validUntil = validUntil;
-        this.supplier = supplier;
-        this.driver = driver;
+        this.supplier = supplier;//
+        this.driver = driver;//
         this.letterRows = letterRows;
         this.sellType = sellType;
     }
@@ -57,12 +60,12 @@ public class LetterOfAuthorization {
         this.id = id;
     }
 
-    public Principal getPrincipalEntity() {
-        return principalEntity;
+    public Principal getPrincipal() {
+        return principal;
     }
 
-    public void setPrincipalEntity(Principal principalEntity) {
-        this.principalEntity = principalEntity;
+    public void setPrincipal(Principal principal) {
+        this.principal = principal;
     }
 
     public Integer getNumber() {

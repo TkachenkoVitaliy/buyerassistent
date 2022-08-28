@@ -21,7 +21,15 @@ public class PrincipalService {
         return principalRepository.findAll();
     }
 
+    public Principal getPrincipalById(Long id) {
+        return principalRepository.findById(id).orElseThrow();//TODO cant find principal exception
+    }
+
     public Principal savePrincipal(Principal principal) {
         return principalRepository.save(principal);
+    }
+
+    public void deletePrincipal(Long id) {
+        principalRepository.deleteById(id);
     }
 }

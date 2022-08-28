@@ -17,6 +17,8 @@ public class Principal {
 
     private String kpp;
 
+    private String okpo;
+
     private String address;
 
     @Column(name = "bank_account")
@@ -28,10 +30,11 @@ public class Principal {
     public Principal() {
     }
 
-    public Principal(String name, String inn, String kpp, String address, String bankAccount, String directorName) {
+    public Principal(String name, String inn, String kpp, String okpo, String address, String bankAccount, String directorName) {
         this.name = name;
         this.inn = inn;
         this.kpp = kpp;
+        this.okpo = okpo;
         this.address = address;
         this.bankAccount = bankAccount;
         this.directorName = directorName;
@@ -67,6 +70,14 @@ public class Principal {
 
     public void setKpp(String kpp) {
         this.kpp = kpp;
+    }
+
+    public String getOkpo() {
+        return okpo;
+    }
+
+    public void setOkpo(String okpo) {
+        this.okpo = okpo;
     }
 
     public String getAddress() {
