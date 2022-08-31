@@ -1,6 +1,8 @@
 package ru.tkachenko.buyerassistant.letter_of_authorization.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
@@ -23,6 +25,7 @@ public class LetterRow {
 
     @ManyToOne
     @JoinColumn(name = "letterOfAuthorization_id")
+    @OnDelete(action = OnDeleteAction.CASCADE)
     @JsonBackReference
     private LetterOfAuthorization letterOfAuthorization;
 

@@ -1,6 +1,8 @@
 package ru.tkachenko.buyerassistant.letter_of_authorization.entity;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 import java.sql.Date;
@@ -33,6 +35,7 @@ public class LetterOfAuthorization {
     private Driver driver;
 
     @OneToMany(mappedBy = "letterOfAuthorization")
+    @OnDelete(action = OnDeleteAction.CASCADE)
     @JsonManagedReference
     private List<LetterRow> letterRows;
 
