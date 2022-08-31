@@ -57,6 +57,12 @@ public class LetterOfAuthorizationController {
         }
     }
 
+    @DeleteMapping("/lettersOfAuthorization/{id}")
+    @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
+    public void deleteLetterOfAuthorization(@PathVariable Long id) {
+        letterOfAuthorizationService.deleteLetterOfAuthorization(id);
+    }
+
     @GetMapping("/lettersOfAuthorization/xls/{id}")
     @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
     public ResponseEntity<Resource> downloadLoaAsXls(@PathVariable Long id) {

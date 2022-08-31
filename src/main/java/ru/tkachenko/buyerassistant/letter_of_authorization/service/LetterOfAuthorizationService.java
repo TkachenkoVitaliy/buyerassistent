@@ -38,4 +38,8 @@ public class LetterOfAuthorizationService {
     public List<LetterOfAuthorization> getAllLetterOfAuthorizationByPrincipal(Principal principal) {
         return loaRepository.findByPrincipal(principal);
     }
+
+    public void deleteLetterOfAuthorization(Long id) {
+        loaRepository.deleteById(id);
+    }
 }
