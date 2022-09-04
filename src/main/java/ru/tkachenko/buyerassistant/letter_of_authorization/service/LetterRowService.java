@@ -2,6 +2,7 @@ package ru.tkachenko.buyerassistant.letter_of_authorization.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import ru.tkachenko.buyerassistant.letter_of_authorization.entity.LetterOfAuthorization;
 import ru.tkachenko.buyerassistant.letter_of_authorization.entity.LetterRow;
 import ru.tkachenko.buyerassistant.letter_of_authorization.repository.LetterRowRepository;
 
@@ -31,5 +32,13 @@ public class LetterRowService {
                 .map(letterRowRepository::save)
                 .collect(Collectors.toList());
 
+    }
+
+    public List<LetterRow> findLetterRowsByLetterOfAuthorization(LetterOfAuthorization letterOfAuthorization) {
+        return letterRowRepository.findLetterRowByLetterOfAuthorization(letterOfAuthorization);
+    }
+
+    public void deleteRow(LetterRow letterRow) {
+        letterRowRepository.delete(letterRow);
     }
 }

@@ -103,4 +103,35 @@ public class Principal {
     public void setDirectorName(String directorName) {
         this.directorName = directorName;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Principal)) return false;
+
+        Principal principal = (Principal) o;
+
+        if (id != null ? !id.equals(principal.id) : principal.id != null) return false;
+        if (name != null ? !name.equals(principal.name) : principal.name != null) return false;
+        if (inn != null ? !inn.equals(principal.inn) : principal.inn != null) return false;
+        if (kpp != null ? !kpp.equals(principal.kpp) : principal.kpp != null) return false;
+        if (okpo != null ? !okpo.equals(principal.okpo) : principal.okpo != null) return false;
+        if (address != null ? !address.equals(principal.address) : principal.address != null) return false;
+        if (bankAccount != null ? !bankAccount.equals(principal.bankAccount) : principal.bankAccount != null)
+            return false;
+        return directorName != null ? directorName.equals(principal.directorName) : principal.directorName == null;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = id != null ? id.hashCode() : 0;
+        result = 31 * result + (name != null ? name.hashCode() : 0);
+        result = 31 * result + (inn != null ? inn.hashCode() : 0);
+        result = 31 * result + (kpp != null ? kpp.hashCode() : 0);
+        result = 31 * result + (okpo != null ? okpo.hashCode() : 0);
+        result = 31 * result + (address != null ? address.hashCode() : 0);
+        result = 31 * result + (bankAccount != null ? bankAccount.hashCode() : 0);
+        result = 31 * result + (directorName != null ? directorName.hashCode() : 0);
+        return result;
+    }
 }

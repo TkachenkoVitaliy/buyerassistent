@@ -36,4 +36,22 @@ public class Supplier {
     public void setSupplierName(String supplierName) {
         this.supplierName = supplierName;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Supplier)) return false;
+
+        Supplier supplier = (Supplier) o;
+
+        if (id != null ? !id.equals(supplier.id) : supplier.id != null) return false;
+        return supplierName != null ? supplierName.equals(supplier.supplierName) : supplier.supplierName == null;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = id != null ? id.hashCode() : 0;
+        result = 31 * result + (supplierName != null ? supplierName.hashCode() : 0);
+        return result;
+    }
 }

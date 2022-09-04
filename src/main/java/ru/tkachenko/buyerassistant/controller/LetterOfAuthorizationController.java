@@ -19,6 +19,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Comparator;
 import java.util.List;
 
 @RestController
@@ -123,10 +124,39 @@ public class LetterOfAuthorizationController {
         return letterOfAuthorizationService.saveLetterOfAuthorization(letterOfAuthorization);
     }
 
+    @PutMapping("/lettersOfAuthorization")
+    @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
+    public LetterOfAuthorization updateLetterOfAuthorization(@RequestBody LetterOfAuthorization letterOfAuthorization) {
+        return letterOfAuthorizationService.saveLetterOfAuthorization(letterOfAuthorization);
+    }
+
     @PostMapping("/letterRows")
     @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
-    public List<LetterRow> createLetterRow(@RequestBody List<LetterRow> letterRows) {
+    public List<LetterRow> createLetterRows(@RequestBody List<LetterRow> letterRows) {
         return letterRowService.saveAllLetterRows(letterRows);
+    }
+
+    @PutMapping("/letterRows")
+    @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
+    public List<LetterRow> updateLetterRows(@RequestBody List<LetterRow> letterRowsAfter) {
+        LetterOfAuthorization letterOfAuthorization = letterRowsAfter.get(0).getLetterOfAuthorization();
+        List<LetterRow> letterRowsBefore = letterRowService.findLetterRowsByLetterOfAuthorization(letterOfAuthorization);
+        if(compareLetterRows(letterRowsBefore, letterRowsAfter)) return letterRowsAfter;
+
+        letterRowsBefore.forEach(letterRow -> letterRowService.deleteRow(letterRow));
+
+        return letterRowService.saveAllLetterRows(letterRowsAfter);
+    }
+
+    private boolean compareLetterRows(List<LetterRow> oldRows, List<LetterRow> newRows) {
+        if(oldRows.size() != newRows.size()) return false;
+        oldRows.sort(Comparator.comparingInt(LetterRow::getNumber));
+        newRows.sort(Comparator.comparingInt(LetterRow::getNumber));
+
+        for(int i = 0; i < oldRows.size(); i++) {
+            if(oldRows.get(i) != newRows.get(i)) return false;
+        }
+        return true;
     }
 
 

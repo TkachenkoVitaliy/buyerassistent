@@ -78,4 +78,29 @@ public class LetterRow {
     public void setLetterOfAuthorization(LetterOfAuthorization letterOfAuthorization) {
         this.letterOfAuthorization = letterOfAuthorization;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof LetterRow)) return false;
+
+        LetterRow letterRow = (LetterRow) o;
+
+        if (id != null ? !id.equals(letterRow.id) : letterRow.id != null) return false;
+        if (nomenclature != null ? !nomenclature.equals(letterRow.nomenclature) : letterRow.nomenclature != null)
+            return false;
+        if (number != null ? !number.equals(letterRow.number) : letterRow.number != null) return false;
+        if (tonnage != null ? !tonnage.equals(letterRow.tonnage) : letterRow.tonnage != null) return false;
+        return letterOfAuthorization != null ? letterOfAuthorization.equals(letterRow.letterOfAuthorization) : letterRow.letterOfAuthorization == null;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = id != null ? id.hashCode() : 0;
+        result = 31 * result + (nomenclature != null ? nomenclature.hashCode() : 0);
+        result = 31 * result + (number != null ? number.hashCode() : 0);
+        result = 31 * result + (tonnage != null ? tonnage.hashCode() : 0);
+        result = 31 * result + (letterOfAuthorization != null ? letterOfAuthorization.hashCode() : 0);
+        return result;
+    }
 }

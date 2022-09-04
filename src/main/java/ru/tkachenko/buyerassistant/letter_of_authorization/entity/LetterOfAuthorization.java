@@ -126,4 +126,36 @@ public class LetterOfAuthorization {
     public void setSellType(String sellType) {
         this.sellType = sellType;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof LetterOfAuthorization)) return false;
+
+        LetterOfAuthorization that = (LetterOfAuthorization) o;
+
+        if (id != null ? !id.equals(that.id) : that.id != null) return false;
+        if (principal != null ? !principal.equals(that.principal) : that.principal != null) return false;
+        if (number != null ? !number.equals(that.number) : that.number != null) return false;
+        if (issuedDate != null ? !issuedDate.equals(that.issuedDate) : that.issuedDate != null) return false;
+        if (validUntil != null ? !validUntil.equals(that.validUntil) : that.validUntil != null) return false;
+        if (supplier != null ? !supplier.equals(that.supplier) : that.supplier != null) return false;
+        if (driver != null ? !driver.equals(that.driver) : that.driver != null) return false;
+        if (letterRows != null ? !letterRows.equals(that.letterRows) : that.letterRows != null) return false;
+        return sellType != null ? sellType.equals(that.sellType) : that.sellType == null;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = id != null ? id.hashCode() : 0;
+        result = 31 * result + (principal != null ? principal.hashCode() : 0);
+        result = 31 * result + (number != null ? number.hashCode() : 0);
+        result = 31 * result + (issuedDate != null ? issuedDate.hashCode() : 0);
+        result = 31 * result + (validUntil != null ? validUntil.hashCode() : 0);
+        result = 31 * result + (supplier != null ? supplier.hashCode() : 0);
+        result = 31 * result + (driver != null ? driver.hashCode() : 0);
+        result = 31 * result + (letterRows != null ? letterRows.hashCode() : 0);
+        result = 31 * result + (sellType != null ? sellType.hashCode() : 0);
+        return result;
+    }
 }

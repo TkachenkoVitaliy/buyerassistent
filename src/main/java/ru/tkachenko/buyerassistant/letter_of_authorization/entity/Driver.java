@@ -92,4 +92,32 @@ public class Driver {
     public void setDateOfIssue(Date dateOfIssue) {
         this.dateOfIssue = dateOfIssue;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Driver)) return false;
+
+        Driver driver = (Driver) o;
+
+        if (id != null ? !id.equals(driver.id) : driver.id != null) return false;
+        if (name != null ? !name.equals(driver.name) : driver.name != null) return false;
+        if (passportSeries != null ? !passportSeries.equals(driver.passportSeries) : driver.passportSeries != null)
+            return false;
+        if (passportNumber != null ? !passportNumber.equals(driver.passportNumber) : driver.passportNumber != null)
+            return false;
+        if (issuedBy != null ? !issuedBy.equals(driver.issuedBy) : driver.issuedBy != null) return false;
+        return dateOfIssue != null ? dateOfIssue.equals(driver.dateOfIssue) : driver.dateOfIssue == null;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = id != null ? id.hashCode() : 0;
+        result = 31 * result + (name != null ? name.hashCode() : 0);
+        result = 31 * result + (passportSeries != null ? passportSeries.hashCode() : 0);
+        result = 31 * result + (passportNumber != null ? passportNumber.hashCode() : 0);
+        result = 31 * result + (issuedBy != null ? issuedBy.hashCode() : 0);
+        result = 31 * result + (dateOfIssue != null ? dateOfIssue.hashCode() : 0);
+        return result;
+    }
 }
