@@ -12,5 +12,6 @@ RUN --mount=type=cache,target=/root/.m2 mvn -f /home/app/pom.xml clean package -
 FROM openjdk:11-jre-slim
 COPY otherfiles/. /home/vitaliy/buyerassistent/loa
 COPY --from=build /home/app/target/BuyerAssistant-2.0.0.jar /usr/local/lib/BuyerAssistant-2.0.0.jar
+RUN apt-get update; apt-get install -y fontconfig libfreetype6
 EXPOSE 8081
-#ENTRYPOINT ["java","-jar","/usr/local/lib/BuyerAssistant-2.0.0.jar"]
+ENTRYPOINT ["java","-jar","/usr/local/lib/BuyerAssistant-2.0.0.jar"]
