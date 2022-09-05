@@ -11,6 +11,6 @@ RUN --mount=type=cache,target=/root/.m2 mvn -f /home/app/pom.xml clean package -
 #
 FROM openjdk:11-jre-slim
 COPY --from=build /home/app/target/BuyerAssistant-2.0.0.jar /usr/local/lib/BuyerAssistant-2.0.0.jar
-COPY /Users/vitaliy/buyerassistent/loa/template.xls /home/vitaliy/buyerassistent/loa
+COPY /home/vitaliy/buyerassistent/loa/template.xls /home/vitaliy/buyerassistent/loa
 EXPOSE 8081
 ENTRYPOINT ["java","-jar","/usr/local/lib/BuyerAssistant-2.0.0.jar"]
