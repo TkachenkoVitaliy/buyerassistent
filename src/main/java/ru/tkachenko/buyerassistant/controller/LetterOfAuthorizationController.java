@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import ru.tkachenko.buyerassistant.letter_of_authorization.entity.*;
+import ru.tkachenko.buyerassistant.letter_of_authorization.exceptions.AlreadyUsedException;
 import ru.tkachenko.buyerassistant.letter_of_authorization.service.*;
 import ru.tkachenko.buyerassistant.utils.PdfUtil;
 
@@ -243,4 +244,21 @@ public class LetterOfAuthorizationController {
     public Nomenclature addNomenclature(@RequestBody Nomenclature nomenclature) {
         return nomenclatureService.saveNomenclature(nomenclature);
     }
+
+    @PutMapping("/nomenclatures")
+    @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
+    public Nomenclature updateNomenclature(@RequestBody Nomenclature nomenclature) {
+        return nomenclatureService.saveNomenclature(nomenclature);
+    }
+
+    @DeleteMapping("/nomenclatures/{id}")
+    @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
+    public void deleteNomenclature(@PathVariable Long id) {
+        if (letterRowService.findLetterRowsUseThisNomenclatureId(id).size() > 0) {
+            throw new AlreadyUsedException("Эта номенклатура уже используется");
+        } else {
+            nomenclatureService.deleteNomenclature(id);
+        }
+    }
+
 }

@@ -18,10 +18,14 @@ public class NomenclatureService {
     }
 
     public List<Nomenclature> getAllNomenclatures() {
-        return nomenclatureRepository.findAll();
+        return nomenclatureRepository.findByOrderByName();
     }
 
     public Nomenclature saveNomenclature(Nomenclature nomenclature) {
         return nomenclatureRepository.save(nomenclature);
+    }
+
+    public void deleteNomenclature(Long id) {
+        nomenclatureRepository.deleteById(id);
     }
 }

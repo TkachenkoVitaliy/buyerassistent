@@ -41,4 +41,8 @@ public class LetterRowService {
     public void deleteRow(LetterRow letterRow) {
         letterRowRepository.delete(letterRow);
     }
+
+    public List<LetterRow> findLetterRowsUseThisNomenclatureId(Long nomId) {
+        return letterRowRepository.findLetterRowsByNomenclature_Id(nomId);
+    }
 }

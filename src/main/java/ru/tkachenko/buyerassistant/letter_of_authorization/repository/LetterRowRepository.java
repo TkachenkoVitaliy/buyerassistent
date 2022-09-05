@@ -11,4 +11,6 @@ import java.util.List;
 public interface LetterRowRepository extends JpaRepository<LetterRow, Long> {
 
     public List<LetterRow> findLetterRowByLetterOfAuthorization(LetterOfAuthorization letterOfAuthorization);
+
+    public List<LetterRow> findLetterRowsByNomenclature_Id(Long id);
 }
