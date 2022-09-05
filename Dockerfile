@@ -13,4 +13,4 @@ FROM openjdk:11-jre-slim
 COPY otherfiles/. /home/vitaliy/buyerassistent/loa
 COPY --from=build /home/app/target/BuyerAssistant-2.0.0.jar /usr/local/lib/BuyerAssistant-2.0.0.jar
 EXPOSE 8081
-ENTRYPOINT ["java","-jar","/usr/local/lib/BuyerAssistant-2.0.0.jar"]
+#ENTRYPOINT ["java","-jar","/usr/local/lib/BuyerAssistant-2.0.0.jar"]

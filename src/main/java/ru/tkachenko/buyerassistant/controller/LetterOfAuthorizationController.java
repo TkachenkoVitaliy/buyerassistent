@@ -35,9 +35,10 @@ public class LetterOfAuthorizationController {
     private final PrincipalService principalService;
     private final SupplierService supplierService;
     private final LetterOfAuthorizationCreator letterOfAuthorizationCreator;
+    private final PdfUtil pdfUtil;
 
     @Autowired
-    public LetterOfAuthorizationController(LetterOfAuthorizationService letterOfAuthorizationService, DriverService driverService, LetterRowService letterRowService, NomenclatureService nomenclatureService, PrincipalService principalService, SupplierService supplierService, LetterOfAuthorizationCreator letterOfAuthorizationCreator) {
+    public LetterOfAuthorizationController(LetterOfAuthorizationService letterOfAuthorizationService, DriverService driverService, LetterRowService letterRowService, NomenclatureService nomenclatureService, PrincipalService principalService, SupplierService supplierService, LetterOfAuthorizationCreator letterOfAuthorizationCreator, PdfUtil pdfUtil) {
         this.letterOfAuthorizationService = letterOfAuthorizationService;
         this.driverService = driverService;
         this.letterRowService = letterRowService;
@@ -45,6 +46,7 @@ public class LetterOfAuthorizationController {
         this.principalService = principalService;
         this.supplierService = supplierService;
         this.letterOfAuthorizationCreator = letterOfAuthorizationCreator;
+        this.pdfUtil = pdfUtil;
     }
 
     @GetMapping("/lettersOfAuthorization") //REST-API
@@ -88,9 +90,8 @@ public class LetterOfAuthorizationController {
                     Workbook workbook = new Workbook(createdLoa.toString());
                     workbook.save(loaPdf, SaveFormat.PDF);
 
-                    PdfUtil pdfUtil = new PdfUtil();
 
-                    pdfUtil.createPDFFromImage(loaPdf, "/Users/vitaliy/buyerassistent/loa/image.png",
+                    pdfUtil.createPDFFromImage(loaPdf,
                             loaPdf);
 
                     createdLoa = Paths.get(loaPdf);
