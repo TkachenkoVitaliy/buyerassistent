@@ -143,7 +143,7 @@ public class LetterOfAuthorizationCreator {
         Path createdLoaPath = LOA_DIRECTORY.resolve(createdLoa);
         Path createdLoaPdfPath = LOA_DIRECTORY.resolve(createdLoadPdf);
 
-        Files.createDirectories(LOA_DIRECTORY);
+        if(!Files.exists(LOA_DIRECTORY)) Files.createDirectories(LOA_DIRECTORY);
         Files.copy(templatePath, createdLoaPath, StandardCopyOption.REPLACE_EXISTING);
         return createdLoaPath;
     }
