@@ -16,12 +16,12 @@ import ru.tkachenko.buyerassistant.letter_of_authorization.exceptions.AlreadyUse
 import ru.tkachenko.buyerassistant.letter_of_authorization.service.*;
 import ru.tkachenko.buyerassistant.utils.PdfUtil;
 
-import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Objects;
 
 @RestController
 @RequestMapping("/api")
@@ -49,7 +49,7 @@ public class LetterOfAuthorizationController {
         this.pdfUtil = pdfUtil;
     }
 
-    @GetMapping("/lettersOfAuthorization") //REST-API
+    @GetMapping("/lettersOfAuthorization")
     @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
     public List<LetterOfAuthorization> getAllLettersOfAuthorization(@RequestParam(required = false, name = "principal_id")
                                                                             Long principalId) {
@@ -80,12 +80,12 @@ public class LetterOfAuthorizationController {
     }
 
     private ResponseEntity<Resource> loaFileForDownload(String extension, Long id) {
-        if (extension == "xls" || extension == "pdf") {
+        if (Objects.equals(extension, "xls") || Objects.equals(extension, "pdf")) {
             LetterOfAuthorization letterOfAuthorization = letterOfAuthorizationService.getLetterOfAuthorizationById(id);
             try {
                 Path createdLoa = letterOfAuthorizationCreator.createNewLoa(letterOfAuthorization);
-                if (extension == "pdf") {
-                    //TO-DO
+                if (extension.equals("pdf")) {
+
                     String loaPdf = createdLoa.toString().replace(".xls", ".pdf");
                     Workbook workbook = new Workbook(createdLoa.toString());
                     workbook.save(loaPdf, SaveFormat.PDF);
@@ -109,8 +109,6 @@ public class LetterOfAuthorizationController {
                         .contentType(MediaType.APPLICATION_OCTET_STREAM)
                         .body(resource);
 
-            } catch (IOException e) {
-                e.printStackTrace();
             } catch (Exception e) {
                 e.printStackTrace();
             }

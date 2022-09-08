@@ -17,6 +17,8 @@ CREATE TABLE IF NOT EXISTS saved_files_table
 );
 CREATE SEQUENCE IF NOT EXISTS hibernate_sequence START WITH 1 INCREMENT BY 1;
 
+DROP TABLE IF EXISTS summary_table;
+
 CREATE TABLE IF NOT EXISTS summary_table
 (
     id    BIGINT PRIMARY KEY ,
