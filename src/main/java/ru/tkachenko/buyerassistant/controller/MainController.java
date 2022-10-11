@@ -111,6 +111,7 @@ public class MainController {
         List<String> resultForUser = new ArrayList<>();
         String message = "Это автоматическая рассылка, не нужно отвечать на это письмо";
         List<Path> createdBranchesFiles = summaryService.createAllBranchesFiles();
+        System.out.println(createdBranchesFiles);
         for (Path filePath : createdBranchesFiles) {
             try {
                 String branchName = filePath.getFileName().toString().replace(".xlsx", "");
@@ -136,6 +137,7 @@ public class MainController {
         List<String> resultForUser = new ArrayList<>();
         String message = "Это автоматическая рассылка, не нужно отвечать на это письмо";
         List<Path> createdBranchesFiles = summaryService.createAllBranchesFiles();
+        System.out.println(createdBranchesFiles);
         for (Path filePath : createdBranchesFiles) {
             try {
                 String branchName = filePath.getFileName().toString().replace(".xlsx", "");

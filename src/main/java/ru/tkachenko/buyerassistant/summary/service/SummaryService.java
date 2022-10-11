@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import ru.tkachenko.buyerassistant.file_storage.entity.SavedFileEntity;
 import ru.tkachenko.buyerassistant.file_storage.service.FileDBService;
 import ru.tkachenko.buyerassistant.property.FileStorageProperties;
+import ru.tkachenko.buyerassistant.settings.entity.BranchStartMonthEntity;
 import ru.tkachenko.buyerassistant.settings.service.BranchStartMonthService;
 import ru.tkachenko.buyerassistant.summary.entity.SummaryRowEntity;
 import ru.tkachenko.buyerassistant.summary.entity.SummaryRowMinEntity;
@@ -141,12 +142,18 @@ public class SummaryService {
         FileUtils.cleanDirectory(ZIP_DIRECTORY);
 
         //TODO-refactor изменить способ с хардкод списка на получение из бд
-        String[] allBranchesNames = summaryDBService.findAllBranches();
+        String[] allBranchesNames = branchStartMonthService.getAllBranchStartMonthEntitiesOrdered()
+                .stream().map(BranchStartMonthEntity::getName).distinct().toArray(String[]::new);
+
+        System.out.println("createAllBranchesFiles");
+        Arrays.stream(allBranchesNames).forEach(System.out::println);
+        System.out.println("end");
+
         List<Path> branchFilesPaths = null;
         try {
             Files.createDirectories(ZIP_DIRECTORY);
             branchFilesPaths = Arrays.stream(allBranchesNames)
-                    .parallel()
+//                    .parallel()
                     .map(this::createBranchFile)
                     .collect(Collectors.toList());
         } catch (IOException e) {

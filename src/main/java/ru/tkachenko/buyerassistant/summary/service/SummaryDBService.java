@@ -95,6 +95,8 @@ public class SummaryDBService {
 
     public String[] findAllBranches() {
         List<String> allBranches = summaryRowRepository.findAllBranches();
+        System.out.println("findAllBranches");
+        System.out.println(allBranches);
         String[] array = new String[allBranches.size()];
         allBranches.toArray(array);
         return array;
