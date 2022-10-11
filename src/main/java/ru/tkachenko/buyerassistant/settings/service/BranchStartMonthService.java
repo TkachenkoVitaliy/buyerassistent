@@ -4,17 +4,23 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.tkachenko.buyerassistant.settings.entity.BranchStartMonthEntity;
 import ru.tkachenko.buyerassistant.settings.repository.BranchStartMonthRepository;
+import ru.tkachenko.buyerassistant.summary.service.SummaryDBService;
+import ru.tkachenko.buyerassistant.summary.service.SummaryService;
+import ru.tkachenko.buyerassistant.utils.CurrentDate;
 
+import java.util.Arrays;
 import java.util.List;
 
 @Service
 public class BranchStartMonthService {
 
     private final BranchStartMonthRepository branchStartMonthRepository;
+    private final SummaryDBService summaryDBService;
 
     @Autowired
-    public BranchStartMonthService(BranchStartMonthRepository branchStartMonthRepository) {
+    public BranchStartMonthService(BranchStartMonthRepository branchStartMonthRepository, SummaryDBService summaryDBService) {
         this.branchStartMonthRepository = branchStartMonthRepository;
+        this.summaryDBService = summaryDBService;
     }
 
     public void saveMonthSettings(List<Integer> values, List<Integer> yearValues) {
@@ -28,6 +34,14 @@ public class BranchStartMonthService {
     }
 
     public List<BranchStartMonthEntity> getAllBranchStartMonthEntitiesOrdered() {
+        String[] allBranches = summaryDBService.findAllBranches();
+        Arrays.stream(allBranches).forEach(e -> {
+            if(branchStartMonthRepository.findFirstByName(e) == null) {
+                CurrentDate currentDate = new CurrentDate();
+                branchStartMonthRepository.save(new BranchStartMonthEntity(e, 1,
+                        currentDate.getYearInt()));
+            }
+        });
         return branchStartMonthRepository.findBranchStartMonthEntitiesByNameIsNotNullOrderById();
     }
 

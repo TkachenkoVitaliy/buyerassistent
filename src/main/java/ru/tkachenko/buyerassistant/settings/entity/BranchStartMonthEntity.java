@@ -1,15 +1,13 @@
 package ru.tkachenko.buyerassistant.settings.entity;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Entity
 @Table(name = "branches_settings_table")
 public class BranchStartMonthEntity {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
 
@@ -24,6 +22,12 @@ public class BranchStartMonthEntity {
 
     public BranchStartMonthEntity(Long id, String name, int startMonth, int startYear) {
         this.id = id;
+        this.name = name;
+        this.startMonth = startMonth;
+        this.startYear = startYear;
+    }
+
+    public BranchStartMonthEntity(String name, int startMonth, int startYear) {
         this.name = name;
         this.startMonth = startMonth;
         this.startYear = startYear;

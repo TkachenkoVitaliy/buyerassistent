@@ -141,7 +141,7 @@ public class SummaryService {
         FileUtils.cleanDirectory(ZIP_DIRECTORY);
 
         //TODO-refactor изменить способ с хардкод списка на получение из бд
-        String[] allBranchesNames = SummaryInfoUtil.getAllBranchesNames();
+        String[] allBranchesNames = summaryDBService.findAllBranches();
         List<Path> branchFilesPaths = null;
         try {
             Files.createDirectories(ZIP_DIRECTORY);

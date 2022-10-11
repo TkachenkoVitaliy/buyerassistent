@@ -53,4 +53,7 @@ public interface SummaryRowRepository extends JpaRepository<SummaryRowEntity, Lo
 
     @Query(value = "SELECT DISTINCT ON (spec) * FROM summary_table WHERE branch IS NULL AND year = :year", nativeQuery = true)
     List<SummaryRowEntity> findDistinctSummaryRowEntitiesByBranchIsNull(int year);
+
+    @Query(value = "SELECT DISTINCT branch FROM summary_table", nativeQuery = true)
+    List<String> findAllBranches();
 }

@@ -92,4 +92,11 @@ public class SummaryDBService {
     public List<SummaryRowMinEntity> getAllSpecsMinified() {
         return summaryRowMinRepository.findAll();
     }
+
+    public String[] findAllBranches() {
+        List<String> allBranches = summaryRowRepository.findAllBranches();
+        String[] array = new String[allBranches.size()];
+        allBranches.toArray(array);
+        return array;
+    }
 }
