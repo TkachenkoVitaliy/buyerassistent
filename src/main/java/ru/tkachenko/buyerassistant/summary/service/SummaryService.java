@@ -145,10 +145,6 @@ public class SummaryService {
         String[] allBranchesNames = branchStartMonthService.getAllBranchStartMonthEntitiesOrdered()
                 .stream().map(BranchStartMonthEntity::getName).distinct().toArray(String[]::new);
 
-        System.out.println("createAllBranchesFiles");
-        Arrays.stream(allBranchesNames).forEach(System.out::println);
-        System.out.println("end");
-
         List<Path> branchFilesPaths = null;
         try {
             Files.createDirectories(ZIP_DIRECTORY);

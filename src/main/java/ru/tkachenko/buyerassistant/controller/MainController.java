@@ -1,6 +1,7 @@
 package ru.tkachenko.buyerassistant.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.Resource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -14,7 +15,6 @@ import ru.tkachenko.buyerassistant.file_storage.service.FileDownloadService;
 import ru.tkachenko.buyerassistant.file_storage.service.FileStorageService;
 import ru.tkachenko.buyerassistant.mmk_accept.exception.AcceptParseException;
 import ru.tkachenko.buyerassistant.mmk_accept.service.MmkAcceptService;
-import ru.tkachenko.buyerassistant.settings.service.BranchStartMonthService;
 import ru.tkachenko.buyerassistant.summary.entity.SummaryRowEntity;
 import ru.tkachenko.buyerassistant.summary.entity.SummaryRowMinEntity;
 import ru.tkachenko.buyerassistant.summary.service.SummaryService;
@@ -28,6 +28,7 @@ import ru.tkachenko.buyerassistant.total.settings.entity.TotalUserSettingsEntity
 import ru.tkachenko.buyerassistant.total.settings.service.TotalUserSettingsService;
 
 import javax.mail.MessagingException;
+import javax.servlet.http.HttpServletRequest;
 import java.io.FileNotFoundException;
 import java.nio.file.Path;
 import java.util.ArrayList;
@@ -49,6 +50,7 @@ public class MainController {
     private final TotalService totalService;
     private final ProductTypeService productTypeService;
     private final ProductGroupService productGroupService;
+    private final FileDownloadService fileDownloadService;
 
     private final List<String> months = List.of("Январь", "Февраль", "Март", "Апрель", "Май", "Июнь",
             "Июль", "Август", "Сентябрь", "Октябрь", "Ноябрь", "Декабрь");
@@ -58,7 +60,7 @@ public class MainController {
     public MainController(FileStorageService fileStorageService, MmkAcceptService mmkAcceptService,
                           SummaryService summaryService, EmailSenderService emailSenderService, MailService mailService,
                           TotalUserSettingsService totalUserSettingsService, TotalService totalService,
-                          ProductTypeService productTypeService, ProductGroupService productGroupService) {
+                          ProductTypeService productTypeService, ProductGroupService productGroupService, FileDownloadService fileDownloadService) {
         this.fileStorageService = fileStorageService;
         this.mmkAcceptService = mmkAcceptService;
         this.summaryService = summaryService;
@@ -68,6 +70,7 @@ public class MainController {
         this.totalService = totalService;
         this.productTypeService = productTypeService;
         this.productGroupService = productGroupService;
+        this.fileDownloadService = fileDownloadService;
     }
 
         @PostMapping("/uploadMultipleFiles")
@@ -111,7 +114,6 @@ public class MainController {
         List<String> resultForUser = new ArrayList<>();
         String message = "Это автоматическая рассылка, не нужно отвечать на это письмо";
         List<Path> createdBranchesFiles = summaryService.createAllBranchesFiles();
-        System.out.println(createdBranchesFiles);
         for (Path filePath : createdBranchesFiles) {
             try {
                 String branchName = filePath.getFileName().toString().replace(".xlsx", "");
@@ -137,7 +139,6 @@ public class MainController {
         List<String> resultForUser = new ArrayList<>();
         String message = "Это автоматическая рассылка, не нужно отвечать на это письмо";
         List<Path> createdBranchesFiles = summaryService.createAllBranchesFiles();
-        System.out.println(createdBranchesFiles);
         for (Path filePath : createdBranchesFiles) {
             try {
                 String branchName = filePath.getFileName().toString().replace(".xlsx", "");
@@ -204,16 +205,11 @@ public class MainController {
     }
 
 //    TODO create REST endpoint for download files
-//    @GetMapping("/downloadAllFiles")
-//    public ResponseEntity<Resource> downloadAllFiles(HttpServletRequest request) {
-//        //TODO remove timer
-//        TimerUtil timerUtilDownloadAllFiles = new TimerUtil();
-//        //TODO remove timer
-//        try {
-//            List<Path> createdBranchesFiles = summaryService.createAllBranchesFiles();
-//            return fileDownloadService.getZipFileAsResources(createdBranchesFiles, request);
-//        } finally {
-//            timerUtilDownloadAllFiles.consoleLogTime("createAllFiles");
-//        }
-//    }
+    @GetMapping("/downloadAllFiles")
+    @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
+    public ResponseEntity<Resource> downloadAllFiles(HttpServletRequest request) {
+        List<Path> createdBranchesFiles = summaryService.createAllBranchesFiles();
+        return fileDownloadService.getZipFileAsResources(createdBranchesFiles, request);
+
+    }
 }

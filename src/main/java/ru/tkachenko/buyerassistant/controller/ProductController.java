@@ -31,21 +31,6 @@ public class ProductController {
     }
 
 
-    @GetMapping("/test")
-    public String checkParser() {
-        System.out.println("квадрат");
-        System.out.println(productTypeService.findGroupByProductTypeName("квадрат"));
-//        System.out.println("лист г/к чеч");
-//        System.out.println(productTypeService.findGroupByProductTypeName("лист г/к чеч"));
-        System.out.println("Рулон ГЦ_полимер");
-        System.out.println(productTypeService.findGroupByProductTypeName("Рулон ГЦ_полимер"));
-//        System.out.println("Профиль арматурный_моток");
-//        System.out.println(productTypeService.findGroupByProductTypeName("Профиль арматурный_моток"));
-//        System.out.println("УГОЛ");
-//        System.out.println(productTypeService.findGroupByProductTypeName("УГОЛ"));
-        return "HI";
-    }
-
     @GetMapping("/test2")
     public String testTotal() {
         List<String> allProductTypeNames = summaryDBService.findAllProductTypeNames();

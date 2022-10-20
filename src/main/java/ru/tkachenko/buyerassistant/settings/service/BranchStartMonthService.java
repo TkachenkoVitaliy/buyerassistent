@@ -50,9 +50,7 @@ public class BranchStartMonthService {
     }
 
     public int getBranchStartMonth(String branchName) {
-        System.out.println(branchName);
         BranchStartMonthEntity branchStartMonthEntity = branchStartMonthRepository.findFirstByName(branchName);
-        System.out.println(branchStartMonthEntity);
         return branchStartMonthEntity.getStartMonth();
     }
 

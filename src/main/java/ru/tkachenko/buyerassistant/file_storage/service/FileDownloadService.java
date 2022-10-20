@@ -1,8 +1,10 @@
 package ru.tkachenko.buyerassistant.file_storage.service;
 
+import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -10,10 +12,12 @@ import ru.tkachenko.buyerassistant.property.FileStorageProperties;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.*;
+import java.net.MalformedURLException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
+import java.util.Objects;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
@@ -38,17 +42,19 @@ public class FileDownloadService {
             String fileName = resource.getFilename();
             headerValues = "attachment; filename=" + fileName;
             contentType = request.getServletContext().getMimeType(resource.getFile().getAbsolutePath());
-            return ResponseEntity.ok().contentType(MediaType.parseMediaType(contentType))
-                    .header(HttpHeaders.CONTENT_DISPOSITION, headerValues).body(resource);
-        } catch (IOException ex) {
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
             System.out.println("Could not determine file type");
         }
 
-        if (contentType == null) {
+        if(contentType == null) {
             contentType = "application/octet-stream";
         }
-        return ResponseEntity.ok().contentType(MediaType.parseMediaType(contentType))
-                .header(HttpHeaders.CONTENT_DISPOSITION, headerValues).body(resource);
+        return ResponseEntity.ok()
+                .contentType(MediaType.parseMediaType(contentType))
+                .header(HttpHeaders.CONTENT_DISPOSITION, headerValues)
+                .body(resource);
     }
 
     private Path zipFiles(List<Path> filesForZip) {
