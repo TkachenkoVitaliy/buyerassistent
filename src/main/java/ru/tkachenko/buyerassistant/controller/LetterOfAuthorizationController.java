@@ -50,7 +50,7 @@ public class LetterOfAuthorizationController {
     }
 
     @GetMapping("/lettersOfAuthorization")
-    @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
+    @PreAuthorize("hasRole('MODERATOR') or hasRole('ADMIN')")
     public List<LetterOfAuthorization> getAllLettersOfAuthorization(@RequestParam(required = false, name = "principal_id")
                                                                             Long principalId) {
         if (principalId == null) {
@@ -62,19 +62,19 @@ public class LetterOfAuthorizationController {
     }
 
     @DeleteMapping("/lettersOfAuthorization/{id}")
-    @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
+    @PreAuthorize("hasRole('MODERATOR') or hasRole('ADMIN')")
     public void deleteLetterOfAuthorization(@PathVariable Long id) {
         letterOfAuthorizationService.deleteLetterOfAuthorization(id);
     }
 
     @GetMapping("/lettersOfAuthorization/xls/{id}")
-    @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
+    @PreAuthorize("hasRole('MODERATOR') or hasRole('ADMIN')")
     public ResponseEntity<Resource> downloadLoaAsXls(@PathVariable Long id) {
         return loaFileForDownload("xls", id);
     }
 
     @GetMapping("/lettersOfAuthorization/pdf/{id}")
-    @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
+    @PreAuthorize("hasRole('MODERATOR') or hasRole('ADMIN')")
     public ResponseEntity<Resource> downloadLoaAsPdf(@PathVariable Long id) {
         return loaFileForDownload("pdf", id);
     }
@@ -119,25 +119,25 @@ public class LetterOfAuthorizationController {
 
 
     @PostMapping("/lettersOfAuthorization")
-    @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
+    @PreAuthorize("hasRole('MODERATOR') or hasRole('ADMIN')")
     public LetterOfAuthorization createLetterOfAuthorization(@RequestBody LetterOfAuthorization letterOfAuthorization) {
         return letterOfAuthorizationService.saveLetterOfAuthorization(letterOfAuthorization);
     }
 
     @PutMapping("/lettersOfAuthorization")
-    @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
+    @PreAuthorize("hasRole('MODERATOR') or hasRole('ADMIN')")
     public LetterOfAuthorization updateLetterOfAuthorization(@RequestBody LetterOfAuthorization letterOfAuthorization) {
         return letterOfAuthorizationService.saveLetterOfAuthorization(letterOfAuthorization);
     }
 
     @PostMapping("/letterRows")
-    @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
+    @PreAuthorize("hasRole('MODERATOR') or hasRole('ADMIN')")
     public List<LetterRow> createLetterRows(@RequestBody List<LetterRow> letterRows) {
         return letterRowService.saveAllLetterRows(letterRows);
     }
 
     @PutMapping("/letterRows")
-    @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
+    @PreAuthorize("hasRole('MODERATOR') or hasRole('ADMIN')")
     public List<LetterRow> updateLetterRows(@RequestBody List<LetterRow> letterRowsAfter) {
         LetterOfAuthorization letterOfAuthorization = letterRowsAfter.get(0).getLetterOfAuthorization();
         List<LetterRow> letterRowsBefore = letterRowService.findLetterRowsByLetterOfAuthorization(letterOfAuthorization);
@@ -161,97 +161,97 @@ public class LetterOfAuthorizationController {
 
 
     @GetMapping("/principals")
-    @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
+    @PreAuthorize("hasRole('MODERATOR') or hasRole('ADMIN')")
     public List<Principal> getAllPrincipals() {
         return principalService.getAllPrincipals();
     }
 
     @PostMapping("/principals")
-    @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
+    @PreAuthorize("hasRole('MODERATOR') or hasRole('ADMIN')")
     public Principal addPrincipal(@RequestBody Principal principal) {
         return principalService.savePrincipal(principal);
     }
 
     @PutMapping("/principals")
-    @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
+    @PreAuthorize("hasRole('MODERATOR') or hasRole('ADMIN')")
     public Principal editPrincipal(@RequestBody Principal principal) {
         return principalService.savePrincipal(principal);
     }
 
     @DeleteMapping("/principals/{id}")
-    @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
+    @PreAuthorize("hasRole('MODERATOR') or hasRole('ADMIN')")
     public void deletePrincipal(@PathVariable Long id) {
         principalService.deletePrincipal(id);
     }
 
     @GetMapping("/suppliers")
-    @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
+    @PreAuthorize("hasRole('MODERATOR') or hasRole('ADMIN')")
     public List<Supplier> getAllSuppliers() {
         return supplierService.getAllSuppliers();
     }
 
     @PostMapping("/suppliers")
-    @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
+    @PreAuthorize("hasRole('MODERATOR') or hasRole('ADMIN')")
     public Supplier addSupplier(@RequestBody Supplier supplier) {
         return supplierService.saveSupplier(supplier);
     }
 
     @PutMapping("/suppliers")
-    @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
+    @PreAuthorize("hasRole('MODERATOR') or hasRole('ADMIN')")
     public Supplier editSupplier(@RequestBody Supplier supplier) {
         return supplierService.saveSupplier(supplier);
     }
 
     @DeleteMapping("/suppliers/{id}")
-    @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
+    @PreAuthorize("hasRole('MODERATOR') or hasRole('ADMIN')")
     public void deleteSupplier(@PathVariable Long id) {
         supplierService.deleteSupplier(id);
     }
 
     @GetMapping("/drivers")
-    @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
+    @PreAuthorize("hasRole('MODERATOR') or hasRole('ADMIN')")
     public List<Driver> getAllDrivers() {
         return driverService.getAllDrivers();
     }
 
     @PostMapping("/drivers")
-    @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
+    @PreAuthorize("hasRole('MODERATOR') or hasRole('ADMIN')")
     public Driver addDriver(@RequestBody Driver driver) {
         return driverService.saveDriver(driver);
     }
 
     @PutMapping("/drivers")
-    @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
+    @PreAuthorize("hasRole('MODERATOR') or hasRole('ADMIN')")
     public Driver editDriver(@RequestBody Driver driver) {
         return driverService.saveDriver(driver);
     }
 
     @DeleteMapping("/drivers/{id}")
-    @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
+    @PreAuthorize("hasRole('MODERATOR') or hasRole('ADMIN')")
     public void deleteDriver(@PathVariable Long id) {
         driverService.deleteDriver(id);
     }
 
     @GetMapping("/nomenclatures")
-    @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
+    @PreAuthorize("hasRole('MODERATOR') or hasRole('ADMIN')")
     public List<Nomenclature> getAllNomenclatures() {
         return nomenclatureService.getAllNomenclatures();
     }
 
     @PostMapping("/nomenclatures")
-    @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
+    @PreAuthorize("hasRole('MODERATOR') or hasRole('ADMIN')")
     public Nomenclature addNomenclature(@RequestBody Nomenclature nomenclature) {
         return nomenclatureService.saveNomenclature(nomenclature);
     }
 
     @PutMapping("/nomenclatures")
-    @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
+    @PreAuthorize("hasRole('MODERATOR') or hasRole('ADMIN')")
     public Nomenclature updateNomenclature(@RequestBody Nomenclature nomenclature) {
         return nomenclatureService.saveNomenclature(nomenclature);
     }
 
     @DeleteMapping("/nomenclatures/{id}")
-    @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
+    @PreAuthorize("hasRole('MODERATOR') or hasRole('ADMIN')")
     public void deleteNomenclature(@PathVariable Long id) {
         if (letterRowService.findLetterRowsUseThisNomenclatureId(id).size() > 0) {
             throw new AlreadyUsedException("Эта номенклатура уже используется");

@@ -74,7 +74,7 @@ public class MainController {
     }
 
         @PostMapping("/uploadMultipleFiles")
-        @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
+        @PreAuthorize("hasRole('MODERATOR') or hasRole('ADMIN')")
     public ResponseEntity uploadMultipleFiles(@RequestParam("otherFactories") MultipartFile otherFactories,
                                             @RequestParam("oracleMmk") MultipartFile oracleMmk,
                                             @RequestParam("dependenciesMmk") MultipartFile dependenciesMmk) {
@@ -90,13 +90,13 @@ public class MainController {
     }
 
     @GetMapping("/undefinedRows")
-    @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
+    @PreAuthorize("hasRole('MODERATOR') or hasRole('ADMIN')")
     public List<SummaryRowEntity> getUndefinedRows() {
         return summaryService.findAllUndefinedBranchRows();
     }
 
     @PostMapping("/uploadAccept")
-    @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
+    @PreAuthorize("hasRole('MODERATOR') or hasRole('ADMIN')")
     public ResponseEntity uploadAccept(@RequestParam("mmkAccept") MultipartFile mmkAccept) {
         try {
             Path mmkAcceptPath = fileStorageService.storeFile(mmkAccept);
@@ -109,7 +109,7 @@ public class MainController {
     }
 
     @GetMapping("/sendFiles")
-    @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
+    @PreAuthorize("hasRole('MODERATOR') or hasRole('ADMIN')")
     public List<String> sendAllFiles() {
         List<String> resultForUser = new ArrayList<>();
         String message = "Это автоматическая рассылка, не нужно отвечать на это письмо";
@@ -160,38 +160,38 @@ public class MainController {
     }
 
     @GetMapping("/loadTables/{username}")
-    @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
+    @PreAuthorize("hasRole('MODERATOR') or hasRole('ADMIN')")
     public List<FactoryTotalTable> getLoadTables(@PathVariable String username) {
         return totalService.createFactoryTables(username);
     }
 
     @GetMapping("/loadTables/settings/{username}")
-    @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
+    @PreAuthorize("hasRole('MODERATOR') or hasRole('ADMIN')")
     public TotalUserSettingsEntity getLoadTablesUserSettings(@PathVariable String username) {
         return totalUserSettingsService.getCurrentUserSettings(username);
     }
 
     @PostMapping("/loadTables/settings")
-    @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
+    @PreAuthorize("hasRole('MODERATOR') or hasRole('ADMIN')")
     public TotalUserSettingsEntity updateLoadTablesUserSettings(@RequestBody TotalUserSettingsEntity userSettings) {
         totalUserSettingsService.updateCurrentUserSettings(userSettings);
         return totalUserSettingsService.getCurrentUserSettings(userSettings.getUsername());
     }
 
     @GetMapping("/productTypes/undefined")
-    @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
+    @PreAuthorize("hasRole('MODERATOR') or hasRole('ADMIN')")
     public List<ProductTypeEntity> getUndefinedProductTypes() {
         return productTypeService.findUndefinedProductTypes();
     }
 
     @GetMapping("/productGroups")
-    @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
+    @PreAuthorize("hasRole('MODERATOR') or hasRole('ADMIN')")
     public List<ProductGroupEntity> getAllProductGroups() {
         return productGroupService.findAllOrdered();
     }
 
     @PostMapping("/productTypes/undefined")
-    @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
+    @PreAuthorize("hasRole('MODERATOR') or hasRole('ADMIN')")
     public ResponseEntity updateProductTypes(@RequestBody List<ProductTypeEntity> productTypes) {
         productTypes.stream()
                 .forEach(e -> productTypeService.save(e));
@@ -199,14 +199,14 @@ public class MainController {
     }
 
     @GetMapping("/specs")
-    @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
+    @PreAuthorize("hasRole('MODERATOR') or hasRole('ADMIN')")
     public List<SummaryRowMinEntity> getAllSpecs() {
         return summaryService.getAllSpecsMinified();
     }
 
 //    TODO create REST endpoint for download files
     @GetMapping("/downloadAllFiles")
-    @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
+    @PreAuthorize("hasRole('MODERATOR') or hasRole('ADMIN')")
     public ResponseEntity<Resource> downloadAllFiles(HttpServletRequest request) {
         List<Path> createdBranchesFiles = summaryService.createAllBranchesFiles();
         return fileDownloadService.getZipFileAsResources(createdBranchesFiles, request);

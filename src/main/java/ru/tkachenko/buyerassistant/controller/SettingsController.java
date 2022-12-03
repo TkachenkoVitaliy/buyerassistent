@@ -37,13 +37,13 @@ public class SettingsController {
     }
 
     @GetMapping("/recipients") //REST-API
-    @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
+    @PreAuthorize("hasRole('MODERATOR') or hasRole('ADMIN')")
     public List<MailEntity> getRecipients() {
         return mailService.getAllMails();
     }
 
     @PutMapping("/recipients") //REST-API
-    @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
+    @PreAuthorize("hasRole('MODERATOR') or hasRole('ADMIN')")
     public ResponseEntity addRecipient(@RequestBody RecipientRequest recipientRequest) {
         MailEntity mailEntity = new MailEntity();
         mailEntity.setBranchName(recipientRequest.getBranchName());
@@ -53,7 +53,7 @@ public class SettingsController {
         return ResponseEntity.ok(HttpStatus.OK);
     }
     @DeleteMapping("/recipients/{id}") //REST-API
-    @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
+    @PreAuthorize("hasRole('MODERATOR') or hasRole('ADMIN')")
     public ResponseEntity removeRecipient(@PathVariable Long id) {
         mailService.deleteById(id);
         return ResponseEntity.ok(HttpStatus.OK);
@@ -74,7 +74,7 @@ public class SettingsController {
     }
 
     @PostMapping("/branches_settings") //REST-API
-    @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
+    @PreAuthorize("hasRole('MODERATOR') or hasRole('ADMIN')")
     public ResponseEntity saveAllBranchesSettings(@RequestBody List<BranchStartMonthEntity> allBranchesSettings) {
         for (BranchStartMonthEntity branchSettings : allBranchesSettings) {
             branchStartMonthService.updateBranchStartMonthEntity(branchSettings);
