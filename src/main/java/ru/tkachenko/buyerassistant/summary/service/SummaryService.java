@@ -174,7 +174,9 @@ public class SummaryService {
             dateStyle.setDataFormat(creationHelper.createDataFormat().getFormat("dd.MM.yyyy"));
 
             for(int j = startYear; j <= 2026; j++) {
-                for(int i = startMonth; i <=12; i++) {
+                for(int i = 1; i <=12; i++) {
+                    if (j == startYear && i < startMonth) continue;
+
 //  TODO think about best way              List<SummaryRowEntity> entities = summaryDBService.findByBranchAndAcceptMonth(branchName, i);
                     List<SummaryRowEntity> entities = summaryDBService.findByBranchAndAcceptMonthSorted (branchName, i,
                             j);
