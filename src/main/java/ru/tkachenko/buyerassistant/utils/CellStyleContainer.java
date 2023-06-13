@@ -49,7 +49,7 @@ public class CellStyleContainer {
         doubleCellStyle.setFont(defaultFont);
 
         CreationHelper createHelper = wb.getCreationHelper();
-        short dateFormat = createHelper.createDataFormat().getFormat("dd.MM.yyyy");
+        short dateFormat = createHelper.createDataFormat().getFormat("[$-0419] dd.MM.yyyy");
 
         dateCellStyle = wb.createCellStyle();
         dateCellStyle.setBorderLeft(BorderStyle.THIN);
