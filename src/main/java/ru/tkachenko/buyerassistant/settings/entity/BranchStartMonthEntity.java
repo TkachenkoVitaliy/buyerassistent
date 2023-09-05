@@ -12,6 +12,7 @@ public class BranchStartMonthEntity {
     private Long id;
 
     @Column(name = "name")
+    @UniqueConstraint(columnNames = {"name"}, name = "${branches_settings.name.unique-constraint}")
     private String name;
 
     @Column(name = "start_month")
