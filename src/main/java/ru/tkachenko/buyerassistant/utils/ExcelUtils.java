@@ -71,10 +71,10 @@ public class ExcelUtils {
     public static String getAnyValueAsString(Cell cell) {
         if (cell == null) return null;
         if (cell.getCellType() == CellType.STRING) {
-            return cell.getStringCellValue();
+            return cell.getStringCellValue().trim();
         } else {
             String stringValue = dataFormatter.formatCellValue(cell);
-            return stringValue;
+            return stringValue.trim();
         }
     }
 
