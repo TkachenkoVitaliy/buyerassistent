@@ -22,16 +22,22 @@ import java.util.List;
 public class LetterOfAuthorizationCreator {
 
     private final Path LOA_DIRECTORY;
-    private final String templateName = "template.xls";
+    private final Path TEMPLATE_DIRECTORY;
+    private final String templatesFolder = "templates";
     private final String createdLoa = "Доверенность.xls";
     private final String createdLoadPdf = "Доверенность.pdf";
 
     public LetterOfAuthorizationCreator(FileStorageProperties fileStorageProperties) {
+        Path FILE_STORAGE_LOCATION = Paths.get(fileStorageProperties.getUploadDir()).toAbsolutePath().normalize();
         this.LOA_DIRECTORY = Paths.get(fileStorageProperties.getLoaDir()).toAbsolutePath().normalize();
+        this.TEMPLATE_DIRECTORY = FILE_STORAGE_LOCATION.resolve("templates");
     }
 
     public Path createNewLoa(LetterOfAuthorization letterOfAuthorization) throws IOException {
-        Path loaPath = createNewBlankLoaFile();
+        String principalInn = letterOfAuthorization.getPrincipal().getInn();
+        String templateName = principalInn + ".xls";
+
+        Path loaPath = createNewBlankLoaFile(templateName);
         FileInputStream fis = new FileInputStream(loaPath.toString());
         HSSFWorkbook wb = new HSSFWorkbook(fis);
         HSSFSheet sheet = wb.getSheetAt(0);
@@ -138,8 +144,8 @@ public class LetterOfAuthorizationCreator {
         return row.getCell(column) == null ? row.createCell(column) : row.getCell(column);
     }
 
-    private Path createNewBlankLoaFile() throws IOException {
-        Path templatePath = LOA_DIRECTORY.resolve(templateName);
+    private Path createNewBlankLoaFile(String templateName) throws IOException {
+        Path templatePath = TEMPLATE_DIRECTORY.resolve(templateName);
         Path createdLoaPath = LOA_DIRECTORY.resolve(createdLoa);
         Path createdLoaPdfPath = LOA_DIRECTORY.resolve(createdLoadPdf);
 

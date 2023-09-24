@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import ru.tkachenko.buyerassistant.file_storage.exceptions.IllegalFileExtensionException;
+import ru.tkachenko.buyerassistant.letter_of_authorization.entity.Principal;
 import ru.tkachenko.buyerassistant.property.FileStorageProperties;
 import ru.tkachenko.buyerassistant.utils.FileUtils;
 
@@ -18,11 +19,27 @@ import java.util.List;
 @Service
 public class FileStorageService {
     private final Path TEMP_DIRECTORY;
+    private final Path TEMPLATE_DIRECTORY;
 
     @Autowired
     public FileStorageService(FileStorageProperties fileStorageProperties) {
         Path FILE_STORAGE_LOCATION = Paths.get(fileStorageProperties.getUploadDir()).toAbsolutePath().normalize();
         this.TEMP_DIRECTORY = FILE_STORAGE_LOCATION.resolve("temp");
+        this.TEMPLATE_DIRECTORY = FILE_STORAGE_LOCATION.resolve("templates");
+    }
+
+    public Path storeTemplateFile(MultipartFile template, String inn) throws IllegalFileExtensionException {
+        final String TEMPLATE_NAME = inn + ".xls";
+        Path templateDestinationPath = TEMPLATE_DIRECTORY.resolve(TEMPLATE_NAME);
+
+        try {
+            FileUtils.validateFileExtensionXls(template);
+            Files.createDirectories(TEMPLATE_DIRECTORY);
+            Files.copy(template.getInputStream(), templateDestinationPath, StandardCopyOption.REPLACE_EXISTING);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return templateDestinationPath;
     }
 
     public Path storeFile(MultipartFile mmkAccept) throws IllegalFileExtensionException {

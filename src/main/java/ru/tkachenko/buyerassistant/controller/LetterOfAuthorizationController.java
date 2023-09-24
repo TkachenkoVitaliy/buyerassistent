@@ -11,6 +11,9 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+import ru.tkachenko.buyerassistant.file_storage.exceptions.IllegalFileExtensionException;
+import ru.tkachenko.buyerassistant.file_storage.service.FileStorageService;
 import ru.tkachenko.buyerassistant.letter_of_authorization.entity.*;
 import ru.tkachenko.buyerassistant.letter_of_authorization.exceptions.AlreadyUsedException;
 import ru.tkachenko.buyerassistant.letter_of_authorization.service.*;
@@ -36,9 +39,10 @@ public class LetterOfAuthorizationController {
     private final SupplierService supplierService;
     private final LetterOfAuthorizationCreator letterOfAuthorizationCreator;
     private final PdfUtil pdfUtil;
+    private final FileStorageService fileStorageService;
 
     @Autowired
-    public LetterOfAuthorizationController(LetterOfAuthorizationService letterOfAuthorizationService, DriverService driverService, LetterRowService letterRowService, NomenclatureService nomenclatureService, PrincipalService principalService, SupplierService supplierService, LetterOfAuthorizationCreator letterOfAuthorizationCreator, PdfUtil pdfUtil) {
+    public LetterOfAuthorizationController(LetterOfAuthorizationService letterOfAuthorizationService, DriverService driverService, LetterRowService letterRowService, NomenclatureService nomenclatureService, PrincipalService principalService, SupplierService supplierService, LetterOfAuthorizationCreator letterOfAuthorizationCreator, PdfUtil pdfUtil, FileStorageService fileStorageService) {
         this.letterOfAuthorizationService = letterOfAuthorizationService;
         this.driverService = driverService;
         this.letterRowService = letterRowService;
@@ -47,6 +51,19 @@ public class LetterOfAuthorizationController {
         this.supplierService = supplierService;
         this.letterOfAuthorizationCreator = letterOfAuthorizationCreator;
         this.pdfUtil = pdfUtil;
+        this.fileStorageService = fileStorageService;
+    }
+
+    @PostMapping("/uploadTemplate/{inn}")
+    @PreAuthorize("hasRole('MODERATOR') or hasRole('ADMIN')")
+    public ResponseEntity uploadTemplate(@RequestParam("template") MultipartFile template, @PathVariable String inn) {
+        try {
+            Path templatePath = fileStorageService.storeTemplateFile(template, inn);
+        } catch (IllegalFileExtensionException e) {
+            e.printStackTrace();
+            return new ResponseEntity(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        return new ResponseEntity(HttpStatus.OK);
     }
 
     @GetMapping("/lettersOfAuthorization")

@@ -3,7 +3,9 @@ package ru.tkachenko.buyerassistant.settings.entity;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "branches_settings_table")
+@Table(name = "branches_settings_table", uniqueConstraints = @UniqueConstraint(columnNames = {"name"}, name = "${branches_settings.name.unique-constraint}")
+)
+
 public class BranchStartMonthEntity {
 
     @Id
@@ -12,7 +14,6 @@ public class BranchStartMonthEntity {
     private Long id;
 
     @Column(name = "name")
-    @UniqueConstraint(columnNames = {"name"}, name = "${branches_settings.name.unique-constraint}")
     private String name;
 
     @Column(name = "start_month")
