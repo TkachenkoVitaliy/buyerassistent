@@ -123,7 +123,7 @@ public class MainController {
                     String subject = "Акцепт-отгрузка " + branchName;
                     emailSenderService.sendMailWithAttachment(emailAddress, subject, message, filePath.toString());
                     resultForUser.add(branchName + " - " + emailAddress);
-                    TimeUnit.SECONDS.sleep(4L);
+                    TimeUnit.SECONDS.sleep(10L);
                 }
             } catch (MessagingException | FileNotFoundException | InterruptedException e) {
                 e.printStackTrace();
@@ -149,7 +149,7 @@ public class MainController {
                         String subject = "Акцепт-отгрузка " + branchName;
                         emailSenderService.sendMailWithAttachment(emailAddress, subject, message, filePath.toString());
                         resultForUser.add(branchName + " - " + emailAddress);
-                        TimeUnit.SECONDS.sleep(4L);
+                        TimeUnit.SECONDS.sleep(10L);
                     }
                 }
             } catch (MessagingException | FileNotFoundException | InterruptedException e) {
